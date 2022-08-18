@@ -28,12 +28,7 @@ namespace PortalWebApp.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _databasecontext = databasecontext;
-
-          
         }
-
-
-
 
         [Required(ErrorMessage = "Required")]
         [RegularExpression("^[0-9]*$", ErrorMessage = "Must be numeric")]
