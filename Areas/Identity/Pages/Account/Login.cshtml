@@ -1,0 +1,88 @@
+﻿@page
+@model LoginModel
+
+@{
+    ViewData["Title"] = "Log in";
+    // PortalWebApp.Data.PortalWebAppContext _databaseContext;
+    List<SelectListItem> LoginUsers()
+    {
+
+     
+        var userList = (from user in LoginModel._databasecontext.User
+                        where user.OrganizationID == 10
+                        orderby user.UserId
+                        select new SelectListItem()
+                        {
+                            Text = user.AbbreviatedName + " (" + user.UserId.ToString() + ")",
+                            Value = user.UserId.ToString()
+                        }).ToList();
+        userList.Insert(0, new SelectListItem()
+        {
+            Text = "---------Select-------------",
+            Value = string.Empty
+        });
+        return userList;
+        // ViewBag.ListofUser = userList;
+        //  return View();
+    }
+}
+
+<h1>@ViewData["Title"]</h1>
+<div class="row">
+    <div class="col-md-4">
+        <section>
+            <form id="account" method="post">
+                <h4>Use a local account to log in.</h4>
+                <hr />
+                <table class="table table-striped">
+                    <tr>
+                        <td style="width:25%">@Html.LabelFor(model => model.UserID, "User ID", new { Class = "form-label" })</td>
+                        <td>
+                            <select asp-for="UserID"
+                                    class="form-control"
+                                    asp-items="@(new SelectList(LoginUsers(),"Value","Text"))">
+                            </select>
+                        </td>
+                        <td style="color:red;font: all-petite-caps;font-weight:bold"> @Html.ValidationMessageFor(model => model.UserID)</td>
+                    </tr>
+                    </table>
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="Input.Email"></label>
+                        <input asp-for="Input.Email" class="form-control" />
+                        <span asp-validation-for="Input.Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Input.Password"></label>
+                        <input asp-for="Input.Password" class="form-control" />
+                        <span asp-validation-for="Input.Password" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <div class="checkbox">
+                            <label asp-for="Input.RememberMe">
+                                <input asp-for="Input.RememberMe" />
+                                @Html.DisplayNameFor(m => m.Input.RememberMe)
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Log in</button>
+                    </div>
+                    <div class="form-group">
+                        <p>
+                            <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
+                        </p>
+                        <p>
+                            <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
+                        </p>
+                    </div>
+            </form>
+        </section>
+    </div>
+    
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
