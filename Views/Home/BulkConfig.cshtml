@@ -1,0 +1,176 @@
+﻿
+@model BulkUpdate
+
+<h4>Bulk Config Mass Updater</h4>
+<hr />
+<script type="text/javascript">
+    function _(el) {
+        return document.getElementById(el);
+    }
+
+    function uploadFile() {
+        var file = _("file1").files[0];
+        // alert(file.name+" | "+file.size+" | "+file.type);
+        var formdata = new FormData();
+        formdata.append("file1", file);
+        var ajax = new XMLHttpRequest();
+        ajax.upload.addEventListener("progress", progressHandler, false);
+        ajax.addEventListener("load", completeHandler, false);
+        ajax.addEventListener("error", errorHandler, false);
+        ajax.addEventListener("abort", abortHandler, false);
+        ajax.open("POST", "file_upload_parser.php"); // http://www.developphp.com/video/JavaScript/File-Upload-Progress-Bar-Meter-Tutorial-Ajax-PHP
+        //use file_upload_parser.php from above url
+        ajax.send(formdata);
+    }
+
+    function progressHandler(event) {
+        _("loaded_n_total").innerHTML = "Uploaded " + event.loaded + " bytes of " + event.total;
+        var percent = (event.loaded / event.total) * 100;
+        _("progressBar").value = Math.round(percent);
+        _("status").innerHTML = Math.round(percent) + "% uploaded... please wait";
+    }
+
+    function completeHandler(event) {
+        _("status").innerHTML = event.target.responseText;
+        _("progressBar").value = 0; //wil clear progress bar after successful upload
+    }
+
+    function errorHandler(event) {
+        _("status").innerHTML = "Upload Failed";
+    }
+
+    function abortHandler(event) {
+        _("status").innerHTML = "Upload Aborted";
+    }
+
+    function OnlyNumeric(e) {
+        //return false;
+        if ((e.which < 48 || e.which > 57)) {
+            if (e.which == 8 || e.which == 46 || e.which == 0) {
+                return true;
+            }
+            else {
+                return e.which;
+            }
+
+        }
+    }
+
+
+</script>
+
+@using (Html.BeginForm("ImportExcelFile", "Home", FormMethod.Post))
+{
+
+
+    <div style="width:70%">
+        <table class="table table-striped">
+
+            <tr style="background-color:lightblue">
+                <td style="width:25%;font-weight:bold">@Html.LabelFor(model => model.Environment, "Environment ", new { Class = "form-label" })</td>
+                <td style="width:25%">@Html.RadioButtonFor(model => model.Environment, PortalWebApp.Models.BulkUpdate.Env.Development) &nbsp;Development </td>
+                <td style="width:25%">@Html.RadioButtonFor(model => model.Environment, PortalWebApp.Models.BulkUpdate.Env.Production) &nbsp;Production </td>
+
+            </tr>
+            <tr><td>&nbsp;</td></tr>
+            <tr>
+                <td style="width:25%">@Html.LabelFor(model => model.UserID, "User ID", new { Class = "form-label" })</td>
+                <td>
+                    <select asp-for="UserID"
+                            class="form-control"
+                            asp-items="@(new SelectList(ViewBag.ListofUser,"Value","Text"))">
+                    </select>
+                </td>
+                <td style="color:red;font: all-petite-caps;font-weight:bold"> @Html.ValidationMessageFor(model => model.UserID)</td>
+            </tr>
+
+            <tr>
+                <td>@Html.LabelFor(model => model.ThrottleNum, "Records to Throttle", new { Class = "form-label" })</td>
+                <td>
+
+                    @Html.EditorFor(model => model.ThrottleNum, new
+                   {
+                       htmlAttributes = new
+                       {
+                           @type = "number",
+                           @min = "0",
+                           @max = "100",
+                           @step = "1",
+                           Value = "7",
+
+                            @onkeypress = "OnlyNumeric(this);",
+                           Class = "form-control"
+                       }
+                   })
+                </td>
+                <td style="color:red;font: all-petite-caps;font-weight:bold;">@Html.ValidationMessageFor(model => model.ThrottleNum)</td>
+
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(model => model.ThrottleDuration, "Throttle Duration", new { Class = "form-label" })</td>
+                <td>
+                    @Html.EditorFor(model => model.ThrottleDuration, new
+                    {
+                        htmlAttributes = new
+                        {
+                            @type = "number",
+                            @min = "0",
+                            @max = "100",
+                            @step = "1",
+                            @Value = "0",
+                            @placeholder = "1",
+                            @onkeypress = "OnlyNumeric(this);",
+                            Class = "form-control"
+                        }
+                    })
+                </td>
+                <td style="color:red;font: all-petite-caps;font-weight:bold">@Html.ValidationMessageFor(model => model.ThrottleDuration)</td>
+
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.RTU, "Enable RTU Validation", new { Class = "form-label" })
+                </td>
+                <td colspan="2">
+                    @Html.CheckBoxFor(model => model.RTU, new { Class = "form-check", @checked = "checked" })
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.HiddenFor(model => model.FileName)Select File:
+                </td>
+                <td colspan="2">
+
+                    <input type="file" model onchange="uploadFile();document.getElementById('FileName').value = this.value;" name="file1" id="file1" value="s" />
+                </td>
+
+                @*<td>
+                        <progress id="progressBar" value="0" max="100" style="width:250px;"></progress> <h3 id="status"></h3>
+                    </td>*@
+            </tr>
+
+            <tr>
+                <td colspan="3">
+                    <span style="color:green">@Html.Raw(ViewBag.Message)</span>
+                    <button name="button" class="btn btn-success" id="btnRun" value="cph" asp-action="check">Run</button>
+                    <input id="Submit" class="btn btn-success" type="submit" value="Run BULK CONFIG IMPORT" disabled onclick=" this.value = 'Running CONFIG IMPORT...'" />
+                    <br /> <br /><br />
+
+                    <div id="divAlert" runat="server" class="alert alert-success alert-dismissible  fade show" role="alert">
+                        <strong>&nbsp;@TempData["ButtonValue"]</strong>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+
+                </td>
+            </tr>
+        </table>
+    </div>
+}
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
