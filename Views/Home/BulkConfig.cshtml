@@ -61,7 +61,7 @@
 
 @using (Html.BeginForm("ImportExcelFile", "Home", FormMethod.Post))
 {
-
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <div style="width:70%">
         <table class="table table-striped">
@@ -70,6 +70,25 @@
                 <td style="width:25%;font-weight:bold">@Html.LabelFor(model => model.Environment, "Environment ", new { Class = "form-label" })</td>
                 <td style="width:25%">@Html.RadioButtonFor(model => model.Environment, PortalWebApp.Models.BulkUpdate.Env.Development) &nbsp;Development </td>
                 <td style="width:25%">@Html.RadioButtonFor(model => model.Environment, PortalWebApp.Models.BulkUpdate.Env.Production) &nbsp;Production </td>
+
+                <td>
+
+
+                    <div>
+                        <input type="radio" id="huey" name="Environment" value="0"
+                               checked>
+                        <label for="Development">&nbsp;Development</label>
+                    </div>
+
+
+
+                    <div>
+                        <input type="radio" id="louie" name="Environment" value="1" data-toggle="modal" data-target="#warningModal">
+                        <label for="Production">&nbsp;Production</label>
+                    </div>
+
+
+                </td>
 
             </tr>
             <tr><td>&nbsp;</td></tr>
@@ -167,6 +186,26 @@
                 </td>
             </tr>
         </table>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="warningModal" tabindex="-1" role="dialog" aria-labelledby="warningModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-confirm">
+            <div class="modal-content">
+                <div class="modal-header  justify-content-center flex-column icon-box">            
+                        <div class="modal-title w-100" style="text-align:center;"> 
+                                    <i class="material-icons" style="font-size:48px; color:red">info</i>Confirm!
+                        </div>   
+                </div>
+                <div class="modal-body">
+                    <div style="text-align:center;font-weight:bolder">You are about about to run in PROD.</div>
+                    <div style="text-align:center;">Please change the radio button to DEV if this was in error.</div>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
     </div>
 }
 

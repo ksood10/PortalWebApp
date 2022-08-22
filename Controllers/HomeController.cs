@@ -149,7 +149,7 @@ namespace PortalWebApp.Controllers
                 DataTable dtExcelSchema;
                 dtExcelSchema = connExcel.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
                 string sheetName = dtExcelSchema.Rows[0]["TABLE_NAME"].ToString();
-                // string sheetName = "Sheet1";
+              //   string sheetName = "Sheet1$";
                 connExcel.Close();
 
                 //Read Data from First Sheet.
