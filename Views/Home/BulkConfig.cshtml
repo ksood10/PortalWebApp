@@ -68,36 +68,24 @@
 
             <tr style="background-color:lightblue">
                 <td style="width:25%;font-weight:bold">@Html.LabelFor(model => model.Environment, "Environment ", new { Class = "form-label" })</td>
-                <td style="width:25%">@Html.RadioButtonFor(model => model.Environment, PortalWebApp.Models.BulkUpdate.Env.Development) &nbsp;Development </td>
-                <td style="width:25%">@Html.RadioButtonFor(model => model.Environment, PortalWebApp.Models.BulkUpdate.Env.Production) &nbsp;Production </td>
-
-                <td>
-
-
-                    <div>
-                        <input type="radio" id="huey" name="Environment" value="0"
-                               checked>
-                        <label for="Development">&nbsp;Development</label>
-                    </div>
-
-
-
-                    <div>
-                        <input type="radio" id="louie" name="Environment" value="1" data-toggle="modal" data-target="#warningModal">
-                        <label for="Production">&nbsp;Production</label>
-                    </div>
-
-
+                <td style="width:25%">
+                    @Html.RadioButtonFor(model => model.Environment, BulkUpdate.Env.Dev);
+                    <input data-val="true" id="Development" name="Environment" type="radio" value="0" data-val-required="The Environment field is required." checked />
+                    <label for="Development">&nbsp;Development</label>
                 </td>
-
+                <td style="width:25%">
+                    @Html.RadioButtonFor(model => model.Environment, BulkUpdate.Env.Prod);
+                    <input data-val="true" id="Production" name="Environment" type="radio" value="1" data-toggle="modal" data-target="#warningModal" />
+                    <label for="Production">&nbsp;Production</label>
+                </td>
             </tr>
+
             <tr><td>&nbsp;</td></tr>
+
             <tr>
                 <td style="width:25%">@Html.LabelFor(model => model.UserID, "User ID", new { Class = "form-label" })</td>
                 <td>
-                    <select asp-for="UserID"
-                            class="form-control"
-                            asp-items="@(new SelectList(ViewBag.ListofUser,"Value","Text"))">
+                    <select asp-for="UserID"   class="form-control"  asp-items="@(new SelectList(ViewBag.ListofUser,"Value","Text"))">
                     </select>
                 </td>
                 <td style="color:red;font: all-petite-caps;font-weight:bold"> @Html.ValidationMessageFor(model => model.UserID)</td>
@@ -111,20 +99,14 @@
                    {
                        htmlAttributes = new
                        {
-                           @type = "number",
-                           @min = "0",
-                           @max = "100",
-                           @step = "1",
-                           Value = "7",
-
-                            @onkeypress = "OnlyNumeric(this);",
-                           Class = "form-control"
+                           @type = "number", @min = "0",  @max = "100",   @step = "1",
+                           @onkeypress = "OnlyNumeric(this);", Class = "form-control"
                        }
                    })
                 </td>
                 <td style="color:red;font: all-petite-caps;font-weight:bold;">@Html.ValidationMessageFor(model => model.ThrottleNum)</td>
-
             </tr>
+
             <tr>
                 <td>@Html.LabelFor(model => model.ThrottleDuration, "Throttle Duration", new { Class = "form-label" })</td>
                 <td>
@@ -132,34 +114,24 @@
                     {
                         htmlAttributes = new
                         {
-                            @type = "number",
-                            @min = "0",
-                            @max = "100",
-                            @step = "1",
-                            @Value = "0",
-                            @placeholder = "1",
-                            @onkeypress = "OnlyNumeric(this);",
-                            Class = "form-control"
+                            @type = "number", @min = "0", @max = "100",  @step = "1",
+                            @onkeypress = "OnlyNumeric(this);", Class = "form-control"
                         }
                     })
                 </td>
                 <td style="color:red;font: all-petite-caps;font-weight:bold">@Html.ValidationMessageFor(model => model.ThrottleDuration)</td>
+            </tr>
 
+            <tr>
+                <td>     @Html.LabelFor(model => model.RTU, "Enable RTU Validation", new { Class = "form-label" })                  
+                </td>
+                <td colspan="2">    @Html.CheckBoxFor(model => model.RTU, new { Class = "form-check", @checked = "checked" })       
+                </td>
             </tr>
             <tr>
-                <td>
-                    @Html.LabelFor(model => model.RTU, "Enable RTU Validation", new { Class = "form-label" })
+                <td>     @Html.HiddenFor(model => model.FileName)Select File:                                                      
                 </td>
                 <td colspan="2">
-                    @Html.CheckBoxFor(model => model.RTU, new { Class = "form-check", @checked = "checked" })
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    @Html.HiddenFor(model => model.FileName)Select File:
-                </td>
-                <td colspan="2">
-
                     <input type="file" model onchange="uploadFile();document.getElementById('FileName').value = this.value;" name="file1" id="file1" value="s" />
                 </td>
 

@@ -18,5 +18,6 @@ namespace PortalWebApp.Models
         public string UserName { get; set; }
         public string EmailAddress { get; set; }
         public int OrganizationID { get; internal set; }
+        public bool HasGlobalOrgSecurity { get; set; }
     }
 }

@@ -18,7 +18,7 @@ namespace PortalWebApp.Models
 
         public UserViewModel()
         {
-            Environment = Env.Development;
+            Environment = Env.Dev;
         }
 
         public List<SelectListItem> ListofUser { get; set; }

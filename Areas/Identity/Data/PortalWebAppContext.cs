@@ -17,6 +17,12 @@ namespace PortalWebApp.Data
         {
         }
         public DbSet<User> User { get; set; }
+
+        public DbSet<TankConfig> TankConfig { get; set; }
+
+        public DbSet<Organization> Organization { get; set; }
+
+        public DbSet<OrganizationTree> OrganizationTree { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

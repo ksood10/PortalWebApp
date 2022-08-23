@@ -9,12 +9,20 @@ namespace PortalWebApp.Models
 {
     public class BulkUpdate
     {
-        public enum Env
+        public sealed class Env
         {
-            Development, Production
+            public static readonly Env Dev = new Env("Server=TankdataLSN1\\TankData;Database=TankData_TDG;User ID=EmailManager;pwd=tanklink5410");
+            public static readonly Env Prod = new Env("Server=Prod");
+
+            private Env(string value)
+            {
+                Value = value;
+            }
+
+            public string Value { get; private set; }
         }
 
-        public Env Environment { get; set; }
+        public string Environment { get; set; }
 
         [Required(ErrorMessage = "Required")]
         [RegularExpression("^[0-9]*$", ErrorMessage = "Must be numeric")]
