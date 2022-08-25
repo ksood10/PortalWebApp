@@ -69,13 +69,11 @@
             <tr style="background-color:lightblue">
                 <td style="width:25%;font-weight:bold">@Html.LabelFor(model => model.Environment, "Environment ", new { Class = "form-label" })</td>
                 <td style="width:25%">
-                    @Html.RadioButtonFor(model => model.Environment, BulkUpdate.Env.Dev);
-                    <input data-val="true" id="Development" name="Environment" type="radio" value="0" data-val-required="The Environment field is required." checked />
+                    @Html.RadioButtonFor(model => model.Environment, BulkUpdate.Env.Dev)
                     <label for="Development">&nbsp;Development</label>
                 </td>
                 <td style="width:25%">
-                    @Html.RadioButtonFor(model => model.Environment, BulkUpdate.Env.Prod);
-                    <input data-val="true" id="Production" name="Environment" type="radio" value="1" data-toggle="modal" data-target="#warningModal" />
+                    @Html.RadioButtonFor(model => model.Environment, BulkUpdate.Env.Prod)
                     <label for="Production">&nbsp;Production</label>
                 </td>
             </tr>
