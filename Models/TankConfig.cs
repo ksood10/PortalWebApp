@@ -106,6 +106,8 @@ namespace PortalWebApp.Models
         public int UserID { get; set; }
         public string ErrorFilePath { get; set; }
         public bool CheckRTUCondition { get; set; }
+
+        public TankConfig() { }
         public TankConfig(string conn, int userid)
         {
             this.ConnectionString = conn;

@@ -285,10 +285,12 @@ namespace PortalWebApp.Utilities
                 //sb.Append("from [Sheet1$]");
                 //  OleDbDataReader dr = DAL.ReturnOleDbDataReader2(sb.ToString(), this.OleDBConnectionString, null, true, ref result);
                 //MessageBox.Show("Error: " + result);
-                //if (dr == null)
-                //{
-                //    this.HaveEXCELReadError = true;
-                //}
+                if (dt == null)
+                {
+                    this.HaveEXCELReadError = true;
+                }
+                else
+                    this.HaveEXCELReadError = false;
                 //if (!this.HaveEXCELReadError)
                 //{
                 int tankIDOrdinal = dt.Columns["TankID"].Ordinal;
@@ -338,7 +340,7 @@ namespace PortalWebApp.Utilities
                 int enableGPSOrdinal = dt.Columns["EnableGPS"].Ordinal;
                 if (dt.Rows.Count > 0)
                 {
-                    var myTankConfigs = new List<TankConfig>();
+                     myTankConfigs = new List<TankConfig>();
 
                     foreach (DataRow dr in dt.Rows)
                     {
