@@ -15,7 +15,7 @@ $(document).ready(function () {
     //        return true;
     //    }
     //});
-    $("input[name='Environment'][value='Development']").prop("checked", true);
+    $("#Development").prop("checked", true);
     $('select>option:eq(3)').attr('selected', true);
     $("#ThrottleNum").val("2");
     $("#ThrottleDuration").val("1");

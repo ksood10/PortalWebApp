@@ -127,6 +127,7 @@ namespace PortalWebApp.Utilities {
             return isValid;
         }
 
+
         public static bool ConvertStringToBool(string mystring)
         {
             bool testBool = false;

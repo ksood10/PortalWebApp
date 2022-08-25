@@ -69,11 +69,11 @@
             <tr style="background-color:lightblue">
                 <td style="width:25%;font-weight:bold">@Html.LabelFor(model => model.Environment, "Environment ", new { Class = "form-label" })</td>
                 <td style="width:25%">
-                    @Html.RadioButtonFor(model => model.Environment, BulkUpdate.Env.Dev)
+                    @Html.RadioButtonFor(model => model.Environment, BulkUpdate.Env.Dev,new { Id = "Development" })
                     <label for="Development">&nbsp;Development</label>
                 </td>
                 <td style="width:25%">
-                    @Html.RadioButtonFor(model => model.Environment, BulkUpdate.Env.Prod)
+                    @Html.RadioButtonFor(model => model.Environment, BulkUpdate.Env.Prod,new { Id = "Production" })
                     <label for="Production">&nbsp;Production</label>
                 </td>
             </tr>

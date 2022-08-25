@@ -591,12 +591,12 @@ namespace PortalWebApp.Utilities
         {
             try
             {
-                //foreach (TankConfig aTankConfig in myTankConfigs)
-                //{
-                //    aTankConfig.TankIDRTUNumberCheck();
-                //    if (aTankConfig.HaveError)
-                //        this.HaveError = true;
-                //}
+                foreach (TankConfig aTankConfig in myTankConfigs)
+                {
+                    aTankConfig.TankIDRTUNumberCheck();
+                    if (aTankConfig.HaveError)
+                        this.HaveError = true;
+                }
             }
             catch (Exception ex)
             {
