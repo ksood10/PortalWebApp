@@ -16,6 +16,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
 using PortalWebApp.Data;
 using PortalWebApp.Models;
+using PortalWebApp.Utilities;
 
 namespace PortalWebApp.Controllers
 {
@@ -112,7 +113,8 @@ namespace PortalWebApp.Controllers
         public IActionResult ImportExcelFile(BulkUpdate model)
         {
             var filename = Path.GetFileName(model.FileName);
-
+            BulkConfiguratorQueue bulkConfiguratorQueue = new BulkConfiguratorQueue(model, _databaseContext);
+           // bulkConfiguratorQueue.
             //get path
             var MainPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Uploads");
 

@@ -16,84 +16,84 @@ namespace PortalWebApp.Models
         public DateTime StartTime                   { get; set; }
         public string Interval                      { get; set; }
         public int TankConfigId                     { get; set; }
-        public int TankName                         { get; set; }
-        public int UserTankNumber                   { get; set; }
+        public string TankName                      { get; set; }
+        public string UserTankNumber                   { get; set; }
         public int TransportStatusID                { get; set; }
         public int ServicePlanID                    { get; set; }
-        public int UserDefined1                     { get; set; }
-        public int UserDefined2                     { get; set; }
-        public int UserDefined3                     { get; set; }
-        public int UserDefined4                     { get; set; }
+        public string UserDefined1                     { get; set; }
+        public string  UserDefined2                     { get; set; }
+        public string UserDefined3                     { get; set; }
+        public string UserDefined4                     { get; set; }
         public int RatePlanID                       { get; set; }
         public int InstallationTypeID               { get; set; }
-        public int InstallationStatus               { get; set; }
-        public int InstallDate                      { get; set; }
-        public int ServiceDate                      { get; set; }
-        public int Region                           { get; set; }
-        public int Route                            { get; set; }
+        public DateTime InstallationStatus               { get; set; }
+        public DateTime InstallDate                      { get; set; }
+        public DateTime ServiceDate                      { get; set; }
+        public string Region                           { get; set; }
+        public string Route                            { get; set; }
         public int ChartID                          { get; set; }
         public int UnitOfMeasureID                  { get; set; }
-        public int TankHgt                          { get; set; }
-        public int TankCap                          { get; set; }
-        public int LimitCapacityFlag                { get; set; }
-        public int CapacityLimit                    { get; set; }
-        public int TankNormallyFills                { get; set; }
-        public int ProdDesc                         { get; set; }
-        public int UserProductNumber                { get; set; }
-        public int SpecGrav                         { get; set; }
-        public int CoeffExp                         { get; set; }
-        public int SensorOffset                     { get; set; }
-        public int LowSetPoint                      { get; set; }
-        public int HighSetPoint                     { get; set; }
-        public int TempOffset                       { get; set; }
-        public int PulseValue                       { get; set; }
+        public decimal TankHgt                          { get; set; }
+        public decimal TankCap                          { get; set; }
+        public bool LimitCapacityFlag                { get; set; }
+        public decimal CapacityLimit                    { get; set; }
+        public bool TankNormallyFills                { get; set; }
+        public string ProdDesc                         { get; set; }
+        public string UserProductNumber                { get; set; }
+        public decimal SpecGrav                         { get; set; }
+        public decimal CoeffExp                         { get; set; }
+        public decimal SensorOffset                     { get; set; }
+        public decimal LowSetPoint                      { get; set; }
+        public decimal HighSetPoint                     { get; set; }
+        public decimal TempOffset                       { get; set; }
+        public decimal PulseValue                       { get; set; }
         public int HighHighLevel                    { get; set; }
         public int HighLevel                        { get; set; }
         public int LowLevel                         { get; set; }
         public int LowLowLevel                      { get; set; }
-        public int FillDetectDelta                  { get; set; }
-        public int ShortFillDelta                   { get; set; }
+        public decimal FillDetectDelta                  { get; set; }
+        public decimal ShortFillDelta                   { get; set; }
         public int HighTemp                         { get; set; }
         public int LowTemp                          { get; set; }
         public int TankSensorTypeID                 { get; set; }
-        public int TankSensorLength                 { get; set; }
-        public int TankSensorDesc                   { get; set; }
-        public int TankSensorNumber                 { get; set; }
+        public string TankSensorLength                 { get; set; }
+        public string TankSensorDesc                   { get; set; }
+        public string TankSensorNumber                 { get; set; }
         public int Callsperday                      { get; set; }
         public int CallDay                          { get; set; }
         public int DiagCallDayMask                  { get; set; }
         public int UsageDelta                       { get; set; }
         public int WakeInterval                     { get; set; }
-        public int TankNum                          { get; set; }
-        public int UpdateInventory                  { get; set; }
-        public int DeviceUsageAlarm                 { get; set; }
-        public int DeviceCriticalHighLevel          { get; set; }
-        public int DeviceHighLevel                  { get; set; }
-        public int DeviceLowLevel                   { get; set; }
-        public int DeviceCriticalLowLevel           { get; set; }
-        public int DeviceFillDetect                 { get; set; }
-        public int DeviceHighTemp                   { get; set; }
-        public int DeviceLowTemp                    { get; set; }
-        public int HasExpectedCallAlarm             { get; set; }
+        public string TankNum                          { get; set; }
+        public bool UpdateInventory                  { get; set; }
+        public bool DeviceUsageAlarm                 { get; set; }
+        public bool DeviceCriticalHighLevel          { get; set; }
+        public bool DeviceHighLevel                  { get; set; }
+        public bool DeviceLowLevel                   { get; set; }
+        public bool DeviceCriticalLowLevel           { get; set; }
+        public bool DeviceFillDetect                 { get; set; }
+        public bool DeviceHighTemp                   { get; set; }
+        public bool DeviceLowTemp                    { get; set; }
+        public bool HasExpectedCallAlarm             { get; set; }
         public int ExpectedCallInterval             { get; set; }
-        public int Active                           { get; set; }
+        public bool Active                           { get; set; }
         public int CreatedBy                        { get; set; }
-        public int CreatedOn                        { get; set; }
+        public DateTime CreatedOn                        { get; set; }
         public int ModifiedBy                       { get; set; }
-        public int ModifiedOn                       { get; set; }
-        public int Stamp                            { get; set; }
+        public DateTime ModifiedOn                       { get; set; }
+        public DateTime Stamp                            { get; set; }
         public int GroupId                          { get; set; }
-        public int DeviceSuspiciousFilter           { get; set; }
+        public bool DeviceSuspiciousFilter           { get; set; }
         public int DeviceSuspiciousDelta            { get; set; }
-        public int DeviceFillDetectDelta            { get; set; }
-        public int DeviceFillHysteresis             { get; set; }
+        public decimal DeviceFillDetectDelta            { get; set; }
+        public decimal DeviceFillHysteresis             { get; set; }
         public int DataLogDelta                     { get; set; }
         public int EnableDeliveryReport             { get; set; }
         public int VolumeDelta                      { get; set; }
-        public int VaporSensorRange                 { get; set; }
-        public int ProductSensorRange               { get; set; }
-        public int ForecastDailyUsage               { get; set; }
-        public int TankMinimum                      { get; set; }
+        public decimal VaporSensorRange                 { get; set; }
+        public decimal ProductSensorRange               { get; set; }
+        public decimal ForecastDailyUsage               { get; set; }
+        public decimal TankMinimum                      { get; set; }
         public int ReorderUsage                     { get; set; }
         public int SafetyStockUsage                 { get; set; }
         public int DistributionLocationID           { get; set; }
@@ -102,6 +102,15 @@ namespace PortalWebApp.Models
         public int RateChangeDelta                  { get; set; }
         public int ProductID                        { get; set; }
 
+        public string ConnectionString { get; set; }
+        public int UserID { get; set; }
+        public string ErrorFilePath { get; set; }
+        public bool CheckRTUCondition { get; set; }
+        public TankConfig(string conn, int userid)
+        {
+            this.ConnectionString = conn;
+            this.UserID = userid;
+        }
     }
     
 }

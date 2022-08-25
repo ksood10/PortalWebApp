@@ -1,281 +1,70 @@
-﻿using System;
+﻿using PortalWebApp.Areas.Utilities;
+using PortalWebApp.Data;
+using PortalWebApp.Models;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.OleDb;
+using System.IO;
 using System.Linq;
 using System.Text;
-using System.Data.OleDb;
-using System.Data.SqlClient;
-using System.IO;
-using System.Drawing;
 using System.Threading;
-using PortalWebApp.Models;
-using PortalWebApp.Data;
-using System.Collections.Generic;
 
 namespace PortalWebApp.Utilities
 {
     public class BulkConfiguratorQueue
     {
-        private string connectionString;
-        private string oleDBConnectionString;
-        private string oleDB = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=";
-        private string fileName;
-        private string filePath;
-        private int recordThrottle;
-        private int throttleAmount;
-        private int userID;
-        private int organizationID;
-        private int userOrganizationID;
-        private StringBuilder sb = new StringBuilder();
+        private readonly string oleDB = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=";
+        private readonly StringBuilder sb = new StringBuilder();
         private List<Organization> myUserOrganizations;
-        private List<TankConfig> myTankConfigs;
-        private TankConfig myTankConfig;
-      //  private FileWriter statusReportWriter;
-        private bool haveError;
-        private bool haveEXCELReadError;
-        private bool superUser;
-        private bool invalidUser;
-        private string statusMessage;
-        private string errorFileName;
-        private string errorFilePath;
-        private string statusFilePath;
-        private bool checkRTUCondition;
-        private bool wroteErrorFileHeadings;
+        private  List<TankConfig> myTankConfigs;
+        private  TankConfig myTankConfig;
+        private  FileWriter statusReportWriter;
+        private readonly bool checkRTUCondition;
+        private  bool wroteErrorFileHeadings;
         private bool wroteErrorFile;
-        private bool wroteStatusFileHeadings;
-     //   private ExcelWorksheet errorReportSheet;
-     //   private ExcelWorksheet statusReportSheet;
-        private int totalEXCELCount;
-        private int currentEXCELCount;
-        private Thread myThread;
+        private  bool wroteStatusFileHeadings;
+        private  Thread myThread;
 
         #region Properties
 
-        internal string ConnectionString
-        {
-            get
-            {
-                return connectionString;
-            }
-            set
-            {
-                connectionString = value;
-            }
-        }
+        internal string ConnectionString { get; set; }
 
-        internal string StatusFilePath
-        {
-            get
-            {
-                return filePath;
-            }
-            set
-            {
-                filePath = value;
-            }
-        }
+        internal string StatusFilePath { get; set; }
 
-        internal string FileName
-        {
-            get
-            {
-                return fileName;
-            }
-            set
-            {
-                fileName = value;
-            }
-        }
+        internal string FileName { get; set; }
 
-        internal string ErrorFilePath
-        {
-            get
-            {
-                return errorFilePath;
-            }
-            set
-            {
-                errorFilePath = value;
-            }
-        }
+        internal string ErrorFilePath { get; set; }
 
-        internal string ErrorFileName
-        {
-            get
-            {
-                return errorFileName;
-            }
-            set
-            {
-                errorFileName = value;
-            }
-        }
+        internal string ErrorFileName { get; set; }
 
-        internal string StatusFileName
-        {
-            get
-            {
-                return statusFilePath;
-            }
-            set
-            {
-                statusFilePath = value;
-            }
-        }
+        internal string StatusFileName { get; set; }
 
-        internal string OleDBConnectionString
-        {
-            get
-            {
-                return oleDBConnectionString;
-            }
-            set
-            {
-                oleDBConnectionString = value;
-            }
-        }
+        internal string OleDBConnectionString { get; set; }
 
-        public int TotalEXCELCount
-        {
-            get
-            {
-                return totalEXCELCount;
-            }
-            set
-            {
-                totalEXCELCount = value;
-            }
-        }
+        public int TotalEXCELCount { get; set; }
 
-        public int CurrentEXCELCount
-        {
-            get
-            {
-                return currentEXCELCount;
-            }
-            set
-            {
-                currentEXCELCount = value;
-            }
-        }
+        public int CurrentEXCELCount { get; set; }
 
-        internal int RecordThrottle
-        {
-            get
-            {
-                return recordThrottle;
-            }
-            set
-            {
-                recordThrottle = value;
-            }
-        }
+        internal int RecordThrottle { get; set; }
 
-        internal int ThrottleAmount
-        {
-            get
-            {
-                return throttleAmount;
-            }
-            set
-            {
-                throttleAmount = value;
-            }
-        }
+        internal int ThrottleAmount { get; set; }
 
-        internal int UserID
-        {
-            get
-            {
-                return userID;
-            }
-            set
-            {
-                userID = value;
-            }
-        }
+        internal int UserID { get; set; }
 
-        internal int OrganizationID
-        {
-            get
-            {
-                return organizationID;
-            }
-            set
-            {
-                organizationID = value;
-            }
-        }
+        internal int OrganizationID { get; set; }
 
-        internal int UserOrganizationID
-        {
-            get
-            {
-                return userOrganizationID;
-            }
-            set
-            {
-                userOrganizationID = value;
-            }
-        }
+        internal int UserOrganizationID { get; set; }
 
-        public bool HaveError
-        {
-            get
-            {
-                return haveError;
-            }
-            set
-            {
-                haveError = value;
-            }
-        }
+        public bool HaveError { get; set; }
 
-        public bool HaveEXCELReadError
-        {
-            get
-            {
-                return haveEXCELReadError;
-            }
-            set
-            {
-                haveEXCELReadError = value;
-            }
-        }
+        public bool HaveEXCELReadError { get; set; }
 
-        internal bool InvalidUser
-        {
-            get
-            {
-                return invalidUser;
-            }
-            set
-            {
-                invalidUser = value;
-            }
-        }
+        internal bool InvalidUser { get; set; }
 
-        internal bool SuperUser
-        {
-            get
-            {
-                return superUser;
-            }
-            set
-            {
-                superUser = value;
-            }
-        }
+        internal bool SuperUser { get; set; }
 
-        internal string StatusMessage
-        {
-            get
-            {
-                return statusMessage;
-            }
-            set
-            {
-                statusMessage = value;
-            }
-        }
+        internal string StatusMessage { get; set; }
 
         #endregion
 
@@ -284,17 +73,17 @@ namespace PortalWebApp.Utilities
         }
 
         private PortalWebAppContext _databaseContext;
-        public BulkConfiguratorQueue(string conn, string excelfilename, int userid, int recordthrottle, int throttleamount, bool checkrtu, PortalWebAppContext databaseContext)
+        public BulkConfiguratorQueue(BulkUpdate bulkUpdate, PortalWebAppContext databaseContext)
         {
             _databaseContext = databaseContext;
-            this.ConnectionString = conn;
-            this.FileName = excelfilename;
+            this.ConnectionString = bulkUpdate.Environment;
+            this.FileName = bulkUpdate.FileName;
             this.OleDBConnectionString = BuildOleDbConnectionString();
-            this.UserID = userid;
-            this.RecordThrottle = recordthrottle;
-            this.ThrottleAmount = throttleamount;
+            this.UserID = bulkUpdate.UserID;
+            this.RecordThrottle = bulkUpdate.ThrottleNum;
+            this.ThrottleAmount = bulkUpdate.ThrottleDuration;
             wroteErrorFileHeadings = false;
-            checkRTUCondition = checkrtu;
+            checkRTUCondition = bulkUpdate.RTU;
             //this.ErrorFilePath = "C:\\BulkConfig\\ErrorFile\\";
             this.ErrorFilePath = AppDomain.CurrentDomain.BaseDirectory + "ErrorFile";
             //this.ErrorFileName = this.ErrorFilePath + "Errors_" + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + DateTime.Now.Second.ToString() + ".xlsx";
@@ -304,7 +93,7 @@ namespace PortalWebApp.Utilities
             //this.StatusFileName = this.StatusFilePath + "Summary_" + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".txt";
             this.StatusFileName = this.StatusFilePath + "\\" + "Summary_" + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".txt";
             DeleteOldReportFiles();
-            GetUserOrganization();
+            GetUserOrganization(UserID);
             if (!this.HaveError)
             {
                 if (!this.SuperUser)
@@ -314,7 +103,7 @@ namespace PortalWebApp.Utilities
                 {
                    // MessageBox.Show("# of EXCEL Records To Process: " + myTankConfigs.Count.ToString());
                     this.TotalEXCELCount = myTankConfigs.Count;
-                    //myThread = new Thread(new ThreadStart(ValidateTheEXCELFile));
+                    myThread = new Thread(new ThreadStart(ValidateTheEXCELFile));
                     ValidateTheEXCELFile();
                 }
             }
@@ -334,10 +123,9 @@ namespace PortalWebApp.Utilities
 
         private void DeleteOldReportFiles()
         {
-            bool directoryExists = false;
             try
             {
-                directoryExists = Directory.Exists(this.ErrorFilePath);
+                bool directoryExists = Directory.Exists(this.ErrorFilePath);
                 if (!directoryExists)
                     Directory.CreateDirectory(this.ErrorFilePath);
                 FileInfo errorReportFile = new FileInfo(this.ErrorFileName);
@@ -356,20 +144,18 @@ namespace PortalWebApp.Utilities
             }
         }
 
-        private void GetUserOrganization()
+        private void GetUserOrganization(int userid)
         {
-
             bool hasglobalorgsecurity = false;
-            int paramUserId = 0;
             try
             {
                 var userList = (from user in _databaseContext.User
-                                where user.UserId == paramUserId
+                                where user.UserId == userid
                                 orderby user.UserId
                                 select new
                                 {
-                                    OrganizationID = user.OrganizationID,
-                                    HasGlobalOrgSecurity = user.HasGlobalOrgSecurity
+                                    user.OrganizationID,
+                                    user.HasGlobalOrgSecurity
                                 })
                                 .ToList();
 
@@ -383,40 +169,20 @@ namespace PortalWebApp.Utilities
                     this.InvalidUser = true;
                     this.HaveError = true;
                 }
+                if (this.UserOrganizationID == 10 && hasglobalorgsecurity)
+                    this.SuperUser = true;
 
-             //   sb.Append("select organizationid, hasglobalorgsecurity ");
-              //  sb.Append("from [user] ");
-               // sb.Append("where userid = @userid");
-                //SqlParameter[] paramArray = new SqlParameter[1];
-                //paramArray[0] = DAL.Parameter("@userid", this.UserID);
-                //SqlDataReader dr = DAL.ReturnDataReader(sb.ToString(), this.ConnectionString, paramArray, true, 20);
-                //if (dr.HasRows)
-                //{
-                //    while (dr.Read())
-                //    {
-                //        this.UserOrganizationID = dr.GetInt32(0);
-                //        hasglobalorgsecurity = dr.GetBoolean(1);
-                //    }
-                //    dr.Close();
-                //    if (this.UserOrganizationID == 10 && hasglobalorgsecurity)
-                        this.SuperUser = true;
-               // }
-                //else
-                //{
-                //    this.InvalidUser = true;
-                //    this.HaveError = true;
-                //}
             }
             catch (Exception ex)
             {
                 string errorMsg = ex.Message;
-                fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
-               // FileWriter errorWriter = new FileWriter(fileName);
-                //errorWriter.Write("****************************");
-                //errorWriter.Write(DateTime.Now.ToString());
-                //errorWriter.Write("Error at GetUserOrganization - ");
-                //errorWriter.Write(ex.Message);
-                //errorWriter.Close();
+                FileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
+                FileWriter errorWriter = new FileWriter(FileName);
+                errorWriter.Write("****************************");
+                errorWriter.Write(DateTime.Now.ToString());
+                errorWriter.Write("Error at GetUserOrganization - ");
+                errorWriter.Write(ex.Message);
+                errorWriter.Close();
             }
         }
 
@@ -424,36 +190,22 @@ namespace PortalWebApp.Utilities
         {
             try
             {
-                this.UserOrganizationID = 10;
                 myUserOrganizations = new List<Organization>();
              
                 var userList = (from orgTree in _databaseContext.OrganizationTree
                                 where orgTree.OrgID == this.UserOrganizationID
-                                select new { ChildOrgID=orgTree.ChildOrgID }).ToList();
-                
-                //sb.Length = 0;
-                //sb.Append("select childorgid ");
-                //sb.Append("from organizationtree ");
-                //sb.Append("where orgid = @organizationid");
-                //SqlParameter[] paramArray = new SqlParameter[1];
-                //paramArray[0] = DAL.Parameter("@organizationid", this.UserOrganizationID);
-                //SqlDataReader dr = DAL.ReturnDataReader(sb.ToString(), this.ConnectionString, paramArray, true, 20);
-                //while (dr.Read())
-                //{
-                //    myUserOrganizations.Add(dr.GetInt32(0));
-                //}
-                //dr.Close();
+                                select new { orgTree.ChildOrgID }).ToList();
             }
             catch (Exception ex)
             {
                 string errorMsg = ex.Message;
-                fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
-                //FileWriter errorWriter = new FileWriter(fileName);
-                //errorWriter.Write("****************************");
-                //errorWriter.Write(DateTime.Now.ToString());
-                //errorWriter.Write("Error at BuildListOfUserOrganizations - ");
-                //errorWriter.Write(ex.Message);
-                //errorWriter.Close();
+                FileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
+                FileWriter errorWriter = new FileWriter(FileName);
+                errorWriter.Write("****************************");
+                errorWriter.Write(DateTime.Now.ToString());
+                errorWriter.Write("Error at BuildListOfUserOrganizations - ");
+                errorWriter.Write(ex.Message);
+                errorWriter.Close();
             }
         }
 
@@ -461,23 +213,77 @@ namespace PortalWebApp.Utilities
         {
             string result = string.Empty;
             string test = string.Empty;
+            //////////////////////////////////////////////////////
+            ///
+            /////////////////////////////////////////////////////
+            var filename = Path.GetFileName(FileName);
+           
+            // bulkConfiguratorQueue.
+            //get path
+            var MainPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Uploads");
+
+            //create directory "Uploads" if it doesn't exists
+            if (!Directory.Exists(MainPath))
+                Directory.CreateDirectory(MainPath);
+            //get file path 
+            var filePath = Path.Combine(MainPath, filename);
+            //using (System.IO.Stream stream = new FileStream(filePath, FileMode.Create))            //{            //    await origstream.CopyToAsync(stream);            //}
+
+            string conString = string.Empty;
+
+            switch (Path.GetExtension(filename))
+            {
+                case ".xls": //Excel 97-03.
+                    conString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + filePath + ";Extended Properties='Excel 8.0;HDR=YES'";
+                    break;
+                case ".xlsx": //Excel 07 and above.
+                    conString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + filePath + ";Extended Properties='Excel 8.0;HDR=YES'";
+                    break;
+            }
+
+            DataTable dt = new DataTable();
+            conString = string.Format(conString, filePath);
+
+            using (OleDbConnection connExcel = new OleDbConnection(conString))
+            {
+                using OleDbCommand cmdExcel = new OleDbCommand();
+                using OleDbDataAdapter odaExcel = new OleDbDataAdapter();
+                cmdExcel.Connection = connExcel;
+
+                //Get the name of First Sheet.
+                connExcel.Open();
+                DataTable dtExcelSchema;
+                dtExcelSchema = connExcel.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
+                string sheetName = dtExcelSchema.Rows[0]["TABLE_NAME"].ToString();
+                //   string sheetName = "Sheet1$";
+                connExcel.Close();
+
+                //Read Data from First Sheet.
+                connExcel.Open();
+                cmdExcel.CommandText = "SELECT * From [" + sheetName + "]";
+                odaExcel.SelectCommand = cmdExcel;
+                odaExcel.Fill(dt);
+                connExcel.Close();
+            }
+            //////////////////////////////////////////////
+            ///
             try
             {
-                sb.Length = 0;
-                sb.Append("select [TankID], [RTUNumber], [TankName], [TankHgt],	[TankCap], [CapacityLimit], ");
-                sb.Append("[TankMinimum], [ReorderUsage], [SafetyStockUsage], [StartTime], [Callsperday], [CallDay], ");
-                sb.Append("[Interval], [DiagCallDayMask], [HighSetPoint], [LowSetPoint], [SensorOffset], [CoeffExp], ");
-                sb.Append("[SpecGrav], [LowLowLevel], [LowLevel], [HighLevel], [HighHighLevel], [FillDetectDelta], ");
-                sb.Append("[ShortFillDelta], [VolumeDelta],	[RateChangeDelta], [DeviceCriticalLowLevel], [DeviceLowLevel], ");
-                sb.Append("[DeviceHighLevel], [DeviceCriticalHighLevel], [DeviceFillDetect], [DeviceFillDetectDelta], ");
-                sb.Append("[DeviceFillHysteresis], [DataLogDelta], [UsageDelta], [WakeInterval], [DeviceUsageAlarm], ");
-                sb.Append("[HasExpectedCallAlarm], [TankNormallyFills] ");
+                //sb.Length = 0;
+                //sb.Append("select [TankID], [RTUNumber], [TankName], [TankHgt],	[TankCap], [CapacityLimit], ");
+                //sb.Append("[TankMinimum], [ReorderUsage], [SafetyStockUsage], [StartTime], [Callsperday], [CallDay], ");
+                //sb.Append("[Interval], [DiagCallDayMask], [HighSetPoint], [LowSetPoint], [SensorOffset], [CoeffExp], ");
+                //sb.Append("[SpecGrav], [LowLowLevel], [LowLevel], [HighLevel], [HighHighLevel], [FillDetectDelta], ");
+                //sb.Append("[ShortFillDelta], [VolumeDelta],	[RateChangeDelta], [DeviceCriticalLowLevel], [DeviceLowLevel], ");
+                //sb.Append("[DeviceHighLevel], [DeviceCriticalHighLevel], [DeviceFillDetect], [DeviceFillDetectDelta], ");
+                //sb.Append("[DeviceFillHysteresis], [DataLogDelta], [UsageDelta], [WakeInterval], [DeviceUsageAlarm], ");
+                //sb.Append("[HasExpectedCallAlarm], [TankNormallyFills] ");
                 //new code added to accomodate EnableLocation and EnableGPS
                 //D Arcilla
                 //Oct 2020
-                sb.Append(",[EnableGPS], [EnableLocation] ");
-                sb.Append("from [Sheet1$]");
-              //  OleDbDataReader dr = DAL.ReturnOleDbDataReader2(sb.ToString(), this.OleDBConnectionString, null, true, ref result);
+                //sb.Append(",[EnableGPS], [EnableLocation] ");
+                //sb.Append("from [Sheet1$]");
+                //  OleDbDataReader dr = DAL.ReturnOleDbDataReader2(sb.ToString(), this.OleDBConnectionString, null, true, ref result);
                 //MessageBox.Show("Error: " + result);
                 //if (dr == null)
                 //{
@@ -485,246 +291,249 @@ namespace PortalWebApp.Utilities
                 //}
                 //if (!this.HaveEXCELReadError)
                 //{
-                //    int tankIDOrdinal = dr.GetOrdinal("TankID");
-                //    int tankNameOrdinal = dr.GetOrdinal("TankName");
-                //    int rtuNumberOrdinal = dr.GetOrdinal("RTUNumber");
-                //    int tankHgtOrdinal = dr.GetOrdinal("TankHgt");
-                //    int tankCapOrdinal = dr.GetOrdinal("TankCap");
-                //    int capacityLimitOrdinal = dr.GetOrdinal("CapacityLimit");
-                //    int tankMinimumOrdinal = dr.GetOrdinal("TankMinimum");
-                //    int reorderUsageOrdinal = dr.GetOrdinal("ReOrderUsage");
-                //    int safetyStockUsageOrdinal = dr.GetOrdinal("SafetyStockUsage");
-                //    int lowLowLevelOrdinal = dr.GetOrdinal("LowLowLevel");
-                //    int lowLevelOrdinal = dr.GetOrdinal("LowLevel");
-                //    int highLevelOrdinal = dr.GetOrdinal("HighLevel");
-                //    int highHighLevelOrdinal = dr.GetOrdinal("HighHighLevel");
-                //    int fillDetectDeltaOrdinal = dr.GetOrdinal("FillDetectDelta");
-                //    int shortFillDeltaOrdinal = dr.GetOrdinal("ShortFillDelta");
-                //    int volumeDeltaOrdinal = dr.GetOrdinal("VolumeDelta");
-                //    int rateChangeDeltaOrdinal = dr.GetOrdinal("RateChangeDelta");
-                //    int callsPerDayOrdinal = dr.GetOrdinal("CallsPerDay");
-                //    int callDayOrdinal = dr.GetOrdinal("CallDay");
-                //    int intervalOrdinal = dr.GetOrdinal("Interval");
-                //    int diagCallDayMaskOrdinal = dr.GetOrdinal("DiagCallDayMask");
-                //    int dataLogDeltaOrdinal = dr.GetOrdinal("DataLogDelta");
-                //    int usageDeltaOrdinal = dr.GetOrdinal("UsageDelta");
-                //    int wakeIntervalOrdinal = dr.GetOrdinal("WakeInterval");
-                //    int startTimeOrdinal = dr.GetOrdinal("StartTime");
-                //    int highSetPointOrdinal = dr.GetOrdinal("HighSetPoint");
-                //    int lowSetPointOrdinal = dr.GetOrdinal("LowSetPoint");
-                //    int sensorOffsetOrdinal = dr.GetOrdinal("SensorOffset");
-                //    int coeffExpOrdinal = dr.GetOrdinal("CoeffExp");
-                //    int specGravOrdinal = dr.GetOrdinal("SpecGrav");
-                //    int deviceFillDetectDeltaOrdinal = dr.GetOrdinal("DeviceFillDetectDelta");
-                //    int deviceFillHysteresisOrdinal = dr.GetOrdinal("DeviceFillHysteresis");
-                //    int deviceCriticalLowLevelOrdinal = dr.GetOrdinal("DeviceCriticalLowLevel");
-                //    int deviceLowLevelOrdinal = dr.GetOrdinal("DeviceLowLevel");
-                //    int deviceHighLevelOrdinal = dr.GetOrdinal("DeviceHighLevel");
-                //    int deviceCriticalHighLevelOrdinal = dr.GetOrdinal("DeviceCriticalHighLevel");
-                //    int deviceFillDetectOrdinal = dr.GetOrdinal("DeviceFillDetect");
-                //    int deviceUsageAlarmOrdinal = dr.GetOrdinal("DeviceUsageAlarm");
-                //    int hasExpectedCallAlarmOrdinal = dr.GetOrdinal("HasExpectedCallAlarm");
-                //    int tankNormallyFillsOrdinal = dr.GetOrdinal("TankNormallyFills");
+                int tankIDOrdinal = dt.Columns["TankID"].Ordinal;
+                int tankNameOrdinal = dt.Columns["TankName"].Ordinal;
+                int rtuNumberOrdinal = dt.Columns["RTUNumber"].Ordinal;
+                int tankHgtOrdinal = dt.Columns["TankHgt"].Ordinal;
+                int tankCapOrdinal = dt.Columns["TankCap"].Ordinal;
+                int capacityLimitOrdinal = dt.Columns["CapacityLimit"].Ordinal;
+                int tankMinimumOrdinal = dt.Columns["TankMinimum"].Ordinal;
+                int reorderUsageOrdinal = dt.Columns["ReOrderUsage"].Ordinal;
+                int safetyStockUsageOrdinal = dt.Columns["SafetyStockUsage"].Ordinal;
+                int lowLowLevelOrdinal = dt.Columns["LowLowLevel"].Ordinal;
+                int lowLevelOrdinal = dt.Columns["LowLevel"].Ordinal;
+                int highLevelOrdinal = dt.Columns["HighLevel"].Ordinal;
+                int highHighLevelOrdinal = dt.Columns["HighHighLevel"].Ordinal;
+                int fillDetectDeltaOrdinal = dt.Columns["FillDetectDelta"].Ordinal;
+                int shortFillDeltaOrdinal = dt.Columns["ShortFillDelta"].Ordinal;
+                int volumeDeltaOrdinal = dt.Columns["VolumeDelta"].Ordinal;
+                int rateChangeDeltaOrdinal = dt.Columns["RateChangeDelta"].Ordinal;
+                int callsPerDayOrdinal = dt.Columns["CallsPerDay"].Ordinal;
+                int callDayOrdinal = dt.Columns["CallDay"].Ordinal;
+                int intervalOrdinal = dt.Columns["Interval"].Ordinal;
+                int diagCallDayMaskOrdinal = dt.Columns["DiagCallDayMask"].Ordinal;
+                int dataLogDeltaOrdinal = dt.Columns["DataLogDelta"].Ordinal;
+                int usageDeltaOrdinal = dt.Columns["UsageDelta"].Ordinal;
+                int wakeIntervalOrdinal = dt.Columns["WakeInterval"].Ordinal;
+                int startTimeOrdinal = dt.Columns["StartTime"].Ordinal;
+                int highSetPointOrdinal = dt.Columns["HighSetPoint"].Ordinal;
+                int lowSetPointOrdinal = dt.Columns["LowSetPoint"].Ordinal;
+                int sensorOffsetOrdinal = dt.Columns["SensorOffset"].Ordinal;
+                int coeffExpOrdinal = dt.Columns["CoeffExp"].Ordinal;
+                int specGravOrdinal = dt.Columns["SpecGrav"].Ordinal;
+                int deviceFillDetectDeltaOrdinal = dt.Columns["DeviceFillDetectDelta"].Ordinal;
+                int deviceFillHysteresisOrdinal = dt.Columns["DeviceFillHysteresis"].Ordinal;
+                int deviceCriticalLowLevelOrdinal = dt.Columns["DeviceCriticalLowLevel"].Ordinal;
+                int deviceLowLevelOrdinal = dt.Columns["DeviceLowLevel"].Ordinal;
+                int deviceHighLevelOrdinal = dt.Columns["DeviceHighLevel"].Ordinal;
+                int deviceCriticalHighLevelOrdinal = dt.Columns["DeviceCriticalHighLevel"].Ordinal;
+                int deviceFillDetectOrdinal = dt.Columns["DeviceFillDetect"].Ordinal;
+                int deviceUsageAlarmOrdinal = dt.Columns["DeviceUsageAlarm"].Ordinal;
+                int hasExpectedCallAlarmOrdinal = dt.Columns["HasExpectedCallAlarm"].Ordinal;
+                int tankNormallyFillsOrdinal = dt.Columns["TankNormallyFills"].Ordinal;
                 //    //new code added to accomodate EnableLocation and EnableGPS+
                 //    //D Arcilla
                 //    //Oct 2020
-                //    int enableLocationOrdinal = dr.GetOrdinal("EnableLocation");
-                //    int enableGPSOrdinal = dr.GetOrdinal("EnableGPS");
-                //    if (dr.HasRows)
-                //    {
-                //        myTankConfigs = new List<TankConfig>();
-                //        while (dr.Read())
-                //        {
-                //          //  myTankConfig = new TankConfig(this.ConnectionString, this.UserID);
-                //          //  myTankConfig.ErrorFilePath = this.ErrorFilePath;
-                //           // myTankConfig.CheckRTUCondition = checkRTUCondition;
-                //            //if (dr.GetValue(tankIDOrdinal) == DBNull.Value)
-                //            //    myTankConfig.TankID = "*** Empty ***";
-                //            //else
-                //            //    myTankConfig.TankID = dr.GetValue(tankIDOrdinal).ToString();
-                //            //if (dr.GetValue(rtuNumberOrdinal) == DBNull.Value)
-                //            //    myTankConfig.RTUNumber = "*** Empty ***";
-                //            //else
-                //            //    myTankConfig.RTUNumber = dr.GetValue(rtuNumberOrdinal).ToString();
-                //            //if (dr.GetValue(tankNameOrdinal) == DBNull.Value)
-                //            //    myTankConfig.TankName = "*** Empty ***";
-                //            //else
-                //            //    myTankConfig.TankName = dr.GetValue(tankNameOrdinal).ToString();
-                //            //if (dr.GetValue(tankHgtOrdinal) == DBNull.Value)
-                //            //    myTankConfig.TankHgt = "*** Empty ***";
-                //            //else
-                //            //    myTankConfig.TankHgt = dr.GetValue(tankHgtOrdinal).ToString();
-                //            //if (dr.GetValue(tankCapOrdinal) == DBNull.Value)
-                //            //    myTankConfig.TankCap = "*** Empty ***";
-                //            //else
-                //            //    myTankConfig.TankCap = dr.GetValue(tankCapOrdinal).ToString();
-                //            //if (dr.GetValue(capacityLimitOrdinal) == DBNull.Value)
-                //            //    myTankConfig.CapacityLimit = "*** Empty ***";
-                //            //else
-                //            //    myTankConfig.CapacityLimit = dr.GetValue(capacityLimitOrdinal).ToString();
-                //            //if (dr.GetValue(tankMinimumOrdinal) == DBNull.Value)
-                //            //    myTankConfig.TankMinimum = "*** Empty ***";
-                //            //else
-                //            //    myTankConfig.TankMinimum = dr.GetValue(tankMinimumOrdinal).ToString();
-                //            //if (dr.GetValue(reorderUsageOrdinal) == DBNull.Value)
-                //            //    myTankConfig.ReorderUsage = "*** Empty ***";
-                //            //else
-                //            //    myTankConfig.ReorderUsage = dr.GetValue(reorderUsageOrdinal).ToString();
-                //            //if (dr.GetValue(safetyStockUsageOrdinal) == DBNull.Value)
-                //            //    myTankConfig.SafetyStockUsage = "*** Empty ***";
-                //            //else
-                //            //    myTankConfig.SafetyStockUsage = dr.GetValue(safetyStockUsageOrdinal).ToString();
-                //            //if (dr.GetValue(lowLowLevelOrdinal) == DBNull.Value)
-                //            //    myTankConfig.LowLowLevel = "*** Empty ***";
-                //            //else
-                //            //    myTankConfig.LowLowLevel = dr.GetValue(lowLowLevelOrdinal).ToString();
-                //            //if (dr.GetValue(lowLevelOrdinal) == DBNull.Value)
-                //            //    myTankConfig.LowLevel = "*** Empty ***";
-                //            //else
-                //            //    myTankConfig.LowLevel = dr.GetValue(lowLevelOrdinal).ToString();
-                //            //if (dr.GetValue(highLevelOrdinal) == DBNull.Value)
-                //            //    myTankConfig.HighLevel = "*** Empty ***";
-                //            //else
-                //            //    myTankConfig.HighLevel = dr.GetValue(highLevelOrdinal).ToString();
-                //            //if (dr.GetValue(highHighLevelOrdinal) == DBNull.Value)
-                //            //    myTankConfig.HighHighLevel = "*** Empty ***";
-                //            //else
-                //            //    myTankConfig.HighHighLevel = dr.GetValue(highHighLevelOrdinal).ToString();
-                //            //if (dr.GetValue(fillDetectDeltaOrdinal) == DBNull.Value)
-                //            //    myTankConfig.FillDetectDelta = "*** Empty ***";
-                //            //else
-                //            //    myTankConfig.FillDetectDelta = dr.GetValue(fillDetectDeltaOrdinal).ToString();
-                //            //if (dr.GetValue(shortFillDeltaOrdinal) == DBNull.Value)
-                //            //    myTankConfig.ShortFillDelta = "*** Empty ***";
-                //            //else
-                //            //    myTankConfig.ShortFillDelta = dr.GetValue(shortFillDeltaOrdinal).ToString();
-                //            //if (dr.GetValue(volumeDeltaOrdinal) == DBNull.Value)
-                //            //    myTankConfig.VolumeDelta = "*** Empty ***";
-                //            //else
-                //            //    myTankConfig.VolumeDelta = dr.GetValue(volumeDeltaOrdinal).ToString();
-                //            //if (dr.GetValue(rateChangeDeltaOrdinal) == DBNull.Value)
-                //            //    myTankConfig.RateChangeDelta = "*** Empty ***";
-                //            //else
-                //            //    myTankConfig.RateChangeDelta = dr.GetValue(rateChangeDeltaOrdinal).ToString();
-                //            //if (dr.GetValue(callsPerDayOrdinal) == DBNull.Value)
-                //            //    myTankConfig.CallsPerDay = "*** Empty ***";
-                //            //else
-                //            //    myTankConfig.CallsPerDay = dr.GetValue(callsPerDayOrdinal).ToString(); ;
-                //            //if (dr.GetValue(callDayOrdinal) == DBNull.Value)
-                //            //    myTankConfig.CallDay = "*** Empty ***";
-                //            //else
-                //            //    myTankConfig.CallDay = dr.GetValue(callDayOrdinal).ToString();
-                //            //if (dr.GetValue(intervalOrdinal) == DBNull.Value)
-                //            //    myTankConfig.Interval = "*** Empty ***";
-                //            //else
-                //            //    myTankConfig.Interval = dr.GetValue(intervalOrdinal).ToString();
-                //            //if (dr.GetValue(diagCallDayMaskOrdinal) == DBNull.Value)
-                //            //    myTankConfig.DiagCallDayMask = "*** Empty ***";
-                //            //else
-                //            //    myTankConfig.DiagCallDayMask = dr.GetValue(diagCallDayMaskOrdinal).ToString();
-                //            //if (dr.GetValue(dataLogDeltaOrdinal) == DBNull.Value)
-                //            //    myTankConfig.DataLogDelta = "*** Empty ***";
-                //            //else
-                //            //    myTankConfig.DataLogDelta = dr.GetValue(dataLogDeltaOrdinal).ToString();
-                //            //if (dr.GetValue(usageDeltaOrdinal) == DBNull.Value)
-                //            //    myTankConfig.UsageDelta = "*** Empty ***";
-                //            //else
-                //            //    myTankConfig.UsageDelta = dr.GetValue(usageDeltaOrdinal).ToString();
-                //            //if (dr.GetValue(wakeIntervalOrdinal) == DBNull.Value)
-                //            //    myTankConfig.WakeInterval = "*** Empty ***";
-                //            //else
-                //            //    myTankConfig.WakeInterval = dr.GetValue(wakeIntervalOrdinal).ToString();
-                //            //if (dr.GetValue(startTimeOrdinal) == DBNull.Value)
-                //            //    myTankConfig.StartTime = "*** Empty ***";
-                //            //else
-                //            //    myTankConfig.StartTime = dr.GetValue(startTimeOrdinal).ToString();
-                //            //if (dr.GetValue(highSetPointOrdinal) == DBNull.Value)
-                //            //    myTankConfig.HighSetPoint = "*** Empty ***";
-                //            //else
-                //            //    myTankConfig.HighSetPoint = dr.GetValue(highSetPointOrdinal).ToString();
-                //            //if (dr.GetValue(lowSetPointOrdinal) == DBNull.Value)
-                //            //    myTankConfig.LowSetPoint = "*** Empty ***";
-                //            //else
-                //            //    myTankConfig.LowSetPoint = dr.GetValue(lowSetPointOrdinal).ToString();
-                //            //if (dr.GetValue(sensorOffsetOrdinal) == DBNull.Value)
-                //            //    myTankConfig.SensorOffset = "*** Empty ***";
-                //            //else
-                //            //    myTankConfig.SensorOffset = dr.GetValue(sensorOffsetOrdinal).ToString();
-                //            //if (dr.GetValue(coeffExpOrdinal) == DBNull.Value)
-                //            //    myTankConfig.CoeffExp = "*** Empty ***";
-                //            //else
-                //            //    myTankConfig.CoeffExp = dr.GetValue(coeffExpOrdinal).ToString();
-                //            //if (dr.GetValue(specGravOrdinal) == DBNull.Value)
-                //            //    myTankConfig.SpecGrav = "*** Empty ***";
-                //            //else
-                //            //    myTankConfig.SpecGrav = dr.GetValue(specGravOrdinal).ToString();
-                //            //if (dr.GetValue(deviceFillDetectDeltaOrdinal) == DBNull.Value)
-                //            //    myTankConfig.DeviceFillDetectDelta = "*** Empty ***";
-                //            //else
-                //            //    myTankConfig.DeviceFillDetectDelta = dr.GetValue(deviceFillDetectDeltaOrdinal).ToString();
-                //            //if (dr.GetValue(deviceFillHysteresisOrdinal) == DBNull.Value)
-                //            //    myTankConfig.DeviceFillHysteresis = "*** Empty ***";
-                //            //else
-                //            //    myTankConfig.DeviceFillHysteresis = dr.GetValue(deviceFillHysteresisOrdinal).ToString();
-                //            //if (dr.GetValue(deviceCriticalLowLevelOrdinal) == DBNull.Value)
-                //            //    myTankConfig.DeviceCriticalLowLevel = "*** Empty ***";
-                //            //else
-                //            //    myTankConfig.DeviceCriticalLowLevel = dr.GetValue(deviceCriticalLowLevelOrdinal).ToString();
-                //            //if (dr.GetValue(deviceLowLevelOrdinal) == DBNull.Value)
-                //            //    myTankConfig.DeviceLowLevel = "*** Empty ***";
-                //            //else
-                //            //    myTankConfig.DeviceLowLevel = dr.GetValue(deviceLowLevelOrdinal).ToString();
-                //            //if (dr.GetValue(deviceHighLevelOrdinal) == DBNull.Value)
-                //            //    myTankConfig.DeviceHighLevel = "*** Empty ***";
-                //            //else
-                //            //    myTankConfig.DeviceHighLevel = dr.GetValue(deviceHighLevelOrdinal).ToString();
-                //            //if (dr.GetValue(deviceCriticalHighLevelOrdinal) == DBNull.Value)
-                //            //    myTankConfig.DeviceCriticalHighLevel = "*** Empty ***";
-                //            //else
-                //            //    myTankConfig.DeviceCriticalHighLevel = dr.GetValue(deviceCriticalHighLevelOrdinal).ToString();
-                //            //if (dr.GetValue(deviceFillDetectOrdinal) == DBNull.Value)
-                //            //    myTankConfig.DeviceFillDetect = "*** Empty ***";
-                //            //else
-                //            //    myTankConfig.DeviceFillDetect = dr.GetValue(deviceFillDetectOrdinal).ToString();
-                //            //if (dr.GetValue(deviceUsageAlarmOrdinal) == DBNull.Value)
-                //            //    myTankConfig.DeviceUsageAlarm = "*** Empty ***";
-                //            //else
-                //            //    myTankConfig.DeviceUsageAlarm = dr.GetValue(deviceUsageAlarmOrdinal).ToString();
-                //            //if (dr.GetValue(hasExpectedCallAlarmOrdinal) == DBNull.Value)
-                //            //    myTankConfig.HasExpectedCallAlarm = "*** Empty ***";
-                //            //else
-                //            //    myTankConfig.HasExpectedCallAlarm = dr.GetValue(hasExpectedCallAlarmOrdinal).ToString();
-                //            //if (dr.GetValue(tankNormallyFillsOrdinal) == DBNull.Value)
-                //            //    myTankConfig.TankNormallyFills = "*** Empty ***";
-                //            //else
-                //            //    myTankConfig.TankNormallyFills = dr.GetValue(tankNormallyFillsOrdinal).ToString();
-                //            ////new code added to accomodate EnableLocation and EnableGPS
-                //            //D Arcilla
-                //            //Oct 2020
-                //            //if (dr.GetValue(enableLocationOrdinal) == DBNull.Value)
-                //            //    myTankConfig.EnableLocation = "*** Empty ***";
-                //            //else
-                //            //    myTankConfig.EnableLocation = dr.GetValue(enableLocationOrdinal).ToString();
-                //            //if (dr.GetValue(enableGPSOrdinal) == DBNull.Value)
-                //            //    myTankConfig.EnableGPS = "*** Empty ***";
-                //            //else
-                //            //    myTankConfig.EnableGPS = dr.GetValue(enableGPSOrdinal).ToString();
-                //            myTankConfigs.Add(myTankConfig);
-                //        }
-                //        dr.Close();
-                //    }
-                //}
+                int enableLocationOrdinal = dt.Columns["EnableLocation"].Ordinal;
+                int enableGPSOrdinal = dt.Columns["EnableGPS"].Ordinal;
+                if (dt.Rows.Count > 0)
+                {
+                    var myTankConfigs = new List<TankConfig>();
+
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        myTankConfig = new TankConfig(this.ConnectionString, this.UserID);
+                        myTankConfig.ErrorFilePath = this.ErrorFilePath;
+                        myTankConfig.CheckRTUCondition = checkRTUCondition;
+                        if (dr[tankIDOrdinal] == DBNull.Value)
+                            myTankConfig.TankID = 0;
+                        else
+                            myTankConfig.TankID = Convert.ToInt32(dr[tankIDOrdinal]);
+                        if (dr[rtuNumberOrdinal] == DBNull.Value)
+                            myTankConfig.RTUNumber = "*** Empty ***";
+                        else
+                            myTankConfig.RTUNumber = dr[rtuNumberOrdinal].ToString();
+                        if (dr[tankNameOrdinal] == DBNull.Value)
+                            myTankConfig.TankName = "*** Empty ***";
+                        else
+                            myTankConfig.TankName = dr[tankNameOrdinal].ToString();
+                        if (dr[tankHgtOrdinal] == DBNull.Value)
+                            myTankConfig.TankHgt =0;
+                        else
+                            myTankConfig.TankHgt = Convert.ToDecimal(dr[tankHgtOrdinal]);
+                        if (dr[tankCapOrdinal] == DBNull.Value)
+                            myTankConfig.TankCap = 0;
+                        else
+                            myTankConfig.TankCap = Convert.ToDecimal( dr[tankCapOrdinal]);
+                        if (dr[capacityLimitOrdinal] == DBNull.Value)
+                            myTankConfig.CapacityLimit = 0;
+                        else
+                            myTankConfig.CapacityLimit = Convert.ToDecimal(dr[capacityLimitOrdinal]);
+                        if (dr[tankMinimumOrdinal] == DBNull.Value)
+                            myTankConfig.TankMinimum = 0;
+                        else
+                            myTankConfig.TankMinimum = Convert.ToDecimal(dr[tankMinimumOrdinal]);
+                        if (dr[reorderUsageOrdinal] == DBNull.Value)
+                            myTankConfig.ReorderUsage = 0;
+                        else
+                            myTankConfig.ReorderUsage = Convert.ToInt32(dr[reorderUsageOrdinal]);
+                        if (dr[safetyStockUsageOrdinal] == DBNull.Value)
+                            myTankConfig.SafetyStockUsage = 0;
+                        else
+                            myTankConfig.SafetyStockUsage = Convert.ToInt32(dr[safetyStockUsageOrdinal]);
+                        if (dr[lowLowLevelOrdinal] == DBNull.Value)
+                            myTankConfig.LowLowLevel = 0;
+                        else
+                            myTankConfig.LowLowLevel = Convert.ToInt32(dr[lowLowLevelOrdinal]);
+                        if (dr[lowLevelOrdinal] == DBNull.Value)
+                            myTankConfig.LowLevel = 0;
+                        else
+                            myTankConfig.LowLevel = Convert.ToInt32(dr[lowLevelOrdinal]);
+                        if (dr[highLevelOrdinal] == DBNull.Value)
+                            myTankConfig.HighLevel = 0;
+                        else
+                            myTankConfig.HighLevel = Convert.ToInt32(dr[highLevelOrdinal]);
+                        if (dr[highHighLevelOrdinal] == DBNull.Value)
+                            myTankConfig.HighHighLevel = 0;
+                        else
+                            myTankConfig.HighHighLevel = Convert.ToInt32(dr[highHighLevelOrdinal]);
+                        if (dr[fillDetectDeltaOrdinal] == DBNull.Value)
+                            myTankConfig.FillDetectDelta =0;
+                        else
+                            myTankConfig.FillDetectDelta = Convert.ToDecimal(dr[fillDetectDeltaOrdinal]);
+                        if (dr[shortFillDeltaOrdinal] == DBNull.Value)
+                            myTankConfig.ShortFillDelta =0;
+                        else
+                            myTankConfig.ShortFillDelta = Convert.ToDecimal(dr[shortFillDeltaOrdinal]);
+                        if (dr[volumeDeltaOrdinal] == DBNull.Value)
+                            myTankConfig.VolumeDelta = 0;
+                        else
+                            myTankConfig.VolumeDelta = Convert.ToInt32(dr[volumeDeltaOrdinal]);
+                        if (dr[rateChangeDeltaOrdinal] == DBNull.Value)
+                            myTankConfig.RateChangeDelta = 0;
+                        else
+                            myTankConfig.RateChangeDelta = Convert.ToInt32(dr[rateChangeDeltaOrdinal]);
+                        if (dr[callsPerDayOrdinal] == DBNull.Value)
+                            myTankConfig.CallDay =0;
+                        else
+                            myTankConfig.CallDay = Convert.ToInt32(dr[callsPerDayOrdinal]);
+                        if (dr[callDayOrdinal] == DBNull.Value)
+                            myTankConfig.CallDay =0;
+                        else
+                            myTankConfig.CallDay = Convert.ToInt32(dr[callDayOrdinal]);
+                        if (dr[intervalOrdinal] == DBNull.Value)
+                            myTankConfig.Interval = "*** Empty ***";
+                        else
+                            myTankConfig.Interval = dr[intervalOrdinal].ToString();
+                        if (dr[diagCallDayMaskOrdinal] == DBNull.Value)
+                            myTankConfig.DiagCallDayMask =0;
+                        else
+                            myTankConfig.DiagCallDayMask = Convert.ToInt32(dr[diagCallDayMaskOrdinal]);
+                        if (dr[dataLogDeltaOrdinal] == DBNull.Value)
+                            myTankConfig.DataLogDelta =0;
+                        else
+                            myTankConfig.DataLogDelta = Convert.ToInt32(dr[dataLogDeltaOrdinal]);
+                        if (dr[usageDeltaOrdinal] == DBNull.Value)
+                            myTankConfig.UsageDelta =0;
+                        else
+                            myTankConfig.UsageDelta = Convert.ToInt32(dr[usageDeltaOrdinal]);
+                        if (dr[wakeIntervalOrdinal] == DBNull.Value)
+                            myTankConfig.WakeInterval =0;
+                        else
+                            myTankConfig.WakeInterval = Convert.ToInt32(dr[wakeIntervalOrdinal]);
+                        if (dr[startTimeOrdinal] == DBNull.Value)
+                            myTankConfig.StartTime =DateTime.Now;
+                        else
+                            myTankConfig.StartTime = Convert.ToDateTime(dr[startTimeOrdinal]);
+                        if (dr[highSetPointOrdinal] == DBNull.Value)
+                            myTankConfig.HighSetPoint =0;
+                        else
+                            myTankConfig.HighSetPoint = Convert.ToDecimal(dr[highSetPointOrdinal]);
+                        if (dr[lowSetPointOrdinal] == DBNull.Value)
+                            myTankConfig.LowSetPoint =0;
+                        else
+                            myTankConfig.LowSetPoint = Convert.ToDecimal(dr[lowSetPointOrdinal]);
+                        if (dr[sensorOffsetOrdinal] == DBNull.Value)
+                            myTankConfig.SensorOffset =0;
+                        else
+                            myTankConfig.SensorOffset = Convert.ToDecimal(dr[sensorOffsetOrdinal]);
+                        if (dr[coeffExpOrdinal] == DBNull.Value)
+                            myTankConfig.CoeffExp =0;
+                        else
+                            myTankConfig.CoeffExp = Convert.ToDecimal(dr[coeffExpOrdinal]);
+                        if (dr[specGravOrdinal] == DBNull.Value)
+                            myTankConfig.SpecGrav =0;
+                        else
+                            myTankConfig.SpecGrav = Convert.ToDecimal(dr[specGravOrdinal]);
+                        if (dr[deviceFillDetectDeltaOrdinal] == DBNull.Value)
+                            myTankConfig.DeviceFillDetectDelta =0;
+                        else
+                            myTankConfig.DeviceFillDetectDelta = Convert.ToDecimal(dr[deviceFillDetectDeltaOrdinal]);
+                        if (dr[deviceFillHysteresisOrdinal] == DBNull.Value)
+                            myTankConfig.DeviceFillHysteresis =0;
+                        else
+                            myTankConfig.DeviceFillHysteresis = Convert.ToDecimal(dr[deviceFillHysteresisOrdinal]);
+                        if (dr[deviceCriticalLowLevelOrdinal] == DBNull.Value)
+                            myTankConfig.DeviceCriticalLowLevel =false;
+                        else
+                            myTankConfig.DeviceCriticalLowLevel = Convert.ToBoolean(dr[deviceCriticalLowLevelOrdinal]);
+                        if (dr[deviceLowLevelOrdinal] == DBNull.Value)
+                            myTankConfig.DeviceLowLevel =false;
+                        else
+                            myTankConfig.DeviceLowLevel = Convert.ToBoolean(dr[deviceLowLevelOrdinal]);
+                        if (dr[deviceHighLevelOrdinal] == DBNull.Value)
+                            myTankConfig.DeviceHighLevel =false;
+                        else
+                            myTankConfig.DeviceHighLevel = Convert.ToBoolean(dr[deviceHighLevelOrdinal]);
+                        if (dr[deviceCriticalHighLevelOrdinal] == DBNull.Value)
+                            myTankConfig.DeviceCriticalHighLevel =false;
+                        else
+                            myTankConfig.DeviceCriticalHighLevel = Convert.ToBoolean(dr[deviceCriticalHighLevelOrdinal]);
+                        if (dr[deviceFillDetectOrdinal] == DBNull.Value)
+                            myTankConfig.DeviceFillDetect =false;
+                        else
+                            myTankConfig.DeviceFillDetect = Convert.ToBoolean(dr[deviceFillDetectOrdinal]);
+                        if (dr[deviceUsageAlarmOrdinal] == DBNull.Value)
+                            myTankConfig.DeviceUsageAlarm =false;
+                        else
+                            myTankConfig.DeviceUsageAlarm = Convert.ToBoolean(dr[deviceUsageAlarmOrdinal]);
+                        if (dr[hasExpectedCallAlarmOrdinal] == DBNull.Value)
+                            myTankConfig.HasExpectedCallAlarm =false;
+                        else
+                            myTankConfig.HasExpectedCallAlarm = Convert.ToBoolean(dr[hasExpectedCallAlarmOrdinal]);
+                        if (dr[tankNormallyFillsOrdinal] == DBNull.Value)
+                            myTankConfig.TankNormallyFills =false;
+                        else
+                            myTankConfig.TankNormallyFills = Convert.ToBoolean(dr[tankNormallyFillsOrdinal]);
+                        //new code added to accomodate EnableLocation and EnableGPS
+                       // D Arcilla
+                     //   Oct 2020
+                        if (dr[enableLocationOrdinal] == DBNull.Value)
+                            myTankConfig.EnableLocation =0;
+                        else
+                            myTankConfig.EnableLocation = Convert.ToInt32(dr[enableLocationOrdinal]);
+                        if (dr[enableGPSOrdinal] == DBNull.Value)
+                            myTankConfig.EnableGPS =0;
+                        else
+                            myTankConfig.EnableGPS = Convert.ToInt32(dr[enableGPSOrdinal]);
+                                   
+                        myTankConfigs.Add(myTankConfig);
+                    }
+                    //        dr.Close();
+                    //    }
+                    //}
+                }
             }
             catch (Exception ex)
             {
                 string errorMsg = ex.Message;
-                fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
-                //FileWriter errorWriter = new FileWriter(fileName);
-                //errorWriter.Write("****************************");
-                //errorWriter.Write(DateTime.Now.ToString());
-                //errorWriter.Write("Error at ReadEXCELFile - ");
-                //errorWriter.Write(ex.Message);
-                //errorWriter.Close();
+                FileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
+                FileWriter errorWriter = new FileWriter(FileName);
+                errorWriter.Write("****************************");
+                errorWriter.Write(DateTime.Now.ToString());
+                errorWriter.Write("Error at ReadEXCELFile - ");
+                errorWriter.Write(ex.Message);
+                errorWriter.Close();
             }
         }
 
@@ -766,13 +575,13 @@ namespace PortalWebApp.Utilities
             catch (Exception ex)
             {
                 string errorMsg = ex.Message;
-                fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
-                //FileWriter errorWriter = new FileWriter(fileName);
-                //errorWriter.Write("****************************");
-                //errorWriter.Write(DateTime.Now.ToString());
-                //errorWriter.Write("Error at ValidateTheEXCELFile - ");
-                //errorWriter.Write(ex.Message);
-                //errorWriter.Close();
+                FileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
+                FileWriter errorWriter = new FileWriter(FileName);
+                errorWriter.Write("****************************");
+                errorWriter.Write(DateTime.Now.ToString());
+                errorWriter.Write("Error at ValidateTheEXCELFile - ");
+                errorWriter.Write(ex.Message);
+                errorWriter.Close();
             }
         }
 
@@ -790,13 +599,13 @@ namespace PortalWebApp.Utilities
             catch (Exception ex)
             {
                 string errorMsg = ex.Message;
-                fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
-                //FileWriter errorWriter = new FileWriter(fileName);
-                //errorWriter.Write("****************************");
-                //errorWriter.Write(DateTime.Now.ToString());
-                //errorWriter.Write("Error at RequiredColumnsCheck - ");
-                //errorWriter.Write(ex.Message);
-                //errorWriter.Close();
+                FileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
+                FileWriter errorWriter = new FileWriter(FileName);
+                errorWriter.Write("****************************");
+                errorWriter.Write(DateTime.Now.ToString());
+                errorWriter.Write("Error at RequiredColumnsCheck - ");
+                errorWriter.Write(ex.Message);
+                errorWriter.Close();
             }
         }
 
@@ -846,13 +655,13 @@ namespace PortalWebApp.Utilities
             catch (Exception ex)
             {
                 string errorMsg = ex.Message;
-                fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
-                //FileWriter errorWriter = new FileWriter(fileName);
-                //errorWriter.Write("****************************");
-                //errorWriter.Write(DateTime.Now.ToString());
-                //errorWriter.Write("Error at WriteErrorReport - ");
-                //errorWriter.Write(ex.Message);
-                //errorWriter.Close();
+                FileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
+                FileWriter errorWriter = new FileWriter(FileName);
+                errorWriter.Write("****************************");
+                errorWriter.Write(DateTime.Now.ToString());
+                errorWriter.Write("Error at WriteErrorReport - ");
+                errorWriter.Write(ex.Message);
+                errorWriter.Close();
             }
         }
 
@@ -910,13 +719,13 @@ namespace PortalWebApp.Utilities
             catch (Exception ex)
             {
                 string errorMsg = ex.Message;
-                fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
-                //FileWriter errorWriter = new FileWriter(fileName);
-                //errorWriter.Write("****************************");
-                //errorWriter.Write(DateTime.Now.ToString());
-                //errorWriter.Write("Error at DataTypeCheck - ");
-                //errorWriter.Write(ex.Message);
-                //errorWriter.Close();
+                FileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
+                FileWriter errorWriter = new FileWriter(FileName);
+                errorWriter.Write("****************************");
+                errorWriter.Write(DateTime.Now.ToString());
+                errorWriter.Write("Error at DataTypeCheck - ");
+                errorWriter.Write(ex.Message);
+                errorWriter.Close();
             }
         }
 
@@ -940,13 +749,13 @@ namespace PortalWebApp.Utilities
             catch (Exception ex)
             {
                 string errorMsg = ex.Message;
-                fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
-                //FileWriter errorWriter = new FileWriter(fileName);
-                //errorWriter.Write("****************************");
-                //errorWriter.Write(DateTime.Now.ToString());
-                //errorWriter.Write("Error at ValidateTankIDRTUNumber - ");
-                //errorWriter.Write(ex.Message);
-                //errorWriter.Close();
+                FileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
+                FileWriter errorWriter = new FileWriter(FileName);
+                errorWriter.Write("****************************");
+                errorWriter.Write(DateTime.Now.ToString());
+                errorWriter.Write("Error at ValidateTankIDRTUNumber - ");
+                errorWriter.Write(ex.Message);
+                errorWriter.Close();
             }
         }
 
@@ -983,13 +792,13 @@ namespace PortalWebApp.Utilities
             catch (Exception ex)
             {
                 string errorMsg = ex.Message;
-                fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
-               // FileWriter errorWriter = new FileWriter(fileName);
-                //errorWriter.Write("****************************");
-                //errorWriter.Write(DateTime.Now.ToString());
-                //errorWriter.Write("Error at ValidateTankScope - ");
-                //errorWriter.Write(ex.Message);
-                //errorWriter.Close();
+                FileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
+                FileWriter errorWriter = new FileWriter(FileName);
+                errorWriter.Write("****************************");
+                errorWriter.Write(DateTime.Now.ToString());
+                errorWriter.Write("Error at ValidateTankScope - ");
+                errorWriter.Write(ex.Message);
+                errorWriter.Close();
             }
         }
 
@@ -1042,13 +851,13 @@ namespace PortalWebApp.Utilities
             catch (Exception ex)
             {
                 string errorMsg = ex.Message;
-                fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
-               // FileWriter errorWriter = new FileWriter(fileName);
-                //errorWriter.Write("****************************");
-                //errorWriter.Write(DateTime.Now.ToString());
-                //errorWriter.Write("Error at BuildConfigValuesCheck - ");
-                //errorWriter.Write(ex.Message);
-                //errorWriter.Close();
+                FileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
+                 FileWriter errorWriter = new FileWriter(FileName);
+                errorWriter.Write("****************************");
+                errorWriter.Write(DateTime.Now.ToString());
+                errorWriter.Write("Error at BuildConfigValuesCheck - ");
+                errorWriter.Write(ex.Message);
+                errorWriter.Close();
             }
         }
 
@@ -1109,13 +918,13 @@ namespace PortalWebApp.Utilities
             catch (Exception ex)
             {
                 string errorMsg = ex.Message;
-                fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
-                //FileWriter errorWriter = new FileWriter(fileName);
-                //errorWriter.Write("****************************");
-                //errorWriter.Write(DateTime.Now.ToString());
-                //errorWriter.Write("Error at ApplyTankConfigChanges - ");
-                //errorWriter.Write(ex.Message);
-                //errorWriter.Close();
+                FileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
+                FileWriter errorWriter = new FileWriter(FileName);
+                errorWriter.Write("****************************");
+                errorWriter.Write(DateTime.Now.ToString());
+                errorWriter.Write("Error at ApplyTankConfigChanges - ");
+                errorWriter.Write(ex.Message);
+                errorWriter.Close();
             }
         }
 

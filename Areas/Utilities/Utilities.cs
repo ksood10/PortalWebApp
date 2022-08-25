@@ -8,6 +8,8 @@ using System.Linq;
 using System.Threading;
 
 
+
+
 namespace PortalWebApp.Utilities { 
     class Utilities
     {
@@ -279,6 +281,7 @@ namespace PortalWebApp.Utilities {
                                             string devicefilldetectdelta, string devicefillhysteresis, string datalogdelta,
                                             string usagedelta, string wakeinterval, string deviceusagealarm, string hasexpectedcallalarm,
                                             string tanknormallyfills, string enablegps, string enablelocation)
+
         {
           //  bool noerrors = false;
             bool tankupdateerror = false;
