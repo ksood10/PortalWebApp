@@ -808,47 +808,47 @@ namespace PortalWebApp.Utilities
         {
             try
             {
-               // foreach (var row in  )
-                //{
-                //    if (!aTankConfig.HaveError)
-                //    {
-                //        aTankConfig.TankNameCheck();
-                //        aTankConfig.TankHgtCheck();
-                //        aTankConfig.TankCapCheck();
-                //        aTankConfig.CapcityLimitCheck();
-                //        aTankConfig.TankMinimumCheck();
-                //        aTankConfig.ReorderUsageCheck();
-                //        aTankConfig.SafetyStockCheck();
-                //        aTankConfig.StartTimeCheck();
-                //        aTankConfig.CallDayCheck();
-                //        aTankConfig.DiagCallDayMaskCheck();
-                //        aTankConfig.IntervalCheck();
-                //        aTankConfig.CallsPerDayCheck();
-                //        aTankConfig.SensorOffsetCheck();
-                //        aTankConfig.CoeffExpCheck();
-                //        aTankConfig.SpecGravCheck();
-                //        aTankConfig.LowLowLevelCheck();
-                //        aTankConfig.LowLevelCheck();
-                //        aTankConfig.HighLevelCheck();
-                //        aTankConfig.HighHighLevelCheck();
-                //        aTankConfig.FillDetectDeltaCheck();
-                //        aTankConfig.ShortFillDeltaCheck();
-                //        aTankConfig.VolumeDeltaCheck();
-                //        aTankConfig.RateChangeDeltaCheck();
-                //        aTankConfig.DeviceFillDetectDeltaCheck();
-                //        aTankConfig.DeviceFillHysteresisCheck();
-                //        aTankConfig.DataLogDeltaCheck();
-                //        aTankConfig.UsageDeltaCheck();
-                //        aTankConfig.WakeIntervalCheck();
-                //        aTankConfig.EnableGPSCheck();
-                //        aTankConfig.EnableLocationCheck();
-                //    }
-                //    if (aTankConfig.HaveError)
-                //    {
-                //        this.HaveError = true;
-                //        WriteErrorReport();
-                //    }
-                //}
+                foreach (TankConfig aTankConfig in myTankConfigs)
+                {
+                    if (!aTankConfig.HaveError)
+                    {
+                        aTankConfig.TankNameCheck();
+                        aTankConfig.TankHgtCheck();
+                        aTankConfig.TankCapCheck();
+                        aTankConfig.CapcityLimitCheck();
+                        aTankConfig.TankMinimumCheck();
+                        aTankConfig.ReorderUsageCheck();
+                        aTankConfig.SafetyStockCheck();
+                        aTankConfig.StartTimeCheck();
+                        aTankConfig.CallDayCheck();
+                        aTankConfig.DiagCallDayMaskCheck();
+                        aTankConfig.IntervalCheck();
+                        aTankConfig.CallsPerDayCheck();
+                        aTankConfig.SensorOffsetCheck();
+                        aTankConfig.CoeffExpCheck();
+                        aTankConfig.SpecGravCheck();
+                        aTankConfig.LowLowLevelCheck();
+                        aTankConfig.LowLevelCheck();
+                        aTankConfig.HighLevelCheck();
+                        aTankConfig.HighHighLevelCheck();
+                        aTankConfig.FillDetectDeltaCheck();
+                        aTankConfig.ShortFillDeltaCheck();
+                        aTankConfig.VolumeDeltaCheck();
+                        aTankConfig.RateChangeDeltaCheck();
+                        aTankConfig.DeviceFillDetectDeltaCheck();
+                        aTankConfig.DeviceFillHysteresisCheck();
+                        aTankConfig.DataLogDeltaCheck();
+                        aTankConfig.UsageDeltaCheck();
+                        aTankConfig.WakeIntervalCheck();
+                        aTankConfig.EnableGPSCheck();
+                        aTankConfig.EnableLocationCheck();
+                    }
+                    if (aTankConfig.HaveError)
+                    {
+                        this.HaveError = true;
+                        WriteErrorReport();
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -866,53 +866,53 @@ namespace PortalWebApp.Utilities
         public void ApplyTankConfigChanges()
         {
             int recordsToProcessPerSecond = this.RecordThrottle;
-           // int processedRecordCount = 0;
+            int processedRecordCount = 0;
             int i = 0;
-          //  int throttleamount = 0;
+            int throttleamount = 0;
             try
             {
                 foreach (TankConfig aTankConfig in myTankConfigs)
                 {
-                   // statusReportWriter = new FileWriter(this.StatusFileName);
+                   statusReportWriter = new FileWriter(this.StatusFileName);
                     sb.Length = 0;
                     if (this.RecordThrottle == 0)
                     {
-                        //if (aTankConfig.PerformUpdate)
-                        //{
-                        //    if (aTankConfig.Add())
-                        //        aTankConfig.StatusMessage = "Successful Update";
-                        //    else
-                        //        aTankConfig.StatusMessage = "Update Failed";
-                        //    sb.Append(DateTime.Now.ToString().PadRight(25));
-                        //    sb.Append(aTankConfig.TankID.PadRight(20));
-                        //    sb.Append(aTankConfig.StatusMessage);
-                        //    //statusReportWriter.Write(sb.ToString());
-                        //    //statusReportWriter.Close();
-                        //    i = i + 1;
-                        //}
+                        if (aTankConfig.PerformUpdate)
+                        {
+                            //if (aTankConfig.Add())
+                            //    aTankConfig.StatusMessage = "Successful Update";
+                            //else
+                            //    aTankConfig.StatusMessage = "Update Failed";
+                            sb.Append(DateTime.Now.ToString().PadRight(25));
+                            sb.Append(aTankConfig.TankID.ToString().PadRight(20));
+                            sb.Append(aTankConfig.StatusMessage);
+                            statusReportWriter.Write(sb.ToString());
+                            statusReportWriter.Close();
+                            i++;
+                        }
                     }
                     if (this.RecordThrottle != 0)
                     {
-                        //if (aTankConfig.PerformUpdate)
-                        //{
-                        //    if (processedRecordCount >= recordsToProcessPerSecond)
-                        //    {
-                        //        processedRecordCount = 0;
-                        //        throttleamount = this.ThrottleAmount * 1000;
-                        //        Utilities.Throttle(throttleamount);
-                        //    }
-                        //    if (aTankConfig.Add())
-                        //        aTankConfig.StatusMessage = "Successful Update";
-                        //    else
-                        //        aTankConfig.StatusMessage = "Update Failed";
-                        //    processedRecordCount = processedRecordCount + 1;
-                        //    sb.Append(DateTime.Now.ToString().PadRight(25));
-                        //    sb.Append(aTankConfig.TankID.PadRight(20));
-                        //    sb.Append(aTankConfig.StatusMessage);
-                        //    statusReportWriter.Write(sb.ToString());
-                        //    statusReportWriter.Close();
-                        //    i = i + 1;
-                        //}
+                        if (aTankConfig.PerformUpdate)
+                        {
+                            if (processedRecordCount >= recordsToProcessPerSecond)
+                            {
+                                processedRecordCount = 0;
+                                throttleamount = this.ThrottleAmount * 1000;
+                                Utilities.Throttle(throttleamount);
+                            }
+                            //if (aTankConfig.Add())
+                            //    aTankConfig.StatusMessage = "Successful Update";
+                            //else
+                            //    aTankConfig.StatusMessage = "Update Failed";
+                            processedRecordCount = processedRecordCount + 1;
+                            sb.Append(DateTime.Now.ToString().PadRight(25));
+                            sb.Append(aTankConfig.TankID.ToString().PadRight(20));
+                            sb.Append(aTankConfig.StatusMessage);
+                            statusReportWriter.Write(sb.ToString());
+                            statusReportWriter.Close();
+                            i++;
+                        }
                     }
                     this.CurrentEXCELCount = i;
                 }
@@ -939,6 +939,8 @@ namespace PortalWebApp.Utilities
         {
             return "hello";
         }
+
+       
     }
 
 }

@@ -62,7 +62,7 @@ namespace PortalWebApp.Models
         public string TankSensorLength                 { get; set; }
         public string TankSensorDesc                   { get; set; }
         public string TankSensorNumber                 { get; set; }
-        public int Callsperday                      { get; set; }
+        public int CallsPerDay                      { get; set; }
         public int CallDay                          { get; set; }
         public int DiagCallDayMask                  { get; set; }
         public int UsageDelta                       { get; set; }
@@ -116,6 +116,13 @@ namespace PortalWebApp.Models
         public bool PerformUpdate { get; private set; }
         public bool DeviceHasModem { get; private set; }
         public bool DeviceHasGPS { get; private set; }
+        public decimal CurrentShortFillDelta { get; private set; }
+        public decimal CurrentFillDetectDelta { get; private set; }
+        public decimal CurrentCapacityLimit { get; private set; }
+        public bool CurrentDeviceFillDetect { get; private set; }
+        public decimal CurrentTankCap { get; private set; }
+        public string CurrentModelNumber { get; private set; }
+        public int CurrentTankConfigID { get; private set; }
 
         private string fileName;
         private string xlReorderUsage;
@@ -1238,9 +1245,9 @@ namespace PortalWebApp.Models
         {
             try
             {
-                if (this.xlTankHgt != "*** Empty ***")
+                if (this.TankHgt != 0)
                 {
-                    if (decimal.Parse(this.xlTankHgt, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture) < 1)
+                    if (TankHgt < 1)
                     {
                         this.HaveError = true;
                         this.StatusMessage = "TankHgt < 1";
@@ -1267,15 +1274,15 @@ namespace PortalWebApp.Models
             decimal tankcap = 0;
             try
             {
-                if (this.xlTankCap != "*** Empty ***")
+                if (this.TankCap != 0)
                 {
-                    tankcap = decimal.Parse(this.xlTankCap);
-                    if (tankcap < 1)
+                   // tankcap = decimal.Parse(TankCap);
+                    if (TankCap < 1)
                     {
                         this.HaveError = true;
                         this.StatusMessage = "TankCap < 1";
                         this.BadColumn = "TankCap";
-                        this.BadColumnValue = this.xlTankCap;
+                        this.BadColumnValue = TankCap.ToString();
                     }
                 }
             }
@@ -1298,24 +1305,24 @@ namespace PortalWebApp.Models
             {
                 decimal tankcapacity = 0;
                 decimal capacitylimit = 0;
-                if (this.xlCapacityLimit != "*** Empty ***")
+                if (this.CapacityLimit != 0)
                 {
-                    capacitylimit = decimal.Parse(this.xlCapacityLimit);
-                    if (this.xlTankCap != "*** Empty ***")
-                        tankcapacity = decimal.Parse(this.xlTankCap);
-                    else
-                        tankcapacity = this.xlCurrentTankCap;
-                    if (capacitylimit > tankcapacity)
+                   // capacitylimit = decimal.Parse(this.xlCapacityLimit);
+                    //if (this.TankCap != 0)
+                    //    tankcapacity = decimal.Parse(TankCap);
+                    //else
+                    //    tankcapacity = this.xlCurrentTankCap;
+                    if (CapacityLimit > TankCap)
                     {
                         this.HaveError = true;
                         this.StatusMessage = "CapacityLimit > TankCap";
                         this.BadColumn = "CapcityLimit";
-                        this.BadColumnValue = this.xlCapacityLimit;
+                        this.BadColumnValue = this.CapacityLimit.ToString();
                     }
                     else if (capacitylimit != tankcapacity)
-                        this.xlLimitCapacityFlag = "True";
+                        this.LimitCapacityFlag = true;
                     else
-                        this.xlLimitCapacityFlag = "False";
+                        this.LimitCapacityFlag = false;
                 }
             }
             catch (Exception ex)
@@ -1335,16 +1342,16 @@ namespace PortalWebApp.Models
         {
             try
             {
-                decimal tankminimum = 0;
-                decimal tankcapacity = 0;
-                if (this.xlTankMinimum != "*** Empty ***")
+                //decimal tankminimum = 0;
+              //  decimal tankcapacity = 0;
+                if (this.TankMinimum != 0)
                 {
-                    tankminimum = decimal.Parse(this.xlTankMinimum);
-                    if (this.xlTankCap != "*** Empty ***")
-                        tankcapacity = decimal.Parse(this.xlTankCap);
-                    else
-                        tankcapacity = this.xlCurrentTankCap;
-                    if (tankminimum > tankcapacity)
+                    //tankminimum = decimal.Parse(this.xlTankMinimum);
+                    //if (this.xlTankCap != "*** Empty ***")
+                    //    tankcapacity = decimal.Parse(this.xlTankCap);
+                    //else
+                    //    tankcapacity = this.xlCurrentTankCap;
+                    if (TankMinimum > TankCap)
                     {
                         this.HaveError = true;
                         this.StatusMessage = "TankMinimum > TankCap";
@@ -1370,14 +1377,14 @@ namespace PortalWebApp.Models
         {
             try
             {
-                if (this.xlReorderUsage != "*** Empty ***")
+                if (this.ReorderUsage != 0)
                 {
                     if (int.Parse(this.xlReorderUsage) < 0)
                     {
                         this.HaveError = true;
                         this.StatusMessage = "ReorderUsage < 0";
                         this.BadColumn = "ReorderUsage";
-                        this.BadColumnValue = this.xlReorderUsage;
+                        this.BadColumnValue = this.ReorderUsage.ToString();
                     }
                 }
             }
@@ -1398,14 +1405,14 @@ namespace PortalWebApp.Models
         {
             try
             {
-                if (this.xlSafetyStockUsage != "*** Empty ***")
+                if (this.SafetyStockUsage !=0)
                 {
-                    if (int.Parse(this.xlSafetyStockUsage) < 0)
+                    if (this.SafetyStockUsage < 0)
                     {
                         this.HaveError = true;
                         this.StatusMessage = "SafetyStockUsage < 0";
                         this.BadColumn = "SafetyStockUsage";
-                        this.BadColumnValue = this.xlSafetyStockUsage;
+                        this.BadColumnValue = this.SafetyStockUsage.ToString();
                     }
                 }
             }
@@ -1426,18 +1433,18 @@ namespace PortalWebApp.Models
         {
             try
             {
-                DateTime starttime = new DateTime();
+                //DateTime starttime = new DateTime();
                 int hour = 0;
-                if (this.xlStartTime != "*** Empty ***")
+                if (this.StartTime != DateTime.MinValue)
                 {
-                    starttime = DateTime.Parse(this.xlStartTime);
-                    hour = starttime.Hour;
+                   // starttime = DateTime.Parse(this.StartTime);
+                    hour = StartTime.Hour;
                     if (hour < 0 || hour > 23)
                     {
                         this.HaveError = true;
                         this.StatusMessage = "Invalid StartTime (Bad Hour)";
                         this.BadColumn = "StartTime";
-                        this.BadColumnValue = this.xlStartTime;
+                        this.BadColumnValue = this.StartTime.ToString(); ;
                     }
                     else
                     {
@@ -1566,11 +1573,11 @@ namespace PortalWebApp.Models
         {
             try
             {
-                int callday = 0;
-                if (this.xlCallsDay != "*** Empty ***")
+                //int callday = 0;
+                if (this.CallDay != 0)
                 {
-                    callday = int.Parse(this.xlCallsDay);
-                    if (callday >= 1 && callday <= 127)
+                   // callday = int.Parse(this.xlCallsDay);
+                    if (CallDay >= 1 && CallDay <= 127)
                     {
                     }
                     else
@@ -1578,7 +1585,7 @@ namespace PortalWebApp.Models
                         this.HaveError = true;
                         this.StatusMessage = "Invalid CallDay Mask";
                         this.BadColumn = "CallDay";
-                        this.BadColumnValue = this.xlCallsDay;
+                        this.BadColumnValue = this.CallDay.ToString();
                     }
                 }
             }
@@ -1599,15 +1606,12 @@ namespace PortalWebApp.Models
         {
             try
             {
-                int diagcalldaymask = 0;
-                if (this.xlDiagCallDayMask != "*** Empty ***")
+               // int diagcalldaymask = 0;
+                if (this.DiagCallDayMask != 0)
                 {
-                    diagcalldaymask = int.Parse(this.xlDiagCallDayMask);
-                    if (diagcalldaymask >= 1 && diagcalldaymask <= 127)
-                    {
-                    }
-                    else
-                    {
+                    //diagcalldaymask = int.Parse(this.xlDiagCallDayMask);
+                    if (DiagCallDayMask < 1 && DiagCallDayMask > 127)
+                    { 
                         this.HaveError = true;
                         this.StatusMessage = "Invalid DiagCallDay Mask";
                         this.BadColumn = "DiagCallDayMask";
@@ -1710,630 +1714,656 @@ namespace PortalWebApp.Models
             }
         }
 
-        //internal void SpecGravCheck()
-        //{
-        //    try
-        //    {
-        //        decimal specgrav = 0;
-        //        if (this.SpecGrav != "*** Empty ***")
-        //        {
-        //            specgrav = decimal.Parse(this.SpecGrav, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
-        //            if (specgrav <= 0)
-        //            {
-        //                this.HaveError = true;
-        //                this.StatusMessage = "SpecGrav <= 0";
-        //                this.BadColumn = "SpecGrav";
-        //                this.BadColumnValue = this.SpecGrav;
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        string errorMsg = ex.Message;
-        //        fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
-        //        FileWriter errorWriter = new FileWriter(fileName);
-        //        errorWriter.Write("****************************");
-        //        errorWriter.Write(DateTime.Now.ToString());
-        //        errorWriter.Write("Error at SpecGravCheck - ");
-        //        errorWriter.Write(ex.Message);
-        //        errorWriter.Close();
-        //    }
-        //}
+        internal void SpecGravCheck()
+        {
+            try
+            {
+              //  decimal specgrav = 0;
+                if (this.SpecGrav != 0)
+                {
+                   // specgrav = decimal.Parse(this.SpecGrav, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
+                    if (SpecGrav <= 0)
+                    {
+                        this.HaveError = true;
+                        this.StatusMessage = "SpecGrav <= 0";
+                        this.BadColumn = "SpecGrav";
+                        this.BadColumnValue = this.SpecGrav.ToString();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string errorMsg = ex.Message;
+                fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
+                FileWriter errorWriter = new FileWriter(fileName);
+                errorWriter.Write("****************************");
+                errorWriter.Write(DateTime.Now.ToString());
+                errorWriter.Write("Error at SpecGravCheck - ");
+                errorWriter.Write(ex.Message);
+                errorWriter.Close();
+            }
+        }
 
-        //internal void RateChangeDeltaCheck()
-        //{
-        //    try
-        //    {
-        //        int ratechangedelta = 0;
-        //        if (this.RateChangeDelta != "*** Empty ***")
-        //        {
-        //            ratechangedelta = int.Parse(this.RateChangeDelta);
-        //            if (ratechangedelta < 0)
-        //            {
-        //                this.HaveError = true;
-        //                this.StatusMessage = "RateChangeDelta < 0";
-        //                this.BadColumn = "RateChangeDelta";
-        //                this.BadColumnValue = this.RateChangeDelta;
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        string errorMsg = ex.Message;
-        //        fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
-        //        FileWriter errorWriter = new FileWriter(fileName);
-        //        errorWriter.Write("****************************");
-        //        errorWriter.Write(DateTime.Now.ToString());
-        //        errorWriter.Write("Error at RateChangeDeltaCheck - ");
-        //        errorWriter.Write(ex.Message);
-        //        errorWriter.Close();
-        //    }
-        //}
+        internal void RateChangeDeltaCheck()
+        {
+            try
+            {
+                int ratechangedelta = 0;
+                if (this.RateChangeDelta != 0)
+                {
+                    //ratechangedelta = int.Parse(this.RateChangeDelta);
+                    if (RateChangeDelta < 0)
+                    {
+                        this.HaveError = true;
+                        this.StatusMessage = "RateChangeDelta < 0";
+                        this.BadColumn = "RateChangeDelta";
+                        this.BadColumnValue = this.RateChangeDelta.ToString();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string errorMsg = ex.Message;
+                fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
+                FileWriter errorWriter = new FileWriter(fileName);
+                errorWriter.Write("****************************");
+                errorWriter.Write(DateTime.Now.ToString());
+                errorWriter.Write("Error at RateChangeDeltaCheck - ");
+                errorWriter.Write(ex.Message);
+                errorWriter.Close();
+            }
+        }
 
-        //internal void LowLowLevelCheck()
-        //{
-        //    try
-        //    {
-        //        int lowlowlevel = 0;
-        //        int lowlevel = 0;
-        //        if (this.LowLowLevel != "*** Empty ***")
-        //        {
-        //            lowlowlevel = int.Parse(this.LowLowLevel);
-        //            if (this.LowLevel != "*** Empty ***")
-        //                lowlevel = int.Parse(this.LowLevel);
-        //            else
-        //                lowlevel = this.CurrentLowLevel;
-        //            if (lowlowlevel > lowlevel)
-        //            {
-        //                this.HaveError = true;
-        //                this.StatusMessage = "LowLowLevel > LowLevel";
-        //                this.BadColumn = "LowLowLevel";
-        //                this.BadColumnValue = this.LowLowLevel;
-        //            }
-        //            if (lowlowlevel < 0)
-        //            {
-        //                this.HaveError = true;
-        //                this.StatusMessage = "LowLowLevel < 0";
-        //                this.BadColumn = "LowLowLevel";
-        //                this.BadColumnValue = this.LowLowLevel;
-        //            }
-        //            if (lowlowlevel > 100)
-        //            {
-        //                this.HaveError = true;
-        //                this.StatusMessage = "LowLowLevel > 100";
-        //                this.BadColumn = "LowLowLevel";
-        //                this.BadColumnValue = this.LowLowLevel;
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        string errorMsg = ex.Message;
-        //        fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
-        //        FileWriter errorWriter = new FileWriter(fileName);
-        //        errorWriter.Write("****************************");
-        //        errorWriter.Write(DateTime.Now.ToString());
-        //        errorWriter.Write("Error at LowLowLevelCheck - ");
-        //        errorWriter.Write(ex.Message);
-        //        errorWriter.Close();
-        //    }
-        //}
+        internal void LowLowLevelCheck()
+        {
+            try
+            {
+               // int lowlowlevel = 0;
+               // int lowlevel = 0;
+                if (this.LowLowLevel != 0)
+                {
+                   // lowlowlevel = int.Parse(this.LowLowLevel);
+                    //if (this.LowLevel != 0)
+                    //    lowlevel = int.Parse(this.LowLevel);
+                    //else
+                    //    lowlevel = this.CurrentLowLevel;
+                    if (LowLowLevel > LowLevel)
+                    {
+                        this.HaveError = true;
+                        this.StatusMessage = "LowLowLevel > LowLevel";
+                        this.BadColumn = "LowLowLevel";
+                        this.BadColumnValue = this.LowLowLevel.ToString();
+                    }
+                    if (LowLowLevel < 0)
+                    {
+                        this.HaveError = true;
+                        this.StatusMessage = "LowLowLevel < 0";
+                        this.BadColumn = "LowLowLevel";
+                        this.BadColumnValue = this.LowLowLevel.ToString();
+                    }
+                    if (LowLowLevel > 100)
+                    {
+                        this.HaveError = true;
+                        this.StatusMessage = "LowLowLevel > 100";
+                        this.BadColumn = "LowLowLevel";
+                        this.BadColumnValue = this.LowLowLevel.ToString();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string errorMsg = ex.Message;
+                fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
+                FileWriter errorWriter = new FileWriter(fileName);
+                errorWriter.Write("****************************");
+                errorWriter.Write(DateTime.Now.ToString());
+                errorWriter.Write("Error at LowLowLevelCheck - ");
+                errorWriter.Write(ex.Message);
+                errorWriter.Close();
+            }
+        }
 
-        //internal void LowLevelCheck()
-        //{
-        //    try
-        //    {
-        //        int lowlowlevel = 0;
-        //        int lowlevel = 0;
-        //        if (this.LowLevel != "*** Empty ***")
-        //        {
-        //            lowlevel = int.Parse(this.LowLevel);
-        //            if (this.LowLowLevel != "*** Empty ***")
-        //                lowlowlevel = int.Parse(this.LowLowLevel);
-        //            else
-        //                lowlowlevel = this.CurrentLowLowLevel;
-        //            if (lowlowlevel > lowlevel)
-        //            {
-        //                this.HaveError = true;
-        //                this.StatusMessage = "LowLevel < LowLowLevel";
-        //                this.BadColumn = "LowLevel";
-        //                this.BadColumnValue = this.LowLevel;
-        //            }
-        //            if (lowlevel < 0)
-        //            {
-        //                this.HaveError = true;
-        //                this.StatusMessage = "LowLevel < 0";
-        //                this.BadColumn = "LowLevel";
-        //                this.BadColumnValue = this.LowLevel;
-        //            }
-        //            if (lowlevel > 100)
-        //            {
-        //                this.HaveError = true;
-        //                this.StatusMessage = "LowLevel > 100";
-        //                this.BadColumn = "LowLevel";
-        //                this.BadColumnValue = this.LowLevel;
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        string errorMsg = ex.Message;
-        //        fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
-        //        FileWriter errorWriter = new FileWriter(fileName);
-        //        errorWriter.Write("****************************");
-        //        errorWriter.Write(DateTime.Now.ToString());
-        //        errorWriter.Write("Error at LowLevelCheck - ");
-        //        errorWriter.Write(ex.Message);
-        //        errorWriter.Close();
-        //    }
-        //}
+        internal void LowLevelCheck()
+        {
+            try
+            {
+                //int lowlowlevel = 0;
+                //int lowlevel = 0;
+                if (this.LowLevel != 0)
+                {
+                    //lowlevel = int.Parse(this.LowLevel);
+                    //if (this.LowLowLevel != "*** Empty ***")
+                    //    lowlowlevel = int.Parse(this.LowLowLevel);
+                    //else
+                    //    lowlowlevel = this.CurrentLowLowLevel;
+                    if (LowLowLevel > LowLevel)
+                    {
+                        this.HaveError = true;
+                        this.StatusMessage = "LowLevel < LowLowLevel";
+                        this.BadColumn = "LowLevel";
+                        this.BadColumnValue = this.LowLevel.ToString();
+                    }
+                    if (LowLevel < 0)
+                    {
+                        this.HaveError = true;
+                        this.StatusMessage = "LowLevel < 0";
+                        this.BadColumn = "LowLevel";
+                        this.BadColumnValue = this.LowLevel.ToString();
+                    }
+                    if (LowLevel > 100)
+                    {
+                        this.HaveError = true;
+                        this.StatusMessage = "LowLevel > 100";
+                        this.BadColumn = "LowLevel";
+                        this.BadColumnValue = this.LowLevel.ToString();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string errorMsg = ex.Message;
+                fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
+                FileWriter errorWriter = new FileWriter(fileName);
+                errorWriter.Write("****************************");
+                errorWriter.Write(DateTime.Now.ToString());
+                errorWriter.Write("Error at LowLevelCheck - ");
+                errorWriter.Write(ex.Message);
+                errorWriter.Close();
+            }
+        }
 
-        //internal void HighHighLevelCheck()
-        //{
-        //    try
-        //    {
-        //        int highhighlevel = 0;
-        //        int highlevel = 0;
-        //        if (this.HighHighLevel != "*** Empty ***")
-        //        {
-        //            highhighlevel = int.Parse(this.HighHighLevel);
-        //            if (this.HighLevel != "*** Empty ***")
-        //                highlevel = int.Parse(this.HighLevel);
-        //            else
-        //                highlevel = this.CurrentHighLevel;
-        //            if (highhighlevel < highlevel)
-        //            {
-        //                this.HaveError = true;
-        //                this.StatusMessage = "HighHighLevel < HighLevel";
-        //                this.BadColumn = "HighHighLevel";
-        //                this.BadColumnValue = this.HighHighLevel;
-        //            }
-        //            if (highhighlevel < 0)
-        //            {
-        //                this.HaveError = true;
-        //                this.StatusMessage = "HighHighLevel < 0";
-        //                this.BadColumn = "HighHighLevel";
-        //                this.BadColumnValue = this.HighHighLevel;
-        //            }
-        //            if (highhighlevel > 100)
-        //            {
-        //                this.HaveError = true;
-        //                this.StatusMessage = "HighHighLevel > 100";
-        //                this.BadColumn = "HighHighLevel";
-        //                this.BadColumnValue = this.HighHighLevel;
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        string errorMsg = ex.Message;
-        //        fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
-        //        FileWriter errorWriter = new FileWriter(fileName);
-        //        errorWriter.Write("****************************");
-        //        errorWriter.Write(DateTime.Now.ToString());
-        //        errorWriter.Write("Error at HighHighLevelCheck - ");
-        //        errorWriter.Write(ex.Message);
-        //        errorWriter.Close();
-        //    }
-        //}
+        internal void HighHighLevelCheck()
+        {
+            try
+            {
+               // int highhighlevel = 0;
+               // int highlevel = 0;
+                if (this.HighHighLevel != 0)
+                {
+                    //highhighlevel = int.Parse(this.HighHighLevel);
+                    //if (this.HighLevel != "*** Empty ***")
+                    //    highlevel = int.Parse(this.HighLevel);
+                    //else
+                    //    highlevel = this.CurrentHighLevel;
+                    if (HighHighLevel < HighLevel)
+                    {
+                        this.HaveError = true;
+                        this.StatusMessage = "HighHighLevel < HighLevel";
+                        this.BadColumn = "HighHighLevel";
+                        this.BadColumnValue = this.HighHighLevel.ToString();
+                    }
+                    if (HighHighLevel < 0)
+                    {
+                        this.HaveError = true;
+                        this.StatusMessage = "HighHighLevel < 0";
+                        this.BadColumn = "HighHighLevel";
+                        this.BadColumnValue = this.HighHighLevel.ToString();
+                    }
+                    if (HighHighLevel > 100)
+                    {
+                        this.HaveError = true;
+                        this.StatusMessage = "HighHighLevel > 100";
+                        this.BadColumn = "HighHighLevel";
+                        this.BadColumnValue = this.HighHighLevel.ToString();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string errorMsg = ex.Message;
+                fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
+                FileWriter errorWriter = new FileWriter(fileName);
+                errorWriter.Write("****************************");
+                errorWriter.Write(DateTime.Now.ToString());
+                errorWriter.Write("Error at HighHighLevelCheck - ");
+                errorWriter.Write(ex.Message);
+                errorWriter.Close();
+            }
+        }
 
-        //internal void HighLevelCheck()
-        //{
-        //    try
-        //    {
-        //        int highhighlevel = 0;
-        //        int highlevel = 0;
-        //        if (this.HighLevel != "*** Empty ***")
-        //        {
-        //            highlevel = int.Parse(this.HighLevel);
-        //            if (this.HighHighLevel != "*** Empty ***")
-        //                highhighlevel = int.Parse(this.HighHighLevel);
-        //            else
-        //                highhighlevel = this.CurrentHighHighLevel;
-        //            if (highlevel > highhighlevel)
-        //            {
-        //                this.HaveError = true;
-        //                this.StatusMessage = "HighLevel > HighHighLevel";
-        //                this.BadColumn = "HighLevel";
-        //                this.BadColumnValue = this.HighLevel;
-        //            }
-        //            if (highlevel < 0)
-        //            {
-        //                this.HaveError = true;
-        //                this.StatusMessage = "HighLevel < 0";
-        //                this.BadColumn = "HighLevel";
-        //                this.BadColumnValue = this.HighLevel;
-        //            }
-        //            if (highlevel > 100)
-        //            {
-        //                this.HaveError = true;
-        //                this.StatusMessage = "HighLevel > 100";
-        //                this.BadColumn = "HighLevel";
-        //                this.BadColumnValue = this.HighLevel;
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        string errorMsg = ex.Message;
-        //        fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
-        //        FileWriter errorWriter = new FileWriter(fileName);
-        //        errorWriter.Write("****************************");
-        //        errorWriter.Write(DateTime.Now.ToString());
-        //        errorWriter.Write("Error at HighLevelCheck - ");
-        //        errorWriter.Write(ex.Message);
-        //        errorWriter.Close();
-        //    }
-        //}
+        internal void HighLevelCheck()
+        {
+            try
+            {
+                //int highhighlevel = 0;
+                //int highlevel = 0;
+                if (this.HighLevel != 0)
+                {
+                    //highlevel = int.Parse(this.HighLevel);
+                    //if (this.HighHighLevel != "*** Empty ***")
+                    //    highhighlevel = int.Parse(this.HighHighLevel);
+                    //else
+                    //    highhighlevel = this.CurrentHighHighLevel;
+                    if (HighLevel > HighHighLevel)
+                    {
+                        this.HaveError = true;
+                        this.StatusMessage = "HighLevel > HighHighLevel";
+                        this.BadColumn = "HighLevel";
+                        this.BadColumnValue = this.HighLevel.ToString();
+                    }
+                    if (HighLevel < 0)
+                    {
+                        this.HaveError = true;
+                        this.StatusMessage = "HighLevel < 0";
+                        this.BadColumn = "HighLevel";
+                        this.BadColumnValue = this.HighLevel.ToString();
+                    }
+                    if (HighLevel > 100)
+                    {
+                        this.HaveError = true;
+                        this.StatusMessage = "HighLevel > 100";
+                        this.BadColumn = "HighLevel";
+                        this.BadColumnValue = this.HighLevel.ToString();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string errorMsg = ex.Message;
+                fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
+                FileWriter errorWriter = new FileWriter(fileName);
+                errorWriter.Write("****************************");
+                errorWriter.Write(DateTime.Now.ToString());
+                errorWriter.Write("Error at HighLevelCheck - ");
+                errorWriter.Write(ex.Message);
+                errorWriter.Close();
+            }
+        }
 
-        //internal void FillDetectDeltaCheck()
-        //{
-        //    try
-        //    {
-        //        decimal capacitylimit = 0;
-        //        decimal filldetectdelta = 0;
-        //        decimal shortfilldelta = 0;
-        //        if (this.FillDetectDelta != "*** Empty ***")
-        //        {
-        //            filldetectdelta = decimal.Parse(this.FillDetectDelta);
-        //            if (this.TankCap != "*** Empty ***")
-        //                capacitylimit = decimal.Parse(this.CapacityLimit);
-        //            else
-        //                capacitylimit = this.CurrentCapacityLimit;
-        //            if (filldetectdelta <= 0)
-        //            {
-        //                this.HaveError = true;
-        //                this.StatusMessage = "FillDetectDelta <= 0";
-        //                this.BadColumn = "FillDetectDelta";
-        //                this.BadColumnValue = this.FillDetectDelta;
-        //            }
-        //            if (filldetectdelta > capacitylimit)
-        //            {
-        //                this.HaveError = true;
-        //                this.StatusMessage = "FillDetectDelta > CapacityLimit";
-        //                this.BadColumn = "FillDetectDelta";
-        //                this.BadColumnValue = this.FillDetectDelta;
-        //            }
-        //            if (this.ShortFillDelta != "*** Empty ***")
-        //                shortfilldelta = decimal.Parse(this.ShortFillDelta);
-        //            else
-        //                shortfilldelta = this.CurrentShortFillDelta;
-        //            if (filldetectdelta <= shortfilldelta)
-        //            {
-        //                this.HaveError = true;
-        //                this.StatusMessage = "FillDetecDelta <= ShortFillDelta";
-        //                this.BadColumn = "FillDetectDelta";
-        //                this.BadColumnValue = this.FillDetectDelta;
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        string errorMsg = ex.Message;
-        //        fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
-        //        FileWriter errorWriter = new FileWriter(fileName);
-        //        errorWriter.Write("****************************");
-        //        errorWriter.Write(DateTime.Now.ToString());
-        //        errorWriter.Write("Error at FillDetectDeltaCheck - ");
-        //        errorWriter.Write(ex.Message);
-        //        errorWriter.Close();
-        //    }
-        //}
+        internal void FillDetectDeltaCheck()
+        {
+            try
+            {
+                //decimal capacitylimit = 0;
+                //decimal filldetectdelta = 0;
+                //decimal shortfilldelta = 0;
+                if (this.FillDetectDelta != 0)
+                {
+                    //filldetectdelta = decimal.Parse(this.FillDetectDelta);
+                    //if (this.TankCap != "*** Empty ***")
+                    //    capacitylimit = decimal.Parse(this.CapacityLimit);
+                    //else
+                    //    capacitylimit = this.CurrentCapacityLimit;
+                    if (FillDetectDelta <= 0)
+                    {
+                        this.HaveError = true;
+                        this.StatusMessage = "FillDetectDelta <= 0";
+                        this.BadColumn = "FillDetectDelta";
+                        this.BadColumnValue = this.FillDetectDelta.ToString();
+                    }
+                    if (FillDetectDelta > CapacityLimit)
+                    {
+                        this.HaveError = true;
+                        this.StatusMessage = "FillDetectDelta > CapacityLimit";
+                        this.BadColumn = "FillDetectDelta";
+                        this.BadColumnValue = this.FillDetectDelta.ToString();
+                    }
+                    if (this.ShortFillDelta ==0)
+                        ShortFillDelta = this.CurrentShortFillDelta;
+                    if (FillDetectDelta <= ShortFillDelta)
+                    {
+                        this.HaveError = true;
+                        this.StatusMessage = "FillDetecDelta <= ShortFillDelta";
+                        this.BadColumn = "FillDetectDelta";
+                        this.BadColumnValue = this.FillDetectDelta.ToString();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string errorMsg = ex.Message;
+                fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
+                FileWriter errorWriter = new FileWriter(fileName);
+                errorWriter.Write("****************************");
+                errorWriter.Write(DateTime.Now.ToString());
+                errorWriter.Write("Error at FillDetectDeltaCheck - ");
+                errorWriter.Write(ex.Message);
+                errorWriter.Close();
+            }
+        }
 
-        //internal void ShortFillDeltaCheck()
-        //{
-        //    try
-        //    {
-        //        decimal capacitylimit = 0;
-        //        decimal filldetectdelta = 0;
-        //        decimal shortfilldelta = 0;
-        //        if (this.ShortFillDelta != "*** Empty ***")
-        //        {
-        //            shortfilldelta = decimal.Parse(this.ShortFillDelta);
-        //            if (this.CapacityLimit != "*** Empty ***")
-        //                capacitylimit = decimal.Parse(this.CapacityLimit);
-        //            else
-        //                capacitylimit = this.CurrentCapacityLimit;
-        //            if (shortfilldelta <= 0)
-        //            {
-        //                this.HaveError = true;
-        //                this.StatusMessage = "ShortFillDelta <= 0";
-        //                this.BadColumn = "ShortFillDelta";
-        //                this.BadColumnValue = this.ShortFillDelta;
-        //            }
-        //            if (shortfilldelta > capacitylimit)
-        //            {
-        //                this.HaveError = true;
-        //                this.StatusMessage = "ShortFillDelta > CapacityLimit";
-        //                this.BadColumn = "ShortFillDelta";
-        //                this.BadColumnValue = this.ShortFillDelta;
-        //            }
-        //            if (this.FillDetectDelta != "*** Empty ***")
-        //                filldetectdelta = decimal.Parse(this.FillDetectDelta);
-        //            else
-        //                filldetectdelta = this.CurrentFillDetectDelta;
-        //            if (filldetectdelta <= shortfilldelta)
-        //            {
-        //                this.HaveError = true;
-        //                this.StatusMessage = "ShortFillDelta >= FillDetectDelta";
-        //                this.BadColumn = "ShortFillDelta";
-        //                this.BadColumnValue = this.ShortFillDelta;
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        string errorMsg = ex.Message;
-        //        fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
-        //        FileWriter errorWriter = new FileWriter(fileName);
-        //        errorWriter.Write("****************************");
-        //        errorWriter.Write(DateTime.Now.ToString());
-        //        errorWriter.Write("Error at ShortFillDeltaCheck - ");
-        //        errorWriter.Write(ex.Message);
-        //        errorWriter.Close();
-        //    }
-        //}
+        internal void ShortFillDeltaCheck()
+        {
+            try
+            {
+                //decimal capacitylimit = 0;
+                //decimal filldetectdelta = 0;
+                //decimal shortfilldelta = 0;
+                if (this.ShortFillDelta != 0)
+                {
+                    //shortfilldelta = decimal.Parse(this.ShortFillDelta);
+                    //if (this.CapacityLimit != "*** Empty ***")
+                    //    capacitylimit = decimal.Parse(this.CapacityLimit);
+                    //else
+                    //    capacitylimit = this.CurrentCapacityLimit;
+                    if (ShortFillDelta <= 0)
+                    {
+                        this.HaveError = true;
+                        this.StatusMessage = "ShortFillDelta <= 0";
+                        this.BadColumn = "ShortFillDelta";
+                        this.BadColumnValue = this.ShortFillDelta.ToString();
+                    }
+                    if (ShortFillDelta > CapacityLimit)
+                    {
+                        this.HaveError = true;
+                        this.StatusMessage = "ShortFillDelta > CapacityLimit";
+                        this.BadColumn = "ShortFillDelta";
+                        this.BadColumnValue = this.ShortFillDelta.ToString();
+                    }
+                    if (this.FillDetectDelta==0)
+                        FillDetectDelta = this.CurrentFillDetectDelta;
+                    if (FillDetectDelta <= ShortFillDelta)
+                    {
+                        this.HaveError = true;
+                        this.StatusMessage = "ShortFillDelta >= FillDetectDelta";
+                        this.BadColumn = "ShortFillDelta";
+                        this.BadColumnValue = this.ShortFillDelta.ToString();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string errorMsg = ex.Message;
+                fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
+                FileWriter errorWriter = new FileWriter(fileName);
+                errorWriter.Write("****************************");
+                errorWriter.Write(DateTime.Now.ToString());
+                errorWriter.Write("Error at ShortFillDeltaCheck - ");
+                errorWriter.Write(ex.Message);
+                errorWriter.Close();
+            }
+        }
 
-        //internal void VolumeDeltaCheck()
-        //{
-        //    try
-        //    {
-        //        int volumedelta = 0;
-        //        if (this.VolumeDelta != "*** Empty ***")
-        //        {
-        //            volumedelta = int.Parse(this.VolumeDelta);
-        //            if (volumedelta < 0)
-        //            {
-        //                this.HaveError = true;
-        //                this.StatusMessage = "VolumeDelta < 0";
-        //                this.BadColumn = "VolumeDelta";
-        //                this.BadColumnValue = this.VolumeDelta;
-        //            }
-        //            if (volumedelta > 100)
-        //            {
-        //                this.HaveError = true;
-        //                this.StatusMessage = "VolumeDelta > 100";
-        //                this.BadColumn = "VolumeDelta";
-        //                this.BadColumnValue = this.VolumeDelta;
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        string errorMsg = ex.Message;
-        //        fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
-        //        FileWriter errorWriter = new FileWriter(fileName);
-        //        errorWriter.Write("****************************");
-        //        errorWriter.Write(DateTime.Now.ToString());
-        //        errorWriter.Write("Error at VolumeDeltaCheck - ");
-        //        errorWriter.Write(ex.Message);
-        //        errorWriter.Close();
-        //    }
-        //}
+        internal void VolumeDeltaCheck()
+        {
+            try
+            {
+               // int volumedelta = 0;
+                if (this.VolumeDelta != 0)
+                {
+                    //volumedelta = int.Parse(this.VolumeDelta.ToString());
+                    if (VolumeDelta < 0)
+                    {
+                        this.HaveError = true;
+                        this.StatusMessage = "VolumeDelta < 0";
+                        this.BadColumn = "VolumeDelta";
+                        this.BadColumnValue = this.VolumeDelta.ToString();
+                    }
+                    if (VolumeDelta > 100)
+                    {
+                        this.HaveError = true;
+                        this.StatusMessage = "VolumeDelta > 100";
+                        this.BadColumn = "VolumeDelta";
+                        this.BadColumnValue = this.VolumeDelta.ToString();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string errorMsg = ex.Message;
+                fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
+                FileWriter errorWriter = new FileWriter(fileName);
+                errorWriter.Write("****************************");
+                errorWriter.Write(DateTime.Now.ToString());
+                errorWriter.Write("Error at VolumeDeltaCheck - ");
+                errorWriter.Write(ex.Message);
+                errorWriter.Close();
+            }
+        }
 
-        //internal void DeviceFillDetectDeltaCheck()
-        //{
-        //    decimal devicefillhysteresis = 0; ;
-        //    decimal devicefilldetectdelta = 0;
-        //    decimal capacitylimit = 0;
-        //    try
-        //    {
-        //        if (this.DeviceFillDetectDelta != "*** Empty ***")
-        //        {
-        //            devicefilldetectdelta = decimal.Parse(this.DeviceFillDetectDelta);
-        //            if (this.DeviceFillHysteresis != "*** Empty ***")
-        //                devicefillhysteresis = decimal.Parse(this.DeviceFillHysteresis);
-        //            else
-        //                devicefillhysteresis = this.CurrentDeviceFillHysteresis;
-        //            if (this.CapacityLimit != "*** Empty ***")
-        //                capacitylimit = decimal.Parse(this.CapacityLimit);
-        //            else
-        //                capacitylimit = this.CurrentCapacityLimit;
-        //            if (devicefilldetectdelta < devicefillhysteresis)
-        //            {
-        //                this.HaveError = true;
-        //                this.StatusMessage = "DeviceFillDetectDelta < DeviceFillHysteresis";
-        //                this.BadColumn = "DeviceFillDetectDelta";
-        //                this.BadColumnValue = this.DeviceFillDetectDelta;
-        //            }
-        //            if (devicefilldetectdelta >= capacitylimit)
-        //            {
-        //                this.HaveError = true;
-        //                this.StatusMessage = "DeviceFillDetectDelta > CapacityLimit";
-        //                this.BadColumn = "DeviceFillDetectDelta";
-        //                this.BadColumnValue = this.DeviceFillDetectDelta;
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        string errorMsg = ex.Message;
-        //        fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
-        //        FileWriter errorWriter = new FileWriter(fileName);
-        //        errorWriter.Write("****************************");
-        //        errorWriter.Write(DateTime.Now.ToString());
-        //        errorWriter.Write("Error at DeviceFillDetectDeltaCheck - ");
-        //        errorWriter.Write(ex.Message);
-        //        errorWriter.Close();
-        //    }
-        //}
+        internal void DeviceFillDetectDeltaCheck()
+        {
+            decimal devicefillhysteresis = 0; ;
+            decimal devicefilldetectdelta = 0;
+            decimal capacitylimit = 0;
+            try
+            {
+                if (this.DeviceFillDetectDelta != 0)
+                {
+                    //devicefilldetectdelta = decimal.Parse(this.DeviceFillDetectDelta);
+                    //if (this.DeviceFillHysteresis != "*** Empty ***")
+                    //    devicefillhysteresis = decimal.Parse(this.DeviceFillHysteresis);
+                    //else
+                    //    devicefillhysteresis = this.CurrentDeviceFillHysteresis;
+                    if (this.CapacityLimit == 0)
+                    //    capacitylimit = decimal.Parse(this.CapacityLimit);
+                    //else
+                        CapacityLimit = this.CurrentCapacityLimit;
+                    if (DeviceFillDetectDelta < DeviceFillHysteresis)
+                    {
+                        this.HaveError = true;
+                        this.StatusMessage = "DeviceFillDetectDelta < DeviceFillHysteresis";
+                        this.BadColumn = "DeviceFillDetectDelta";
+                        this.BadColumnValue = this.DeviceFillDetectDelta.ToString();
+                    }
+                    if (DeviceFillDetectDelta >= CapacityLimit)
+                    {
+                        this.HaveError = true;
+                        this.StatusMessage = "DeviceFillDetectDelta > CapacityLimit";
+                        this.BadColumn = "DeviceFillDetectDelta";
+                        this.BadColumnValue = this.DeviceFillDetectDelta.ToString();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string errorMsg = ex.Message;
+                fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
+                FileWriter errorWriter = new FileWriter(fileName);
+                errorWriter.Write("****************************");
+                errorWriter.Write(DateTime.Now.ToString());
+                errorWriter.Write("Error at DeviceFillDetectDeltaCheck - ");
+                errorWriter.Write(ex.Message);
+                errorWriter.Close();
+            }
+        }
 
-        //internal void DeviceFillHysteresisCheck()
-        //{
-        //    decimal devicefillhysteresis = 0; ;
-        //    decimal devicefilldetect = 0;
-        //    decimal tankcap = 0;
-        //    try
-        //    {
-        //        if (this.DeviceFillHysteresis != "*** Empty ***")
-        //        {
-        //            devicefillhysteresis = decimal.Parse(this.DeviceFillHysteresis);
-        //            if (this.DeviceFillDetect != "*** Empty ***")
-        //                devicefilldetect = decimal.Parse(this.DeviceFillDetect);
-        //            else
-        //                devicefilldetect = this.CurrentDeviceFillDetect;
-        //            if (this.TankCap != "*** Empty ***")
-        //                tankcap = decimal.Parse(this.TankCap);
-        //            else
-        //                tankcap = this.CurrentTankCap;
-        //            if (devicefilldetect < devicefillhysteresis)
-        //            {
-        //                this.HaveError = true;
-        //                this.StatusMessage = "DeviceFillHysteresis > DeviceFillDetect";
-        //                this.BadColumn = "DeviceFillHysteresis";
-        //                this.BadColumnValue = this.DeviceFillHysteresis;
-        //            }
-        //            if (devicefillhysteresis > tankcap)
-        //            {
-        //                this.HaveError = true;
-        //                this.StatusMessage = "DeviceFillHysteresis > TankCap";
-        //                this.BadColumn = "DeviceFillHysteresis";
-        //                this.BadColumnValue = this.DeviceFillHysteresis;
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        string errorMsg = ex.Message;
-        //        fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
-        //        FileWriter errorWriter = new FileWriter(fileName);
-        //        errorWriter.Write("****************************");
-        //        errorWriter.Write(DateTime.Now.ToString());
-        //        errorWriter.Write("Error at DeviceFillHysteresisCheck - ");
-        //        errorWriter.Write(ex.Message);
-        //        errorWriter.Close();
-        //    }
-        //}
+        internal void DeviceFillHysteresisCheck()
+        {
+            decimal devicefillhysteresis = 0; ;
+            decimal devicefilldetect = 0;
+            decimal tankcap = 0;
+            try
+            {
+                if (this.DeviceFillHysteresis != 0)
+                {
+                   // devicefillhysteresis = decimal.Parse(this.DeviceFillHysteresis);
+                    //if (this.DeviceFillDetect == 0)
+                    //    devicefilldetect = decimal.Parse(this.DeviceFillDetect);
+                    //else
+                        DeviceFillDetect = this.CurrentDeviceFillDetect;
+                    if (this.TankCap == 0)
+                         TankCap = this.CurrentTankCap;
+                    if (DeviceFillDetectDelta  < DeviceFillHysteresis)
+                    {
+                        this.HaveError = true;
+                        this.StatusMessage = "DeviceFillHysteresis > DeviceFillDetect";
+                        this.BadColumn = "DeviceFillHysteresis";
+                        this.BadColumnValue = this.DeviceFillHysteresis.ToString();
+                    }
+                    if (DeviceFillHysteresis > TankCap)
+                    {
+                        this.HaveError = true;
+                        this.StatusMessage = "DeviceFillHysteresis > TankCap";
+                        this.BadColumn = "DeviceFillHysteresis";
+                        this.BadColumnValue = this.DeviceFillHysteresis.ToString();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string errorMsg = ex.Message;
+                fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
+                FileWriter errorWriter = new FileWriter(fileName);
+                errorWriter.Write("****************************");
+                errorWriter.Write(DateTime.Now.ToString());
+                errorWriter.Write("Error at DeviceFillHysteresisCheck - ");
+                errorWriter.Write(ex.Message);
+                errorWriter.Close();
+            }
+        }
 
-        //internal void DataLogDeltaCheck()
-        //{
-        //    decimal datalogdelta = 0; ;
-        //    try
-        //    {
-        //        if (this.DataLogDelta != "*** Empty ***")
-        //        {
-        //            datalogdelta = decimal.Parse(this.DataLogDelta, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
-        //            if (datalogdelta > (1000))
-        //            {
-        //                this.HaveError = true;
-        //                this.StatusMessage = "DataLogDelta > 1000";
-        //                this.BadColumn = "DataLogDelta";
-        //                this.BadColumnValue = this.DataLogDelta;
-        //            }
-        //            if (datalogdelta < 0)
-        //            {
-        //                this.HaveError = true;
-        //                this.StatusMessage = "DataLogDelta < 0";
-        //                this.BadColumn = "DataLogDelta";
-        //                this.BadColumnValue = this.DataLogDelta;
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        string errorMsg = ex.Message;
-        //        fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
-        //        FileWriter errorWriter = new FileWriter(fileName);
-        //        errorWriter.Write("****************************");
-        //        errorWriter.Write(DateTime.Now.ToString());
-        //        errorWriter.Write("Error at DataLogDeltaCheck - ");
-        //        errorWriter.Write(ex.Message);
-        //        errorWriter.Close();
-        //    }
-        //}
+        internal void DataLogDeltaCheck()
+        {
+            decimal datalogdelta = 0; ;
+            try
+            {
+                if (this.DataLogDelta !=0)
+                {
+                  //  datalogdelta = decimal.Parse(this.DataLogDelta, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
+                    if (DataLogDelta > (1000))
+                    {
+                        this.HaveError = true;
+                        this.StatusMessage = "DataLogDelta > 1000";
+                        this.BadColumn = "DataLogDelta";
+                        this.BadColumnValue = this.DataLogDelta.ToString();
+                    }
+                    if (datalogdelta < 0)
+                    {
+                        this.HaveError = true;
+                        this.StatusMessage = "DataLogDelta < 0";
+                        this.BadColumn = "DataLogDelta";
+                        this.BadColumnValue = this.DataLogDelta.ToString();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string errorMsg = ex.Message;
+                fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
+                FileWriter errorWriter = new FileWriter(fileName);
+                errorWriter.Write("****************************");
+                errorWriter.Write(DateTime.Now.ToString());
+                errorWriter.Write("Error at DataLogDeltaCheck - ");
+                errorWriter.Write(ex.Message);
+                errorWriter.Close();
+            }
+        }
 
-        //internal void UsageDeltaCheck()
-        //{
-        //    decimal usagedelta = 0; ;
-        //    decimal tankcap = 0;
-        //    try
-        //    {
-        //        if (this.UsageDelta != "*** Empty ***")
-        //        {
-        //            usagedelta = decimal.Parse(this.UsageDelta, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
-        //            if (this.TankCap != "*** Empty ***")
-        //                tankcap = decimal.Parse(this.TankCap, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
-        //            else
-        //                tankcap = this.CurrentTankCap;
-        //            if (usagedelta > 1000)
-        //            {
-        //                this.HaveError = true;
-        //                this.StatusMessage = "UsageDelta > 1000";
-        //                this.BadColumn = "UsageDelta";
-        //                this.BadColumnValue = this.UsageDelta;
-        //            }
-        //            if (usagedelta < 0)
-        //            {
-        //                this.HaveError = true;
-        //                this.StatusMessage = "UsageDelta < 0";
-        //                this.BadColumn = "UsageDelta";
-        //                this.BadColumnValue = this.UsageDelta;
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        string errorMsg = ex.Message;
-        //        fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
-        //        FileWriter errorWriter = new FileWriter(fileName);
-        //        errorWriter.Write("****************************");
-        //        errorWriter.Write(DateTime.Now.ToString());
-        //        errorWriter.Write("Error at UsageDeltaCheck - ");
-        //        errorWriter.Write(ex.Message);
-        //        errorWriter.Close();
-        //    }
-        //}
+        internal void UsageDeltaCheck()
+        {
+           // decimal usagedelta = 0; ;
+           // decimal tankcap = 0;
+            try
+            {
+                if (this.UsageDelta != 0)
+                {
+                   // usagedelta = decimal.Parse(this.UsageDelta, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
+                    if (this.TankCap == 0)
+                    //    tankcap = decimal.Parse(this.TankCap, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
+                    //else
+                        TankCap = CurrentTankCap;
+                    if (UsageDelta > 1000)
+                    {
+                        this.HaveError = true;
+                        this.StatusMessage = "UsageDelta > 1000";
+                        this.BadColumn = "UsageDelta";
+                        this.BadColumnValue = this.UsageDelta.ToString();
+                    }
+                    if (UsageDelta < 0)
+                    {
+                        this.HaveError = true;
+                        this.StatusMessage = "UsageDelta < 0";
+                        this.BadColumn = "UsageDelta";
+                        this.BadColumnValue = this.UsageDelta.ToString();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string errorMsg = ex.Message;
+                fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
+                FileWriter errorWriter = new FileWriter(fileName);
+                errorWriter.Write("****************************");
+                errorWriter.Write(DateTime.Now.ToString());
+                errorWriter.Write("Error at UsageDeltaCheck - ");
+                errorWriter.Write(ex.Message);
+                errorWriter.Close();
+            }
+        }
 
-        //internal void WakeIntervalCheck()
-        //{
-        //    try
-        //    {
-        //        bool tl9xDevice = false;
-        //        int wakeinterval = 0;
-        //        if (this.WakeInterval != "*** Empty ***")
-        //        {
-        //            wakeinterval = int.Parse(this.WakeInterval);
-        //            if (this.CurrentModelNumber.Substring(2, 1) == "H" || this.CurrentModelNumber.Substring(2, 1) == "L")
-        //                tl9xDevice = true;
-        //            if (!tl9xDevice && wakeinterval > 255)
-        //            {
-        //                this.HaveError = true;
-        //                this.StatusMessage = "WakeInterval > 255";
-        //                this.BadColumn = "WakeInterval";
-        //                this.BadColumnValue = this.WakeInterval;
-        //            }
-        //            if (!tl9xDevice && wakeinterval > 1092)
-        //            {
-        //                this.HaveError = true;
-        //                this.StatusMessage = "WakeInterval > 1092";
-        //                this.BadColumn = "WakeInterval";
-        //                this.BadColumnValue = this.WakeInterval;
-        //            }
-        //            if (wakeinterval < 1)
-        //            {
-        //                this.HaveError = true;
-        //                this.StatusMessage = "WakeInterval < 1";
-        //                this.BadColumn = "WakeInterval";
-        //                this.BadColumnValue = this.WakeInterval;
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        string errorMsg = ex.Message;
-        //        fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
-        //        FileWriter errorWriter = new FileWriter(fileName);
-        //        errorWriter.Write("****************************");
-        //        errorWriter.Write(DateTime.Now.ToString());
-        //        errorWriter.Write("Error at WakeIntervalCheck - ");
-        //        errorWriter.Write(ex.Message);
-        //        errorWriter.Close();
-        //    }
-        //}
+        internal void WakeIntervalCheck()
+        {
+            try
+            {
+                bool tl9xDevice = false;
+                int wakeinterval = 0;
+                if (this.WakeInterval != 0)
+                {
+                    //wakeinterval = int.Parse(this.WakeInterval);
+                    if (this.CurrentModelNumber.Substring(2, 1) == "H" || this.CurrentModelNumber.Substring(2, 1) == "L")
+                        tl9xDevice = true;
+                    if (!tl9xDevice && WakeInterval > 255)
+                    {
+                        this.HaveError = true;
+                        this.StatusMessage = "WakeInterval > 255";
+                        this.BadColumn = "WakeInterval";
+                        this.BadColumnValue = this.WakeInterval.ToString();
+                    }
+                    if (!tl9xDevice && wakeinterval > 1092)
+                    {
+                        this.HaveError = true;
+                        this.StatusMessage = "WakeInterval > 1092";
+                        this.BadColumn = "WakeInterval";
+                        this.BadColumnValue = this.WakeInterval.ToString();
+                    }
+                    if (WakeInterval < 1)
+                    {
+                        this.HaveError = true;
+                        this.StatusMessage = "WakeInterval < 1";
+                        this.BadColumn = "WakeInterval";
+                        this.BadColumnValue = this.WakeInterval.ToString();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string errorMsg = ex.Message;
+                fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
+                FileWriter errorWriter = new FileWriter(fileName);
+                errorWriter.Write("****************************");
+                errorWriter.Write(DateTime.Now.ToString());
+                errorWriter.Write("Error at WakeIntervalCheck - ");
+                errorWriter.Write(ex.Message);
+                errorWriter.Close();
+            }
+        }
 
 
 
         #endregion
+
+        //internal bool Add()
+        //{
+        //    bool successfulupdate = false;
+        //    try
+        //    {
+        //        successfulupdate = Utilities.Utilities.UpdateTankConfig(this.ConnectionString, this.TankID, this.CurrentTankConfigID, this.UserID,
+        //                                    this.TankName, this.TankHgt, this.TankCap, this.CapacityLimit,
+        //                                    this.LimitCapacityFlag, this.TankMinimum, this.ReorderUsage,
+        //                                    this.SafetyStockUsage, this.StartTime, this.CallsPerDay, this.CallDay,
+        //                                    this.Interval, this.DiagCallDayMask, this.HighSetPoint, this.LowSetPoint,
+        //                                    this.SensorOffset, this.CoeffExp, this.SpecGrav, this.LowLowLevel,
+        //                                    this.LowLevel, this.HighLevel, this.HighHighLevel, this.FillDetectDelta,
+        //                                    this.ShortFillDelta, this.VolumeDelta, this.RateChangeDelta,
+        //                                    this.DeviceCriticalLowLevel, this.DeviceLowLevel, this.DeviceHighLevel,
+        //                                    this.DeviceCriticalHighLevel, this.DeviceFillDetect, this.DeviceFillDetectDelta,
+        //                                    this.DeviceFillHysteresis, this.DataLogDelta, this.UsageDelta, this.WakeInterval, this.DeviceUsageAlarm,
+        //                                    this.HasExpectedCallAlarm, this.TankNormallyFills, EnableGPS, EnableLocation);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        string errorMsg = ex.Message;
+        //        fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
+        //        FileWriter errorWriter = new FileWriter(fileName);
+        //        errorWriter.Write("****************************");
+        //        errorWriter.Write(DateTime.Now.ToString());
+        //        errorWriter.Write("Error at TankConfig.Add - ");
+        //        errorWriter.Write(ex.Message);
+        //        errorWriter.Close();
+        //    }
+        //    return successfulupdate;
+        //}
     }
 
 }

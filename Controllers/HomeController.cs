@@ -113,8 +113,33 @@ namespace PortalWebApp.Controllers
         public IActionResult ImportExcelFile(BulkUpdate model)
         {
             var filename = Path.GetFileName(model.FileName);
-            BulkConfiguratorQueue bulkConfiguratorQueue = new BulkConfiguratorQueue(model, _databaseContext);
-           // bulkConfiguratorQueue.
+          //  BulkConfiguratorQueue bulkConfiguratorQueue = new BulkConfiguratorQueue(model, _databaseContext);
+            //if (myBulkConfigurator.HaveEXCELReadError)
+            //{
+            //    statusLBL.ForeColor = Color.Red;
+            //    statusLBL.Text = "Problem reading the EXCEL sheet. Make sure all columns are present";
+            //    validationError = true;
+            //}
+            //else
+            //{
+            //    totalEXCELCount = myBulkConfigurator.TotalEXCELCount;
+            //    progressBar1.Maximum = totalEXCELCount;
+            //    if (!myBulkConfigurator.HaveError)
+            //    {
+            //        MessageBox.Show("Data Validation Checks Finished.  Now processing updates");
+            //        //ProcessAllEXCELRecords();
+            //        th1 = new Thread(new ThreadStart(ProcessAllEXCELRecords));
+            //        timer1.Enabled = true;
+            //        timer1.Start();
+            //        th1.Start();
+            //    }
+            //    else
+            //    {
+            //        statusLBL.ForeColor = Color.Red;
+            //        statusLBL.Text = "Errors found in EXCEL file. Review error report";
+            //        validationError = true;
+            //    }
+            //}
             //get path
             var MainPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Uploads");
 
@@ -166,20 +191,38 @@ namespace PortalWebApp.Controllers
 
             using (SqlConnection con = new SqlConnection(conString))
             {
-                using (SqlBulkCopy sqlBulkCopy = new SqlBulkCopy(con))
+                using (var cmd = new SqlCommand("INSERT INTO dbo.TankConfig_Test1 (RTUNumber, StartTime, Interval) VALUES (@RTUNumber, @StartTime,@Interval)",con))
                 {
-                    //Set the database table name.
-                    sqlBulkCopy.DestinationTableName = "dbo.TankConfig_Test";
-
-                    sqlBulkCopy.ColumnMappings.Add("TankID", "TankID");
-                    sqlBulkCopy.ColumnMappings.Add("RTUNumber", "RTUNumber");
-                    sqlBulkCopy.ColumnMappings.Add("StartTime", "StartTime");
-                    sqlBulkCopy.ColumnMappings.Add("Interval", "Interval");
-
                     con.Open();
-                    sqlBulkCopy.WriteToServer(dt);
+                    cmd.Parameters.Add(new SqlParameter("@RTUNumber",SqlDbType.NChar));
+                    cmd.Parameters.Add(new SqlParameter("@StartTime", SqlDbType.DateTime));
+                    cmd.Parameters.Add(new SqlParameter("@Interval", SqlDbType.NVarChar));
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        cmd.Parameters[0].Value= dr["RTUNumber"];
+                        cmd.Parameters[1].Value = dr["StartTime"];
+                        cmd.Parameters[2].Value = dr["Interval"];
+                        //cmd.Parameters.AddWithValue("@StartTime", dr["StartTime"]);
+                        //cmd.Parameters.AddWithValue("@Interval", dr["Interval"]);                
+                        int rowsAffected = cmd.ExecuteNonQuery();
+                      //  con.Close();
+                    }
                     con.Close();
                 }
+                //using (SqlBulkCopy sqlBulkCopy = new SqlBulkCopy(con))
+                //{
+                //    //Set the database table name.
+                //    sqlBulkCopy.DestinationTableName = "dbo.TankConfig_Test1";
+
+                //   // sqlBulkCopy.ColumnMappings.Add("TankID", "TankID");
+                //   // sqlBulkCopy.ColumnMappings.Add("RTUNumber", "RTUNumber");
+                //    sqlBulkCopy.ColumnMappings.Add("StartTime", "StartTime");
+                //    sqlBulkCopy.ColumnMappings.Add("Interval", "Interval");
+
+                //    con.Open();
+                //    sqlBulkCopy.WriteToServer(dt);
+                //    con.Close();
+                //}
             }
             //if the code reach here means everthing goes fine and excel data is imported into database
             ViewBag.Message = "File Imported and excel data saved into database";

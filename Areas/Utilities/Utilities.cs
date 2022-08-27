@@ -271,29 +271,29 @@ namespace PortalWebApp.Utilities {
 
         //modified to include EnableGPS and EnableLocation
 
-        public static bool UpdateTankConfig(string conn, int tankid, int tankconfigid, int userid, string tankname, string tankhgt, string tankcap,
-                                            string capacitylimit, string limitcapacityflag, string tankminimum, string reorderusage,
-                                            string safetystockusage, string starttime, string callsperday, string callday, string interval,
-                                            string diagcalldaymask, string highsetpoint, string lowsetpoint, string sensoroffset,
-                                            string coeffexp, string specgrav, string lowlowlevel, string lowlevel, string highlevel,
-                                            string highhighlevel, string filldetectdelta, string shortfilldelta, string volumedelta,
-                                            string ratechangedelta, string devicecriticallowlevel, string devicelowlevel,
-                                            string devicehighlevel, string devicecriticalhighlevel, string devicefilldetect,
-                                            string devicefilldetectdelta, string devicefillhysteresis, string datalogdelta,
-                                            string usagedelta, string wakeinterval, string deviceusagealarm, string hasexpectedcallalarm,
-                                            string tanknormallyfills, string enablegps, string enablelocation)
+        //public static bool UpdateTankConfig(string conn, int tankid, int tankconfigid, int userid, string tankname, string tankhgt, string tankcap,
+        //                                    string capacitylimit, string limitcapacityflag, string tankminimum, string reorderusage,
+        //                                    string safetystockusage, string starttime, string callsperday, string callday, string interval,
+        //                                    string diagcalldaymask, string highsetpoint, string lowsetpoint, string sensoroffset,
+        //                                    string coeffexp, string specgrav, string lowlowlevel, string lowlevel, string highlevel,
+        //                                    string highhighlevel, string filldetectdelta, string shortfilldelta, string volumedelta,
+        //                                    string ratechangedelta, string devicecriticallowlevel, string devicelowlevel,
+        //                                    string devicehighlevel, string devicecriticalhighlevel, string devicefilldetect,
+        //                                    string devicefilldetectdelta, string devicefillhysteresis, string datalogdelta,
+        //                                    string usagedelta, string wakeinterval, string deviceusagealarm, string hasexpectedcallalarm,
+        //                                    string tanknormallyfills, string enablegps, string enablelocation)
 
-        {
-          //  bool noerrors = false;
-            bool tankupdateerror = false;
-            string fileName = string.Empty;
-            string errorfilepath = AppDomain.CurrentDomain.BaseDirectory + "ErrorFile";
-            //TankData.DBTableAdapters.TankConfigTableAdapter tankConfigTA = null;
-            //TankData.DB.TankConfigDataTable tankConfigDT = null;
-            //TankData.DB.TankConfigRow newTankConfigDR = null;
-           // int newTankConfigID = 0;
-            try
-            {
+        //{
+        //  //  bool noerrors = false;
+        //    bool tankupdateerror = false;
+        //    string fileName = string.Empty;
+        //    string errorfilepath = AppDomain.CurrentDomain.BaseDirectory + "ErrorFile";
+        //    TankData.DBTableAdapters.TankConfigTableAdapter tankConfigTA = null;
+        //    TankData.DB.TankConfigDataTable tankConfigDT = null;
+        //    TankData.DB.TankConfigRow newTankConfigDR = null;
+        //    // int newTankConfigID = 0;
+        //    try
+        //    {
                 //TankData.DB.TankConfigRow currentTankConfigDR = GetCurrentTankConfig(conn, tankconfigid);
                 //using (tankConfigTA = new TankData.DBTableAdapters.TankConfigTableAdapter())
                 //{
@@ -394,20 +394,20 @@ namespace PortalWebApp.Utilities {
                 //        tankupdateerror = UpdateTank(noerrors, conn, tankid, userid, newTankConfigID);
                 //    }
                 //}
-            }
-            catch (Exception ex)
-            {
-                string errorMsg = ex.Message;
-                fileName = errorfilepath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
-                //FileWriter errorWriter = new FileWriter(fileName);
-                //errorWriter.Write("****************************");
-                //errorWriter.Write(DateTime.Now.ToString());
-                //errorWriter.Write("Error at TankConfig.Add - ");
-                //errorWriter.Write(ex.Message);
-                //errorWriter.Close();
-            }
-            return tankupdateerror;
-        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        string errorMsg = ex.Message;
+        //        fileName = errorfilepath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
+        //        //FileWriter errorWriter = new FileWriter(fileName);
+        //        //errorWriter.Write("****************************");
+        //        //errorWriter.Write(DateTime.Now.ToString());
+        //        //errorWriter.Write("Error at TankConfig.Add - ");
+        //        //errorWriter.Write(ex.Message);
+        //        //errorWriter.Close();
+        //    }
+        //    return tankupdateerror;
+        //}
 
         public static /*TankData.DB.TankConfigRow*/ void  GetCurrentTankConfig(string conn, int tankconfigid)
         {
