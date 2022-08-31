@@ -58,7 +58,81 @@
 
 
 </script>
+<script>
 
+    $('#UploadBtn').click(function () {
+
+        var fileUpload = $("#Files").get(0);
+        var files = fileUpload.files;
+        // Create FormData object
+        var fileData = new FormData();
+        // Looping over all files and add it to FormData object
+        for (var i = 0; i < files.length; i++) {
+            fileData.append(files[i].name, files[i]);
+        }
+        $.ajax({
+            url: '/Home/UploadFiles',
+            type: "POST",
+            contentType: false, // Not to set any content header
+            processData: false, // Not to process data
+            data: fileData,
+            async: false,
+            success: function (result) {
+                if (result != "") {
+                    $('#FileBrowse').find("*").prop("disabled", true);
+                    LoadProgressBar(result); //calling LoadProgressBar function to load the progress bar.
+                }
+            },
+            error: function (err) {
+                alert(err.statusText);
+            }
+        });
+
+    });
+
+    function LoadProgressBar(result) {
+        var progressbar = $("#progressbar-5");
+        var progressLabel = $(".progress-label");
+        progressbar.show();
+        $("#progressbar-5").progressbar({
+            //value: false,
+            change: function () {
+                progressLabel.text(
+                    progressbar.progressbar("value") + "%");  // Showing the progress increment value in progress bar
+            },
+            complete: function () {
+                progressLabel.text("Loading Completed!");
+                progressbar.progressbar("value", 0);  //Reinitialize the progress bar value 0
+                progressLabel.text("");
+                progressbar.hide(); //Hiding the progress bar
+                var markup = "<tr><td>" + result + "</td><td><a href='#' onclick='DeleteFile(\"" + result + "\")'><span class='glyphicon glyphicon-remove red'></span></a></td></tr>"; // Binding the file name
+                $("#ListofFiles tbody").append(markup);
+                $('#Files').val('');
+                $('#FileBrowse').find("*").prop("disabled", false);
+            }
+        });
+        function progress() {
+            var val = progressbar.progressbar("value") || 0;
+            progressbar.progressbar("value", val + 1);
+            if (val < 99) {
+                setTimeout(progress, 25);
+            }
+        }
+        setTimeout(progress, 100);
+    }
+
+    function DeleteFile(FileName) {
+
+        //Write your delete logic here
+    }
+
+    function updateui() {
+
+        document.getElementById('Submit').value = 'Running CONFIG IMPORT...';
+        document.getElementById('spin').style.visibility = "visible";
+    }
+
+</script>
 @using (Html.BeginForm("ImportExcelFile", "Home", FormMethod.Post))
 {
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -69,11 +143,11 @@
             <tr style="background-color:lightblue">
                 <td style="width:25%;font-weight:bold">@Html.LabelFor(model => model.Environment, "Environment ", new { Class = "form-label" })</td>
                 <td style="width:25%">
-                    @Html.RadioButtonFor(model => model.Environment, BulkUpdate.Env.Dev,new { Id = "Development" })
+                    @Html.RadioButtonFor(model => model.Environment, BulkUpdate.Env.Dev, new { Id = "Development" })
                     <label for="Development">&nbsp;Development</label>
                 </td>
                 <td style="width:25%">
-                    @Html.RadioButtonFor(model => model.Environment, BulkUpdate.Env.Prod,new { Id = "Production" })
+                    @Html.RadioButtonFor(model => model.Environment, BulkUpdate.Env.Prod, new { Id = "Production" })
                     <label for="Production">&nbsp;Production</label>
                 </td>
             </tr>
@@ -83,7 +157,7 @@
             <tr>
                 <td style="width:25%">@Html.LabelFor(model => model.UserID, "User ID", new { Class = "form-label" })</td>
                 <td>
-                    <select asp-for="UserID"   class="form-control"  asp-items="@(new SelectList(ViewBag.ListofUser,"Value","Text"))">
+                    <select asp-for="UserID" class="form-control" asp-items="@(new SelectList(ViewBag.ListofUser,"Value","Text"))">
                     </select>
                 </td>
                 <td style="color:red;font: all-petite-caps;font-weight:bold"> @Html.ValidationMessageFor(model => model.UserID)</td>
@@ -97,8 +171,12 @@
                    {
                        htmlAttributes = new
                        {
-                           @type = "number", @min = "0",  @max = "100",   @step = "1",
-                           @onkeypress = "OnlyNumeric(this);", Class = "form-control"
+                           @type = "number",
+                            @min = "0",
+                            @max = "100",
+                            @step = "1",
+                           @onkeypress = "OnlyNumeric(this);",
+                            Class = "form-control"
                        }
                    })
                 </td>
@@ -112,8 +190,12 @@
                     {
                         htmlAttributes = new
                         {
-                            @type = "number", @min = "0", @max = "100",  @step = "1",
-                            @onkeypress = "OnlyNumeric(this);", Class = "form-control"
+                            @type = "number",
+                            @min = "0",
+                            @max = "100",
+                            @step = "1",
+                            @onkeypress = "OnlyNumeric(this);",
+                            Class = "form-control"
                         }
                     })
                 </td>
@@ -121,13 +203,16 @@
             </tr>
 
             <tr>
-                <td>     @Html.LabelFor(model => model.RTU, "Enable RTU Validation", new { Class = "form-label" })                  
+                <td>
+                    @Html.LabelFor(model => model.RTU, "Enable RTU Validation", new { Class = "form-label" })
                 </td>
-                <td colspan="2">    @Html.CheckBoxFor(model => model.RTU, new { Class = "form-check", @checked = "checked" })       
+                <td colspan="2">
+                    @Html.CheckBoxFor(model => model.RTU, new { Class = "form-check", @checked = "checked" })
                 </td>
             </tr>
             <tr>
-                <td>     @Html.HiddenFor(model => model.FileName)Select File:                                                      
+                <td>
+                    @Html.HiddenFor(model => model.FileName)Select File:
                 </td>
                 <td colspan="2">
                     <input type="file" model onchange="uploadFile();document.getElementById('FileName').value = this.value;" name="file1" id="file1" value="s" />
@@ -142,8 +227,12 @@
                 <td colspan="3">
                     <span style="color:green">@Html.Raw(ViewBag.Message)</span>
                     <button name="button" class="btn btn-success" id="btnRun" value="cph" asp-action="check">Run</button>
-                    <input id="Submit" class="btn btn-success" type="submit" value="Run BULK CONFIG IMPORT" disabled onclick=" this.value = 'Running CONFIG IMPORT...'" />
-                    <br /> <br /><br />
+                    <input id="Submit" class="btn btn-success" type="submit" value="Run BULK CONFIG IMPORT" disabled onclick="updateui() " />
+                    &nbsp;&nbsp;&nbsp;
+                    <div id="spin" class="spinner-border" role="status" style="visibility:hidden">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                    <br /><br />
 
                     <div id="divAlert" runat="server" class="alert alert-success alert-dismissible  fade show" role="alert">
                         <strong>&nbsp;@TempData["ButtonValue"]</strong>
@@ -162,10 +251,10 @@
     <div class="modal fade" id="warningModal" tabindex="-1" role="dialog" aria-labelledby="warningModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-confirm">
             <div class="modal-content">
-                <div class="modal-header  justify-content-center flex-column icon-box">            
-                        <div class="modal-title w-100" style="text-align:center;"> 
-                                    <i class="material-icons" style="font-size:48px; color:red">info</i>Confirm!
-                        </div>   
+                <div class="modal-header  justify-content-center flex-column icon-box">
+                    <div class="modal-title w-100" style="text-align:center;">
+                        <i class="material-icons" style="font-size:48px; color:red">info</i>Confirm!
+                    </div>
                 </div>
                 <div class="modal-body">
                     <div style="text-align:center;font-weight:bolder">You are about about to run in PROD.</div>

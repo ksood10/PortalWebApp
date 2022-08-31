@@ -73,12 +73,16 @@ namespace PortalWebApp.Controllers
             return RedirectToAction("BulkConfig");
         }
 
-        [Authorize]
+        
         public IActionResult Privacy()
         {
             return View();
         }
-        public IActionResult BulkConfig()
+
+        
+      
+
+            public IActionResult BulkConfig()
         {
             var userList = (from user in _databaseContext.User
                             where user.OrganizationID == 10
@@ -192,123 +196,105 @@ namespace PortalWebApp.Controllers
             using (SqlConnection con = new SqlConnection(conString))
             {
                 using (var cmd = new SqlCommand("BulkTankConfig_Insert", con))
-                // using (var cmd = new SqlCommand("INSERT INTO dbo.TankConfig_Test1 (RTUNumber, StartTime, Interval) VALUES (@RTUNumber, @StartTime,@Interval)",con))
-                {
+                 {
                     con.Open();
                     cmd.CommandType = CommandType.StoredProcedure;
-                   //// @TankConfigId Int OUTPUT , 
-                   // cmd.Parameters.Add(new SqlParameter("@TankID", SqlDbType.Int));
+
+                    cmd.Parameters.Add(new SqlParameter("@TankID", SqlDbType.Int));
                     cmd.Parameters.Add(new SqlParameter("@RTUNumber", SqlDbType.NVarChar));
-                    //cmd.Parameters.Add(new SqlParameter("@TankName", SqlDbType.NVarChar));
-                    //cmd.Parameters.Add(new SqlParameter("@TankHgt", SqlDbType.Decimal));
-                    //cmd.Parameters.Add(new SqlParameter("@TankCap", SqlDbType.Decimal));
-                    //cmd.Parameters.Add(new SqlParameter("@CapacityLimit", SqlDbType.Decimal));
-                    //cmd.Parameters.Add(new SqlParameter("@TankMinimum", SqlDbType.Decimal));
-                    //cmd.Parameters.Add(new SqlParameter("@ReorderUsage", SqlDbType.Int));
-                    //cmd.Parameters.Add(new SqlParameter("@SafetyStockUsage", SqlDbType.Int));
-                    //cmd.Parameters.Add(new SqlParameter("@ReorderUsage", SqlDbType.Int));
+                    cmd.Parameters.Add(new SqlParameter("@TankHgt", SqlDbType.Decimal));
+                    cmd.Parameters.Add(new SqlParameter("@TankCap", SqlDbType.Decimal));
+                    cmd.Parameters.Add(new SqlParameter("@CapacityLimit", SqlDbType.Decimal));
+                    cmd.Parameters.Add(new SqlParameter("@TankMinimum", SqlDbType.Decimal));
+                    cmd.Parameters.Add(new SqlParameter("@SafetyStockUsage", SqlDbType.Int));
+                    cmd.Parameters.Add(new SqlParameter("@ReorderUsage", SqlDbType.Int));
                     cmd.Parameters.Add(new SqlParameter("@StartTime", SqlDbType.DateTime));
-                    //cmd.Parameters.Add(new SqlParameter("@Callsperday", SqlDbType.Int));
-                    //cmd.Parameters.Add(new SqlParameter("@CallDay", SqlDbType.Int));
+                    cmd.Parameters.Add(new SqlParameter("@Callsperday", SqlDbType.Int));
+                    cmd.Parameters.Add(new SqlParameter("@CallDay", SqlDbType.Int));
                     cmd.Parameters.Add(new SqlParameter("@Interval", SqlDbType.NVarChar));
-                   // cmd.Parameters.Add(new SqlParameter("@DiagCallDayMask", SqlDbType.Int));
-                   // cmd.Parameters.Add(new SqlParameter("@HighSetPoint", SqlDbType.Decimal));
-                   // cmd.Parameters.Add(new SqlParameter("@LowSetPoint", SqlDbType.Decimal));
-                   // cmd.Parameters.Add(new SqlParameter("@SensorOffset", SqlDbType.Decimal));
-                   // cmd.Parameters.Add(new SqlParameter("@CoeffExp", SqlDbType.Decimal));
-                   // cmd.Parameters.Add(new SqlParameter("@SpecGrav", SqlDbType.Decimal));
-                   // cmd.Parameters.Add(new SqlParameter("@LowLowLevel", SqlDbType.Int));
-                   // cmd.Parameters.Add(new SqlParameter("@LowLevel", SqlDbType.Int));
-                   // cmd.Parameters.Add(new SqlParameter("@HighLevel", SqlDbType.Int));
-                   // cmd.Parameters.Add(new SqlParameter("@HighHighLevel", SqlDbType.Int));
-                   // cmd.Parameters.Add(new SqlParameter("@ShortFillDelta", SqlDbType.Decimal));
-                   // cmd.Parameters.Add(new SqlParameter("@FillDetectDelta", SqlDbType.Decimal));
-                   // cmd.Parameters.Add(new SqlParameter("@VolumeDelta", SqlDbType.Int));
-                   // cmd.Parameters.Add(new SqlParameter("@DeviceCriticalLowLevel", SqlDbType.Bit));
-                   // cmd.Parameters.Add(new SqlParameter("@DeviceLowLevel", SqlDbType.Bit));
-                   // cmd.Parameters.Add(new SqlParameter("@DeviceHighLevel", SqlDbType.Bit));
-                   // cmd.Parameters.Add(new SqlParameter("@DeviceCriticalHighLevel", SqlDbType.Bit));
-                   // cmd.Parameters.Add(new SqlParameter("@DeviceFillDetect", SqlDbType.Bit));
-                   // cmd.Parameters.Add(new SqlParameter("@DeviceFillDetectDelta", SqlDbType.Decimal));
-                   // cmd.Parameters.Add(new SqlParameter("@DeviceFillHysteresis", SqlDbType.Bit));
-                   // cmd.Parameters.Add(new SqlParameter("@DataLogDelta", SqlDbType.Int));
-                   // cmd.Parameters.Add(new SqlParameter("@UsageDelta", SqlDbType.Bit));
-                   // cmd.Parameters.Add(new SqlParameter("@WakeInterval", SqlDbType.Int));
-                   //// cmd.Parameters.Add(new SqlParameter("@DeviceUsageAlarm ", SqlDbType.Bit));
-                   // cmd.Parameters.Add(new SqlParameter("@HasExpectedCallAlarm", SqlDbType.Bit));
-                   // cmd.Parameters.Add(new SqlParameter("@TankNormallyFills", SqlDbType.Bit));
-                   // cmd.Parameters.Add(new SqlParameter("@EnableGPS", SqlDbType.Bit));
-                   // cmd.Parameters.Add(new SqlParameter("@EnableLocation", SqlDbType.Bit));
+                    cmd.Parameters.Add(new SqlParameter("@DiagCallDayMask", SqlDbType.Int));
+                    cmd.Parameters.Add(new SqlParameter("@HighSetPoint", SqlDbType.Decimal));
+                    cmd.Parameters.Add(new SqlParameter("@LowSetPoint", SqlDbType.Decimal));
+                    cmd.Parameters.Add(new SqlParameter("@SensorOffset", SqlDbType.Decimal));
+                    cmd.Parameters.Add(new SqlParameter("@CoeffExp", SqlDbType.Decimal));
+                    cmd.Parameters.Add(new SqlParameter("@SpecGrav", SqlDbType.Decimal));
+                    cmd.Parameters.Add(new SqlParameter("@LowLowLevel", SqlDbType.Int));
+                    cmd.Parameters.Add(new SqlParameter("@LowLevel", SqlDbType.Int));
+                    cmd.Parameters.Add(new SqlParameter("@HighLevel", SqlDbType.Int));
+                    cmd.Parameters.Add(new SqlParameter("@HighHighLevel", SqlDbType.Int));
+                    cmd.Parameters.Add(new SqlParameter("@ShortFillDelta", SqlDbType.Decimal));
+                    cmd.Parameters.Add(new SqlParameter("@FillDetectDelta", SqlDbType.Decimal));
+                    cmd.Parameters.Add(new SqlParameter("@VolumeDelta", SqlDbType.Int));
+                    cmd.Parameters.Add(new SqlParameter("@RateChangeDelta", SqlDbType.Int));
+                    cmd.Parameters.Add(new SqlParameter("@DeviceCriticalLowLevel", SqlDbType.Bit));
+                    cmd.Parameters.Add(new SqlParameter("@DeviceLowLevel", SqlDbType.Bit));
+                    cmd.Parameters.Add(new SqlParameter("@DeviceHighLevel", SqlDbType.Bit));
+                    cmd.Parameters.Add(new SqlParameter("@DeviceCriticalHighLevel", SqlDbType.Bit));
+                    cmd.Parameters.Add(new SqlParameter("@DeviceFillDetect", SqlDbType.Bit));
+                    cmd.Parameters.Add(new SqlParameter("@DeviceFillDetectDelta", SqlDbType.Decimal));
+                    cmd.Parameters.Add(new SqlParameter("@DeviceFillHysteresis", SqlDbType.Bit));
+                    cmd.Parameters.Add(new SqlParameter("@DataLogDelta", SqlDbType.Int));
+                    cmd.Parameters.Add(new SqlParameter("@UsageDelta", SqlDbType.Bit));
+                    cmd.Parameters.Add(new SqlParameter("@WakeInterval", SqlDbType.Int));
+                    //cmd.Parameters.Add(new SqlParameter("@DeviceUsageAlarm ", SqlDbType.Bit));
+                    cmd.Parameters.Add(new SqlParameter("@HasExpectedCallAlarm", SqlDbType.Bit));
+                    cmd.Parameters.Add(new SqlParameter("@TankNormallyFills", SqlDbType.Bit));
+                    cmd.Parameters.Add(new SqlParameter("@EnableGPS", SqlDbType.Bit));
+                    cmd.Parameters.Add(new SqlParameter("@EnableLocation", SqlDbType.Bit));
 
 
                     foreach (DataRow dr in dt.Rows)
                     {
-                        //cmd.Parameters["@TankID"].Value= dr["TankID"];
+                        cmd.Parameters["@TankID"].Value= dr["TankID"];
                         cmd.Parameters["@RTUNumber"].Value = dr["RTUNumber"];
-                        //cmd.Parameters["@TankName"].Value = dr["TankName"];
-                        //cmd.Parameters["@TankHgt"].Value = dr["TankHgt"];
-                        //cmd.Parameters["@TankCap"].Value = dr["TankCap"];
-                        //cmd.Parameters["@CapacityLimit"].Value = dr["CapacityLimit"];
-                        //cmd.Parameters["@TankMinimum"].Value = dr["TankMinimum"];
-                        //cmd.Parameters["@ReorderUsage"].Value = dr["ReorderUsage"];
-                        //cmd.Parameters["@SafetyStockUsage"].Value = dr["SafetyStockUsage"];
-                        //cmd.Parameters["@StartTime"].Value = dr["StartTime"];
-                        //cmd.Parameters["@Callsperday"].Value = dr["Callsperday"];
-                        //cmd.Parameters["@CallDay"].Value = dr["CallDay"];
+                        cmd.Parameters["@TankHgt"].Value = (dr["TankHgt"] == DBNull.Value) ? 0 : dr["TankHgt"];
+                        cmd.Parameters["@TankCap"].Value = (dr["TankCap"] == DBNull.Value) ? 0 : dr["TankCap"]; 
+                        cmd.Parameters["@CapacityLimit"].Value = (dr["CapacityLimit"] == DBNull.Value) ? 0 : dr["CapacityLimit"];
+                        cmd.Parameters["@TankMinimum"].Value = (dr["TankMinimum"] == DBNull.Value) ? 0 : dr["TankMinimum"];
+                        cmd.Parameters["@ReorderUsage"].Value = (dr["ReorderUsage"] == DBNull.Value) ? 0 : dr["ReorderUsage"]; 
+                        cmd.Parameters["@SafetyStockUsage"].Value = (dr["SafetyStockUsage"] == DBNull.Value) ? 0 : dr["SafetyStockUsage"];
+
+                        cmd.Parameters["@Callsperday"].Value = (dr["Callsperday"] == DBNull.Value) ? 0 : dr["Callsperday"];
+                        cmd.Parameters["@CallDay"].Value = (dr["CallDay"] == DBNull.Value) ? 0 : dr["CallDay"];
                         cmd.Parameters["@StartTime"].Value = dr["StartTime"];
                                       
-                        cmd.Parameters["@Interval"].Value = dr["Interval"];
-                       // cmd.Parameters["@DiagCallDayMask"].Value = dr["DiagCallDayMask"];
-                       // cmd.Parameters["@HighSetPoint"].Value = dr["HighSetPoint"];
-                       // cmd.Parameters["@LowSetPoint"].Value = dr["LowSetPoint"];
-                       // cmd.Parameters["@SensorOffset"].Value = dr["SensorOffset"];
-                       // cmd.Parameters["@CoeffExp"].Value = dr["CoeffExp"];
-                       // cmd.Parameters["@SpecGrav"].Value = dr["SpecGrav"];
-                       // cmd.Parameters["@LowLowLevel"].Value = dr["LowLowLevel"];
-                       // cmd.Parameters["@LowLevel"].Value = dr["LowLevel"];
-                       // cmd.Parameters["@HighLevel"].Value = dr["HighLevel"];
-                       // cmd.Parameters["@HighHighLevel"].Value = dr["HighHighLevel"];
-                       // cmd.Parameters["@ShortFillDelta"].Value = dr["ShortFillDelta"];
-                       // cmd.Parameters["@FillDetectDelta"].Value = dr["FillDetectDelta"];
-                       // cmd.Parameters["@VolumeDelta"].Value = dr["VolumeDelta"];
-                       // cmd.Parameters["@DeviceCriticalLowLevel"].Value = dr["DeviceCriticalLowLevel"];
-                       // cmd.Parameters["@DeviceLowLevel"].Value = dr["DeviceLowLevel"];
-                       // cmd.Parameters["@DeviceHighLevel"].Value = dr["DeviceHighLevel"];
-                       // cmd.Parameters["@DeviceCriticalHighLevel"].Value = dr["DeviceCriticalHighLevel"];
-                       // cmd.Parameters["@DeviceFillDetect"].Value = dr["DeviceFillDetect"];
-                       // cmd.Parameters["@DeviceFillDetectDelta"].Value = dr["DeviceFillDetectDelta"];
-                       // cmd.Parameters["@DeviceFillHysteresis"].Value = dr["DeviceFillHysteresis"];
-                       // cmd.Parameters["@DataLogDelta"].Value = dr["DataLogDelta"];
-                       // cmd.Parameters["@UsageDelta"].Value = dr["UsageDelta"];
-                       // cmd.Parameters["@WakeInterval"].Value = dr["WakeInterval"];
-                       //// cmd.Parameters["@DeviceUsageAlarm"].Value = dr["DeviceUsageAlarm"];
-                       // cmd.Parameters["@HasExpectedCallAlarm"].Value = dr["HasExpectedCallAlarm"];
-                       // cmd.Parameters["@TankNormallyFills"].Value = dr["TankNormallyFills"];
-                       // cmd.Parameters["@EnableGPS"].Value = dr["EnableGPS"];
-                       // cmd.Parameters["@EnableLocation"].Value = dr["EnableLocation"];
-
-                        
-                        //cmd.Parameters.AddWithValue("@StartTime", dr["StartTime"]);
-                        //cmd.Parameters.AddWithValue("@Interval", dr["Interval"]);                
+                        cmd.Parameters["@Interval"].Value = (dr["Interval"] == DBNull.Value) ? "0" : dr["Interval"];
+                        cmd.Parameters["@DiagCallDayMask"].Value = (dr["DiagCallDayMask"] == DBNull.Value) ? 0 : dr["DiagCallDayMask"] ; 
+                        cmd.Parameters["@HighSetPoint"].Value = (dr["HighSetPoint"] == DBNull.Value) ? 0 : dr["HighSetPoint"];
+                        cmd.Parameters["@LowSetPoint"].Value = (dr["LowSetPoint"] == DBNull.Value) ? 0 : dr["LowSetPoint"];
+                        cmd.Parameters["@SensorOffset"].Value = (dr["SensorOffset"] == DBNull.Value) ? 0 : dr["SensorOffset"];
+                        cmd.Parameters["@CoeffExp"].Value = (dr["CoeffExp"] == DBNull.Value) ? 0 : dr["CoeffExp"];
+                        cmd.Parameters["@SpecGrav"].Value = (dr["SpecGrav"] == DBNull.Value) ? 0 : dr["SpecGrav"];
+                        cmd.Parameters["@LowLowLevel"].Value = (dr["LowLowLevel"] == DBNull.Value) ? 0 : dr["LowLowLevel"];
+                        cmd.Parameters["@LowLevel"].Value = (dr["LowLevel"] == DBNull.Value) ? 0 : dr["LowLevel"];
+                        cmd.Parameters["@HighLevel"].Value = (dr["HighLevel"] == DBNull.Value) ? 0 : dr["HighLevel"];
+                        cmd.Parameters["@HighHighLevel"].Value = (dr["HighHighLevel"] == DBNull.Value) ? 0 : dr["HighHighLevel"];
+                        cmd.Parameters["@ShortFillDelta"].Value = (dr["ShortFillDelta"] == DBNull.Value) ? 0 : dr["ShortFillDelta"];
+                        cmd.Parameters["@FillDetectDelta"].Value = (dr["FillDetectDelta"] == DBNull.Value) ? 0 : dr["FillDetectDelta"];
+                        cmd.Parameters["@VolumeDelta"].Value = (dr["VolumeDelta"] == DBNull.Value) ? 0 : dr["VolumeDelta"];
+                        cmd.Parameters["@RateChangeDelta"].Value = (dr["RateChangeDelta"] == DBNull.Value) ? 0 : dr["RateChangeDelta"];
+                        cmd.Parameters["@DeviceCriticalLowLevel"].Value = (dr["DeviceCriticalLowLevel"] == DBNull.Value) ? 0 : dr["DeviceCriticalLowLevel"]; 
+                        cmd.Parameters["@DeviceLowLevel"].Value = (dr["DeviceLowLevel"] == DBNull.Value) ? 0 : dr["DeviceLowLevel"]; 
+                        cmd.Parameters["@DeviceHighLevel"].Value = (dr["DeviceHighLevel"] == DBNull.Value) ? 0 : dr["DeviceHighLevel"]; ;
+                        cmd.Parameters["@DeviceCriticalHighLevel"].Value = (dr["DeviceCriticalHighLevel"] == DBNull.Value) ? 0 : dr["DeviceCriticalHighLevel"]; 
+                        cmd.Parameters["@DeviceFillDetect"].Value = (dr["DeviceFillDetect"] == DBNull.Value) ? 0 : dr["DeviceFillDetect"]; 
+                        cmd.Parameters["@DeviceFillDetectDelta"].Value = (dr["DeviceFillDetectDelta"] == DBNull.Value) ? 0 : dr["DeviceFillDetectDelta"]; 
+                        cmd.Parameters["@DeviceFillHysteresis"].Value = (dr["DeviceFillHysteresis"] == DBNull.Value) ? 0 : dr["DeviceFillHysteresis"]; 
+                        cmd.Parameters["@DataLogDelta"].Value = (dr["DataLogDelta"] == DBNull.Value) ? 0 : dr["DataLogDelta"]; 
+                        cmd.Parameters["@UsageDelta"].Value = (dr["UsageDelta"] == DBNull.Value) ? 0 : dr["UsageDelta"]; 
+                        cmd.Parameters["@WakeInterval"].Value = (dr["WakeInterval"] == DBNull.Value) ? 0 : dr["WakeInterval"];
+                        //cmd.Parameters["@DeviceUsageAlarm"].Value = (dr["DeviceUsageAlarm"] == DBNull.Value) ? 0 : dr["DeviceUsageAlarm"];
+                        cmd.Parameters["@HasExpectedCallAlarm"].Value = (dr["HasExpectedCallAlarm"] == DBNull.Value) ? 0 : dr["HasExpectedCallAlarm"]; ;
+                        cmd.Parameters["@TankNormallyFills"].Value = (dr["TankNormallyFills"] == DBNull.Value) ? 0 : dr["TankNormallyFills"]; ;
+                        cmd.Parameters["@EnableGPS"].Value = (dr["EnableGPS"] == DBNull.Value) ? 0 : dr["EnableGPS"]; ;
+                        cmd.Parameters["@EnableLocation"].Value = (dr["EnableLocation"] == DBNull.Value) ? 0 : dr["EnableLocation"]; ;
+          
                         int rowsAffected = cmd.ExecuteNonQuery();
-                      //  con.Close();
+                      
                     }
                     con.Close();
                 }
-                //using (SqlBulkCopy sqlBulkCopy = new SqlBulkCopy(con))
-                //{
-                //    //Set the database table name.
-                //    sqlBulkCopy.DestinationTableName = "dbo.TankConfig_Test1";
-
-                //   // sqlBulkCopy.ColumnMappings.Add("TankID", "TankID");
-                //   // sqlBulkCopy.ColumnMappings.Add("RTUNumber", "RTUNumber");
-                //    sqlBulkCopy.ColumnMappings.Add("StartTime", "StartTime");
-                //    sqlBulkCopy.ColumnMappings.Add("Interval", "Interval");
-
-                //    con.Open();
-                //    sqlBulkCopy.WriteToServer(dt);
-                //    con.Close();
-                //}
+                //using (SqlBulkCopy sqlBulkCopy = new SqlBulkCopy(con)){ sqlBulkCopy.DestinationTableName = "dbo.TankConfig_Test1";sqlBulkCopy.ColumnMappings.Add("TankID", "TankID");   con.Open(); sqlBulkCopy.WriteToServer(dt);}
             }
             //if the code reach here means everthing goes fine and excel data is imported into database
             ViewBag.Message = "File Imported and excel data saved into database";
