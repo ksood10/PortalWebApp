@@ -899,7 +899,7 @@ namespace PortalWebApp.Utilities
                             {
                                 processedRecordCount = 0;
                                 throttleamount = this.ThrottleAmount * 1000;
-                                Utilities.Throttle(throttleamount);
+                                Util.Throttle(throttleamount);
                             }
                             //if (aTankConfig.Add())
                             //    aTankConfig.StatusMessage = "Successful Update";

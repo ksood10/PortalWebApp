@@ -123,6 +123,7 @@ namespace PortalWebApp.Models
         public decimal CurrentTankCap { get; private set; }
         public string CurrentModelNumber { get; private set; }
         public int CurrentTankConfigID { get; private set; }
+       
 
         private string fileName;
         private string xlReorderUsage;
@@ -226,7 +227,7 @@ namespace PortalWebApp.Models
                     case "RTUNumber":
                         if (this.RTUNumber != "*** Empty ***")
                         {
-                            if (Utilities.Utilities.ConvertStringToInt(this.RTUNumber))
+                            if (Util.ConvertStringToInt(this.RTUNumber))
                                 break;
                             else
                             {
@@ -242,7 +243,7 @@ namespace PortalWebApp.Models
                     case "TankID":
                         if (this.xlTankID != "*** Empty ***")
                         {
-                            if (Utilities.Utilities.ConvertStringToInt(this.xlTankID))
+                            if (Util.ConvertStringToInt(this.xlTankID))
                                 break;
                             else
                             {
@@ -258,7 +259,7 @@ namespace PortalWebApp.Models
                     case "ReorderUsage":
                         if (this.xlReorderUsage != "*** Empty ***")
                         {
-                            if (Utilities.Utilities.ConvertStringToInt(xlReorderUsage))
+                            if (Util.ConvertStringToInt(xlReorderUsage))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -277,7 +278,7 @@ namespace PortalWebApp.Models
                     case "SafetyStockUsage":
                         if (this.xlSafetyStockUsage != "*** Empty ***")
                         {
-                            if (Utilities.Utilities.ConvertStringToInt(this.xlSafetyStockUsage))
+                            if (Util.ConvertStringToInt(this.xlSafetyStockUsage))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -315,7 +316,7 @@ namespace PortalWebApp.Models
                     case "CallDay":
                         if (this.xlCallDay != "*** Empty ***")
                         {
-                            if (Utilities.Utilities.ConvertStringToInt(this.xlCallDay))
+                            if (Util.ConvertStringToInt(this.xlCallDay))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -334,7 +335,7 @@ namespace PortalWebApp.Models
                     case "Interval":
                         if (this.xlInterval != "*** Empty ***")
                         {
-                            if (Utilities.Utilities.ConvertStringToInt(this.xlInterval))
+                            if (Util.ConvertStringToInt(this.xlInterval))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -353,7 +354,7 @@ namespace PortalWebApp.Models
                     case "DiagCallDayMask":
                         if (this.xlDiagCallDayMask != "*** Empty ***")
                         {
-                            if (Utilities.Utilities.ConvertStringToInt(this.xlDiagCallDayMask))
+                            if (Util.ConvertStringToInt(this.xlDiagCallDayMask))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -372,7 +373,7 @@ namespace PortalWebApp.Models
                     case "LowLowLevel":
                         if (this.xlLowLowLevel != "*** Empty ***")
                         {
-                            if (Utilities.Utilities.ConvertStringToInt(this.xlLowLowLevel))
+                            if (Util.ConvertStringToInt(this.xlLowLowLevel))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -391,7 +392,7 @@ namespace PortalWebApp.Models
                     case "LowLevel":
                         if (this.xlLowLevel != "*** Empty ***")
                         {
-                            if (Utilities.Utilities.ConvertStringToInt(this.xlLowLevel))
+                            if (Util.ConvertStringToInt(this.xlLowLevel))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -410,7 +411,7 @@ namespace PortalWebApp.Models
                     case "HighLevel":
                         if (this.xlHighLevel != "*** Empty ***")
                         {
-                            if (Utilities.Utilities.ConvertStringToInt(this.xlHighLevel))
+                            if (Util.ConvertStringToInt(this.xlHighLevel))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -429,7 +430,7 @@ namespace PortalWebApp.Models
                     case "HighHighLevel":
                         if (this.xlHighHighLevel != "*** Empty ***")
                         {
-                            if (Utilities.Utilities.ConvertStringToInt(this.xlHighHighLevel))
+                            if (Util.ConvertStringToInt(this.xlHighHighLevel))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -448,7 +449,7 @@ namespace PortalWebApp.Models
                     case "VolumeDelta":
                         if (this.xlVolumeDelta != "*** Empty ***")
                         {
-                            if (Utilities.Utilities.ConvertStringToInt(this.xlVolumeDelta))
+                            if (Util.ConvertStringToInt(this.xlVolumeDelta))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -467,7 +468,7 @@ namespace PortalWebApp.Models
                     case "RateChangeDelta":
                         if (this.xlRateChangeDelta != "*** Empty ***")
                         {
-                            if (Utilities.Utilities.ConvertStringToInt(this.xlRateChangeDelta))
+                            if (Util.ConvertStringToInt(this.xlRateChangeDelta))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -486,7 +487,7 @@ namespace PortalWebApp.Models
                     case "DataLogDelta":
                         if (this.xlDataLogDelta != "*** Empty ***")
                         {
-                            if (Utilities.Utilities.ConvertStringToInt(this.xlDataLogDelta))
+                            if (Util.ConvertStringToInt(this.xlDataLogDelta))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -505,7 +506,7 @@ namespace PortalWebApp.Models
                     case "UsageDelta":
                         if (this.xlUsageDelta != "*** Empty ***")
                         {
-                            if (Utilities.Utilities.ConvertStringToInt(this.xlUsageDelta))
+                            if (Util.ConvertStringToInt(this.xlUsageDelta))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -524,7 +525,7 @@ namespace PortalWebApp.Models
                     case "WakeInterval":
                         if (this.xlWakeInterval != "*** Empty ***")
                         {
-                            if (Utilities.Utilities.ConvertStringToInt(this.xlWakeInterval))
+                            if (Util.ConvertStringToInt(this.xlWakeInterval))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -567,7 +568,7 @@ namespace PortalWebApp.Models
                         if (this.xlTankHgt != "*** Empty ***")
                         {
                             decimal tankhgt = 0;
-                            if (Utilities.Utilities.ConvertStringToDecimal(this.xlTankHgt))
+                            if (Util.ConvertStringToDecimal(this.xlTankHgt))
                             {
                                 tankhgt = decimal.Parse(this.xlTankHgt);
                                 if (tankhgt < 0)
@@ -599,7 +600,7 @@ namespace PortalWebApp.Models
                         if (this.xlTankCap != "*** Empty ***")
                         {
                             decimal tankcap = 0;
-                            if (Utilities.Utilities.ConvertStringToDecimal(this.xlTankCap))
+                            if (Util.ConvertStringToDecimal(this.xlTankCap))
                             {
                                 tankcap = decimal.Parse(this.xlTankCap);
                                 if (tankcap < 0)
@@ -631,7 +632,7 @@ namespace PortalWebApp.Models
                         if (this.xlCapacityLimit != "*** Empty ***")
                         {
                             decimal capacitylimit = 0;
-                            if (Utilities.Utilities.ConvertStringToDecimal(this.xlCapacityLimit))
+                            if (Util.ConvertStringToDecimal(this.xlCapacityLimit))
                             {
                                 capacitylimit = decimal.Parse(this.xlCapacityLimit);
                                 if (capacitylimit < 0)
@@ -663,7 +664,7 @@ namespace PortalWebApp.Models
                         if (this.xlTankMinimum != "*** Empty ***")
                         {
                             decimal tankminimum = 0;
-                            if (Utilities.Utilities.ConvertStringToDecimal(this.xlTankMinimum))
+                            if (Util.ConvertStringToDecimal(this.xlTankMinimum))
                             {
                                 tankminimum = decimal.Parse(this.xlTankMinimum);
                                 if (tankminimum < 0)
@@ -694,7 +695,7 @@ namespace PortalWebApp.Models
                     case "FillDetectDelta":
                         if (this.xlFillDetectDelta != "*** Empty ***")
                         {
-                            if (Utilities.Utilities.ConvertStringToDecimal(this.xlFillDetectDelta))
+                            if (Util.ConvertStringToDecimal(this.xlFillDetectDelta))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -713,7 +714,7 @@ namespace PortalWebApp.Models
                     case "ShortFillDelta":
                         if (this.xlShortFillDelta != "*** Empty ***")
                         {
-                            if (Utilities.Utilities.ConvertStringToDecimal(this.xlShortFillDelta))
+                            if (Util.ConvertStringToDecimal(this.xlShortFillDelta))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -732,7 +733,7 @@ namespace PortalWebApp.Models
                     case "HighSetPoint":
                         if (this.xlHighSetPoint != "*** Empty ***")
                         {
-                            if (Utilities.Utilities.ConvertStringToDecimal(this.xlHighSetPoint))
+                            if (Util.ConvertStringToDecimal(this.xlHighSetPoint))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -751,7 +752,7 @@ namespace PortalWebApp.Models
                     case "LowSetPoint":
                         if (this.xlLowSetPoint != "*** Empty ***")
                         {
-                            if (Utilities.Utilities.ConvertStringToDecimal(this.xlLowSetPoint))
+                            if (Util.ConvertStringToDecimal(this.xlLowSetPoint))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -770,7 +771,7 @@ namespace PortalWebApp.Models
                     case "SensorOffset":
                         if (this.xlSensorOffset != "*** Empty ***")
                         {
-                            if (Utilities.Utilities.ConvertStringToDecimal(this.xlSensorOffset))
+                            if (Util.ConvertStringToDecimal(this.xlSensorOffset))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -789,7 +790,7 @@ namespace PortalWebApp.Models
                     case "CoeffExp":
                         if (this.xlCoeffExp != "*** Empty ***")
                         {
-                            if (Utilities.Utilities.ConvertStringToDecimal(this.xlCoeffExp))
+                            if (Util.ConvertStringToDecimal(this.xlCoeffExp))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -808,7 +809,7 @@ namespace PortalWebApp.Models
                     case "SpecGrav":
                         if (this.xlSpecGrav != "*** Empty ***")
                         {
-                            if (Utilities.Utilities.ConvertStringToDecimal(this.xlSpecGrav))
+                            if (Util.ConvertStringToDecimal(this.xlSpecGrav))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -827,7 +828,7 @@ namespace PortalWebApp.Models
                     case "DeviceFillDetectDelta":
                         if (this.xlDeviceFillDetectDelta != "*** Empty ***")
                         {
-                            if (Utilities.Utilities.ConvertStringToDecimal(this.xlDeviceFillDetectDelta))
+                            if (Util.ConvertStringToDecimal(this.xlDeviceFillDetectDelta))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -847,7 +848,7 @@ namespace PortalWebApp.Models
                         if (this.xlDeviceFillHysteresis != "*** Empty ***")
                         {
                             decimal devicefillhysteresis = 0;
-                            if (Utilities.Utilities.ConvertStringToDecimal(this.xlDeviceFillHysteresis))
+                            if (Util.ConvertStringToDecimal(this.xlDeviceFillHysteresis))
                             {
                                 devicefillhysteresis = decimal.Parse(this.xlDeviceFillHysteresis);
                                 if (devicefillhysteresis < 0)
@@ -901,7 +902,7 @@ namespace PortalWebApp.Models
                     case "DeviceCriticalLowLevel":
                         if (this.xlDeviceCriticalLowLevel != "*** Empty ***")
                         {
-                            if (Utilities.Utilities.ConvertStringToBool(this.xlDeviceCriticalLowLevel))
+                            if (Util.ConvertStringToBool(this.xlDeviceCriticalLowLevel))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -920,7 +921,7 @@ namespace PortalWebApp.Models
                     case "DeviceLowLevel":
                         if (this.xlDeviceLowLevel != "*** Empty ***")
                         {
-                            if (Utilities.Utilities.ConvertStringToBool(this.xlDeviceLowLevel))
+                            if (Util.ConvertStringToBool(this.xlDeviceLowLevel))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -939,7 +940,7 @@ namespace PortalWebApp.Models
                     case "DeviceHighLevel":
                         if (this.xlDeviceHighLevel != "*** Empty ***")
                         {
-                            if (Utilities.Utilities.ConvertStringToBool(this.xlDeviceHighLevel))
+                            if (Util.ConvertStringToBool(this.xlDeviceHighLevel))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -958,7 +959,7 @@ namespace PortalWebApp.Models
                     case "DeviceCriticalHighLevel":
                         if (this.xlDeviceCriticalHighLevel != "*** Empty ***")
                         {
-                            if (Utilities.Utilities.ConvertStringToBool(this.xlDeviceCriticalHighLevel))
+                            if (Util.ConvertStringToBool(this.xlDeviceCriticalHighLevel))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -977,7 +978,7 @@ namespace PortalWebApp.Models
                     case "DeviceFillDetect":
                         if (this.xlDeviceFillDetect != "*** Empty ***")
                         {
-                            if (Utilities.Utilities.ConvertStringToBool(this.xlDeviceFillDetect))
+                            if (Util.ConvertStringToBool(this.xlDeviceFillDetect))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -996,7 +997,7 @@ namespace PortalWebApp.Models
                     case "DeviceUsageAlarm":
                         if (this.xlDeviceUsageAlarm != "*** Empty ***")
                         {
-                            if (Utilities.Utilities.ConvertStringToBool(this.xlDeviceUsageAlarm))
+                            if (Util.ConvertStringToBool(this.xlDeviceUsageAlarm))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -1015,7 +1016,7 @@ namespace PortalWebApp.Models
                     case "HasExpectedCallAlarm":
                         if (this.xlHasExpectedCallAlarm != "*** Empty ***")
                         {
-                            if (Utilities.Utilities.ConvertStringToBool(this.xlHasExpectedCallAlarm))
+                            if (Util.ConvertStringToBool(this.xlHasExpectedCallAlarm))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -1034,7 +1035,7 @@ namespace PortalWebApp.Models
                     case "TankNormallyFills":
                         if (this.xlTankNormallyFills != "*** Empty ***")
                         {
-                            if (Utilities.Utilities.ConvertStringToBool(this.xlTankNormallyFills))
+                            if (Util.ConvertStringToBool(this.xlTankNormallyFills))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -1053,7 +1054,7 @@ namespace PortalWebApp.Models
                     case "EnableGPS":
                         if (xlEnableGPS != "*** Empty ***")
                         {
-                            if (Utilities.Utilities.ConvertStringToBool(xlEnableGPS))
+                            if (Util.ConvertStringToBool(xlEnableGPS))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -1072,7 +1073,7 @@ namespace PortalWebApp.Models
                     case "EnableLocation":
                         if (xlEnableLocation != "*** Empty ***")
                         {
-                            if (Utilities.Utilities.ConvertStringToBool(xlEnableLocation))
+                            if (Util.ConvertStringToBool(xlEnableLocation))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -1114,7 +1115,7 @@ namespace PortalWebApp.Models
                     case "StartTime":
                         if (this.xlStartTime != "*** Empty ***")
                         {
-                            if (Utilities.Utilities.ConvertStringToDateTime(this.xlStartTime))
+                            if (Util.ConvertStringToDateTime(this.xlStartTime))
                             {
                                 this.PerformUpdate = true;
                                 break;

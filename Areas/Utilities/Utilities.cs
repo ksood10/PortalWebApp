@@ -6,12 +6,12 @@ using System.Data.SqlClient;
 using System.Net.NetworkInformation;
 using System.Linq;
 using System.Threading;
-
-
-
+using System.Data.OleDb;
+using System.IO;
+using PortalWebApp.Models;
 
 namespace PortalWebApp.Utilities { 
-    class Utilities
+    public class Util
     {
         public static float psiPerCubicInch = 27.729623F;
 
@@ -37,6 +37,60 @@ namespace PortalWebApp.Utilities {
             }
             return multipleInstances;
         }
+
+
+        public static DataTable GetDataTableFromExcelFile(BulkUpdate model)
+        {
+            var filename = Path.GetFileName(model.FileName);
+            var MainPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Uploads");
+
+            //create directory "Uploads" if it doesn't exists
+            if (!Directory.Exists(MainPath))
+                Directory.CreateDirectory(MainPath);
+            //get file path 
+            var filePath = Path.Combine(MainPath, filename);
+            var conString = string.Empty;
+
+            switch (Path.GetExtension(filename))
+            {
+                case ".xls": //Excel 97-03.
+                    conString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + filePath + ";Extended Properties='Excel 8.0;HDR=YES'";
+                    break;
+                case ".xlsx": //Excel 07 and above.
+                    conString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + filePath + ";Extended Properties='Excel 8.0;HDR=YES'";
+                    break;
+            }
+
+            var dt = new DataTable();
+            conString = string.Format(conString, filePath);
+
+            using (OleDbConnection connExcel = new OleDbConnection(conString))
+            {
+                using OleDbCommand cmdExcel = new OleDbCommand();
+                using OleDbDataAdapter odaExcel = new OleDbDataAdapter();
+                cmdExcel.Connection = connExcel;
+
+                //Get the name of First Sheet.
+                connExcel.Open();
+                DataTable dtExcelSchema;
+                dtExcelSchema = connExcel.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
+                string sheetName = dtExcelSchema.Rows[0]["TABLE_NAME"].ToString();
+                //   string sheetName = "Sheet1$";
+                connExcel.Close();
+
+                //Read Data from First Sheet.
+                connExcel.Open();
+                cmdExcel.CommandText = "SELECT * From [" + sheetName + "]";
+                odaExcel.SelectCommand = cmdExcel;
+                odaExcel.Fill(dt);
+                connExcel.Close();
+            }
+           
+            return dt;
+        }
+
+
+
 
         public static int MinutesToMilliseconds(int minutes)
         {

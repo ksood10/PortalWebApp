@@ -40,36 +40,15 @@ namespace PortalWebApp.Controllers
             return View();
         }
 
-        [HttpPost]
-        public ActionResult RunBulkUpdate(BulkUpdate model, List<IFormFile> postedFiles, IFormCollection collection)
-        {
-            collection.TryGetValue("file1", out file_1);
-            if (ModelState.IsValid)
-            {
-                TempData["ButtonValue"] = string.Format("{0} button clicked. ", model.UserID);
-                //TODO: SubscribeUser(model.Email);
-            }
-
-            return RedirectToAction("BulkConfig");
-        }
+       
 
         public IActionResult check(IFormFile postedFile, string button, BulkUpdate model)
         {
-           // myBulkConfigurator = new BulkConfiguratorQueue();
-          //  string s = myBulkConfigurator.TestDLL();
-          // string connectionString = Properties.Resources.TankDataTestDatabase;
+           // myBulkConfigurator = new BulkConfiguratorQueue();  string s = myBulkConfigurator.TestDLL(); string connectionString = Properties.Resources.TankDataTestDatabase;
             var filename = Path.GetFileName(model.FileName);
-            if (!string.IsNullOrEmpty(button))
-            {
+           
                 TempData["ButtonValue"] = string.Format("Env--{0} :::  User -- {1}::: ThrottleNum -- {2}:::Duration-- {3}:::RTU--{4}:::File--{5}", model.Environment, model.UserID, model.ThrottleNum, model.ThrottleDuration, model.RTU, model.FileName);
-                //    myBulkConfigurator = new BulkConfiguratorQueue(connectionString, model.FileName, model.UserID,
-                //                                                      model.ThrottleNum, model.ThrottleDuration,            //                                                      model.RTU);
-                //
-            }
-            else
-            {
-                TempData["ButtonValue"] = "No button click!";
-            }
+            
             return RedirectToAction("BulkConfig");
         }
 
@@ -112,87 +91,65 @@ namespace PortalWebApp.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+        
+        //public DataTable GetDataTableFromExcelFile(BulkUpdate model) { 
+        //    var filename = Path.GetFileName(model.FileName);
+        //    var MainPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Uploads");
+
+        //    //create directory "Uploads" if it doesn't exists
+        //    if (!Directory.Exists(MainPath))
+        //        Directory.CreateDirectory(MainPath);
+        //    //get file path 
+        //     var filePath = Path.Combine(MainPath, filename);
+        //     var conString = string.Empty;
+
+        //    switch (Path.GetExtension(filename))
+        //    {
+        //        case ".xls": //Excel 97-03.
+        //            conString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + filePath + ";Extended Properties='Excel 8.0;HDR=YES'";
+        //            break;
+        //        case ".xlsx": //Excel 07 and above.
+        //            conString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + filePath + ";Extended Properties='Excel 8.0;HDR=YES'";
+        //            break;
+        //    }
+
+        //    var dt = new DataTable();
+        //    conString = string.Format(conString, filePath);
+
+        //    using (OleDbConnection connExcel = new OleDbConnection(conString))
+        //    {
+        //        using OleDbCommand cmdExcel = new OleDbCommand();
+        //        using OleDbDataAdapter odaExcel = new OleDbDataAdapter();
+        //        cmdExcel.Connection = connExcel;
+
+        //        //Get the name of First Sheet.
+        //        connExcel.Open();
+        //        DataTable dtExcelSchema;
+        //        dtExcelSchema = connExcel.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
+        //        string sheetName = dtExcelSchema.Rows[0]["TABLE_NAME"].ToString();
+        //        //   string sheetName = "Sheet1$";
+        //        connExcel.Close();
+
+        //        //Read Data from First Sheet.
+        //        connExcel.Open();
+        //        cmdExcel.CommandText = "SELECT * From [" + sheetName + "]";
+        //        odaExcel.SelectCommand = cmdExcel;
+        //        odaExcel.Fill(dt);
+        //        connExcel.Close();
+        //    }
+        //    TempData["ButtonValue"] = "Processing ....";
+        //    return dt;
+        //}
 
         [HttpPost]
-        public IActionResult ImportExcelFile(BulkUpdate model)
+        public IActionResult ImportExcelFile(BulkUpdate model,IFormCollection collection)
         {
-            var filename = Path.GetFileName(model.FileName);
-          //  BulkConfiguratorQueue bulkConfiguratorQueue = new BulkConfiguratorQueue(model, _databaseContext);
-            //if (myBulkConfigurator.HaveEXCELReadError)
-            //{
-            //    statusLBL.ForeColor = Color.Red;
-            //    statusLBL.Text = "Problem reading the EXCEL sheet. Make sure all columns are present";
-            //    validationError = true;
-            //}
-            //else
-            //{
-            //    totalEXCELCount = myBulkConfigurator.TotalEXCELCount;
-            //    progressBar1.Maximum = totalEXCELCount;
-            //    if (!myBulkConfigurator.HaveError)
-            //    {
-            //        MessageBox.Show("Data Validation Checks Finished.  Now processing updates");
-            //        //ProcessAllEXCELRecords();
-            //        th1 = new Thread(new ThreadStart(ProcessAllEXCELRecords));
-            //        timer1.Enabled = true;
-            //        timer1.Start();
-            //        th1.Start();
-            //    }
-            //    else
-            //    {
-            //        statusLBL.ForeColor = Color.Red;
-            //        statusLBL.Text = "Errors found in EXCEL file. Review error report";
-            //        validationError = true;
-            //    }
-            //}
-            //get path
-            var MainPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Uploads");
 
-            //create directory "Uploads" if it doesn't exists
-            if (!Directory.Exists(MainPath))
-                Directory.CreateDirectory(MainPath);
-            //get file path 
-            var filePath = Path.Combine(MainPath, filename);
-            //using (System.IO.Stream stream = new FileStream(filePath, FileMode.Create))            //{            //    await origstream.CopyToAsync(stream);            //}
+             var dt= Util.GetDataTableFromExcelFile(model);
 
-            string conString = string.Empty;
-
-            switch (Path.GetExtension(filename))
-            {
-                case ".xls": //Excel 97-03.
-                    conString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + filePath + ";Extended Properties='Excel 8.0;HDR=YES'";
-                    break;
-                case ".xlsx": //Excel 07 and above.
-                    conString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + filePath + ";Extended Properties='Excel 8.0;HDR=YES'";
-                    break;
-            }
-
-            DataTable dt = new DataTable();
-            conString = string.Format(conString, filePath);
-
-            using (OleDbConnection connExcel = new OleDbConnection(conString))
-            {
-                using OleDbCommand cmdExcel = new OleDbCommand();
-                using OleDbDataAdapter odaExcel = new OleDbDataAdapter();
-                cmdExcel.Connection = connExcel;
-
-                //Get the name of First Sheet.
-                connExcel.Open();
-                DataTable dtExcelSchema;
-                dtExcelSchema = connExcel.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
-                string sheetName = dtExcelSchema.Rows[0]["TABLE_NAME"].ToString();
-              //   string sheetName = "Sheet1$";
-                connExcel.Close();
-
-                //Read Data from First Sheet.
-                connExcel.Open();
-                cmdExcel.CommandText = "SELECT * From [" + sheetName + "]";
-                odaExcel.SelectCommand = cmdExcel;
-                odaExcel.Fill(dt);
-                connExcel.Close();
-            }
             //your database connection string
-            conString = @"Server=TankdataLSN1\TankData;Database=TankData_TDG;User ID=EmailManager;pwd=tanklink5410;";
-
+            var conString = @"Server=TankdataLSN1\TankData;Database=TankData_TDG;User ID=EmailManager;pwd=tanklink5410;";
+            var rws = 0;
             using (SqlConnection con = new SqlConnection(conString))
             {
                 using (var cmd = new SqlCommand("BulkTankConfig_Insert", con))
@@ -242,7 +199,9 @@ namespace PortalWebApp.Controllers
                     cmd.Parameters.Add(new SqlParameter("@EnableGPS", SqlDbType.Bit));
                     cmd.Parameters.Add(new SqlParameter("@EnableLocation", SqlDbType.Bit));
 
-
+                    var s = collection.Keys;
+                    rws = dt.Rows.Count;
+                    model.TotalRows = rws; 
                     foreach (DataRow dr in dt.Rows)
                     {
                         cmd.Parameters["@TankID"].Value= dr["TankID"];
@@ -290,7 +249,8 @@ namespace PortalWebApp.Controllers
                         cmd.Parameters["@EnableLocation"].Value = (dr["EnableLocation"] == DBNull.Value) ? 0 : dr["EnableLocation"]; ;
           
                         int rowsAffected = cmd.ExecuteNonQuery();
-                      
+                        
+                       // JavaScript("window.alert('Hello World');");
                     }
                     con.Close();
                 }
@@ -298,8 +258,9 @@ namespace PortalWebApp.Controllers
             }
             //if the code reach here means everthing goes fine and excel data is imported into database
             ViewBag.Message = "File Imported and excel data saved into database";
-            TempData["ButtonValue"] = "File Imported !";
-
+            TempData["RowsToProcess"] = rws.ToString();
+            TempData["ButtonValue"] = "Excel File Imported !";
+          //  return View("BulkConfig");
             return RedirectToAction("BulkConfig");
 
         }

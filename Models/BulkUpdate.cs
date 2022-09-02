@@ -24,6 +24,8 @@ namespace PortalWebApp.Models
 
         public string Environment { get; set; }
 
+        public string JavascriptToRun { get; set; }
+
         [Required(ErrorMessage = "Required")]
         [RegularExpression("^[0-9]*$", ErrorMessage = "Must be numeric")]
         public int UserID { get; set; }
@@ -40,6 +42,9 @@ namespace PortalWebApp.Models
 
         public string FileName { get; set; }
         public IFormFile file1 { get; set; }
+
+        public int TotalRows { get; set; }
+        public int RowsProcessed { get; set; }
 
     }
 }
