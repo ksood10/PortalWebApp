@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 namespace PortalWebApp.Utilities { 
     public class Util
     {
+        public const string SPBulkInsert = "BulkTankConfig_Insert";
         public static float psiPerCubicInch = 27.729623F;
         public static int tankIDOrdinal { get; set; }
         public static int tankNameOrdinal { get; set; }
@@ -94,9 +95,6 @@ namespace PortalWebApp.Utilities {
             return multipleInstances;
         }
 
-  
-
-
         public static DataTable GetDataTableFromExcelFile(BulkUpdate model)
         {
             var filename = Path.GetFileName(model.FileName);
@@ -130,14 +128,8 @@ namespace PortalWebApp.Utilities {
 
                 //Get the name of First Sheet.
                 connExcel.Open();
-                DataTable dtExcelSchema;
-                dtExcelSchema = connExcel.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
+                var dtExcelSchema = connExcel.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
                 string sheetName = dtExcelSchema.Rows[0]["TABLE_NAME"].ToString();
-                //   string sheetName = "Sheet1$";
-                connExcel.Close();
-
-                //Read Data from First Sheet.
-                connExcel.Open();
                 cmdExcel.CommandText = "SELECT * From [" + sheetName + "]";
                 odaExcel.SelectCommand = cmdExcel;
                 odaExcel.Fill(dt);
@@ -147,54 +139,58 @@ namespace PortalWebApp.Utilities {
             return dt;
         }
 
-        public static SqlParameter[] GetSqlParams()
+        public static SqlParameter[] GetSqlParams(DataRow dr)
         {
-
-        var prm= new[]
+            var prm= new SqlParameter[]
             {
-                new SqlParameter("@TankID", SqlDbType.Int)    ,                 /* { Value = dr[tankIDOrdinal] },*/
-                new SqlParameter("@RTUNumber", SqlDbType.NVarChar)     ,        /* { Value = dr[rtuNumberOrdinal] },*/
-                new SqlParameter("@TankHgt", SqlDbType.Decimal)   ,             /* { Value = (dr[tankHgtOrdinal] == DBNull.Value) ? 0 : dr[tankHgtOrdinal] },*/
-                new SqlParameter("@TankCap", SqlDbType.Decimal)      ,          /* { Value = (dr[tankCapOrdinal] == DBNull.Value) ? 0 : dr[tankCapOrdinal] },*/
-                new SqlParameter("@CapacityLimit", SqlDbType.Decimal)    ,      /* { Value = (dr[capacityLimitOrdinal] == DBNull.Value) ? 0 : dr[capacityLimitOrdinal] },*/
-                new SqlParameter("@TankMinimum", SqlDbType.Decimal)    ,        /* { Value = (dr[tankMinimumOrdinal] == DBNull.Value) ? 0 : dr[tankMinimumOrdinal] },*/
-                new SqlParameter("@SafetyStockUsage", SqlDbType.Int)  ,         /* { Value = (dr[safetyStockUsageOrdinal] == DBNull.Value) ? 0 : dr[safetyStockUsageOrdinal] },*/
-                new SqlParameter("@ReorderUsage", SqlDbType.Int)    ,           /* { Value = (dr[reorderUsageOrdinal] == DBNull.Value) ? 0 : dr[reorderUsageOrdinal] },*/
-                new SqlParameter("@StartTime", SqlDbType.DateTime)   ,          /* { Value = (dr[startTimeOrdinal] == DBNull.Value) ? 0 : dr[startTimeOrdinal] },*/
-                new SqlParameter("@Callsperday", SqlDbType.Int)     ,           /* { Value = (dr[callsPerDayOrdinal] == DBNull.Value) ? 0 : dr[callsPerDayOrdinal] },*/
-                new SqlParameter("@CallDay", SqlDbType.Int)       ,             /* { Value = (dr[callDayOrdinal] == DBNull.Value) ? 0 : dr[callDayOrdinal] },*/
-                new SqlParameter("@Interval", SqlDbType.NVarChar)     ,         /* { Value = (dr[intervalOrdinal] == DBNull.Value) ? 0 : dr[intervalOrdinal] },*/
-                new SqlParameter("@DiagCallDayMask", SqlDbType.Int)    ,        /* { Value = (dr[diagCallDayMaskOrdinal] == DBNull.Value) ? 0 : dr[diagCallDayMaskOrdinal] },*/
-                new SqlParameter("@HighSetPoint", SqlDbType.Decimal)  ,         /* { Value = (dr[highSetPointOrdinal] == DBNull.Value) ? 0 : dr[highSetPointOrdinal] },*/
-                new SqlParameter("@LowSetPoint", SqlDbType.Decimal)   ,         /* { Value = (dr[lowSetPointOrdinal] == DBNull.Value) ? 0 : dr[lowSetPointOrdinal] },*/
-                new SqlParameter("@SensorOffset", SqlDbType.Decimal) ,          /* { Value = (dr[sensorOffsetOrdinal] == DBNull.Value) ? 0 : dr[sensorOffsetOrdinal] },*/
-                new SqlParameter("@CoeffExp", SqlDbType.Decimal)     ,          /* { Value = (dr[coeffExpOrdinal] == DBNull.Value) ? 0 : dr[coeffExpOrdinal] },*/
-                new SqlParameter("@SpecGrav", SqlDbType.Decimal)  ,             /* { Value = (dr[specGravOrdinal] == DBNull.Value) ? 0 : dr[specGravOrdinal] },*/
-                new SqlParameter("@LowLowLevel", SqlDbType.Int)    ,            /* { Value = (dr[lowLowLevelOrdinal] == DBNull.Value) ? 0 : dr[lowLowLevelOrdinal] },*/
-                new SqlParameter("@LowLevel", SqlDbType.Int)    ,               /* { Value = (dr[lowLevelOrdinal] == DBNull.Value) ? 0 : dr[lowLevelOrdinal] },*/
-                new SqlParameter("@HighLevel", SqlDbType.Int)        ,          /* { Value = (dr[highLevelOrdinal] == DBNull.Value) ? 0 : dr[highLevelOrdinal] },*/
-                new SqlParameter("@HighHighLevel", SqlDbType.Int)       ,       /* { Value = (dr[highHighLevelOrdinal] == DBNull.Value) ? 0 : dr[highHighLevelOrdinal] },*/
-                new SqlParameter("@ShortFillDelta", SqlDbType.Decimal)   ,      /* { Value = (dr[shortFillDeltaOrdinal] == DBNull.Value) ? 0 : dr[shortFillDeltaOrdinal] },*/
-                new SqlParameter("@FillDetectDelta", SqlDbType.Decimal)  ,      /* { Value = (dr[fillDetectDeltaOrdinal] == DBNull.Value) ? 0 : dr[fillDetectDeltaOrdinal] },*/
-                new SqlParameter("@VolumeDelta", SqlDbType.Int)         ,       /* { Value = (dr[volumeDeltaOrdinal] == DBNull.Value) ? 0 : dr[volumeDeltaOrdinal] },*/
-                new SqlParameter("@RateChangeDelta", SqlDbType.Int)   ,         /* { Value = (dr[rateChangeDeltaOrdinal] == DBNull.Value) ? 0 : dr[rateChangeDeltaOrdinal] },*/
-                new SqlParameter("@DeviceCriticalLowLevel", SqlDbType.Bit) ,    /* { Value = (dr[deviceCriticalLowLevelOrdinal] == DBNull.Value) ? 0 : dr[deviceCriticalLowLevelOrdinal] },*/
-                new SqlParameter("@DeviceLowLevel", SqlDbType.Bit)    ,         /* { Value = (dr[deviceLowLevelOrdinal] == DBNull.Value) ? 0 : dr[deviceLowLevelOrdinal] },*/
-                new SqlParameter("@DeviceHighLevel", SqlDbType.Bit)   ,         /* { Value = (dr[deviceHighLevelOrdinal] == DBNull.Value) ? 0 : dr[deviceHighLevelOrdinal] },*/
-                new SqlParameter("@DeviceCriticalHighLevel", SqlDbType.Bit) ,   /* { Value = (dr[deviceCriticalHighLevelOrdinal] == DBNull.Value) ? 0 : dr[deviceCriticalHighLevelOrdinal] },*/
-                new SqlParameter("@DeviceFillDetect", SqlDbType.Bit)      ,     /* { Value = (dr[deviceFillDetectOrdinal] == DBNull.Value) ? 0 : dr[deviceFillDetectOrdinal] },*/
-                new SqlParameter("@DeviceFillDetectDelta", SqlDbType.Decimal),  /* { Value = (dr[deviceFillDetectDeltaOrdinal] == DBNull.Value) ? 0 : dr[deviceFillDetectDeltaOrdinal] },*/
-                new SqlParameter("@DeviceFillHysteresis", SqlDbType.Bit) ,      /* { Value = (dr[deviceFillHysteresisOrdinal] == DBNull.Value) ? 0 : dr[deviceFillHysteresisOrdinal] },*/
-                new SqlParameter("@DataLogDelta", SqlDbType.Int)  ,             /* { Value = (dr[dataLogDeltaOrdinal] == DBNull.Value) ? 0 : dr[dataLogDeltaOrdinal] },*/
-                new SqlParameter("@UsageDelta", SqlDbType.Bit)    ,             /* { Value = (dr[usageDeltaOrdinal] == DBNull.Value) ? 0 : dr[usageDeltaOrdinal] },*/
-                new SqlParameter("@WakeInterval", SqlDbType.Int)        ,       /* { Value = (dr[wakeIntervalOrdinal] == DBNull.Value) ? 0 : dr[wakeIntervalOrdinal] },*/
-               // new SqlParameter("@DeviceUsageAlarm ", SqlDbType.Bit),       /* { Value = (dr[tankHgtOrdinal] == DBNull.Value) ? 0 : dr[tankHgtOrdinal] },*/
-                new SqlParameter("@HasExpectedCallAlarm", SqlDbType.Bit)  ,     /* { Value = (dr[hasExpectedCallAlarmOrdinal] == DBNull.Value) ? 0 : dr[hasExpectedCallAlarmOrdinal] },*/
-                new SqlParameter("@TankNormallyFills", SqlDbType.Bit)  ,        /* { Value = (dr[tankNormallyFillsOrdinal] == DBNull.Value) ? 0 : dr[tankHgtOrdinal] },*/
-                new SqlParameter("@EnableGPS", SqlDbType.Bit)      ,            /* { Value = (dr[tankCapOrdinal] == DBNull.Value) ? 0 : dr[tankCapOrdinal] },*/
-                new SqlParameter("@EnableLocation", SqlDbType.Bit)             /* { Value = (dr[tankHgtOrdinal] == DBNull.Value) ? 0 : dr[tankHgtOrdinal] }*/
-            };                                                                    
+                new SqlParameter("@TankID", SqlDbType.Int)                      { Value = dr[tankIDOrdinal] },
+                new SqlParameter("@RTUNumber", SqlDbType.NVarChar)              { Value = dr[rtuNumberOrdinal] },
+                new SqlParameter("@TankHgt", SqlDbType.Decimal)                 { Value = (dr[tankHgtOrdinal] == DBNull.Value) ? 0 : dr[tankHgtOrdinal] },
+                new SqlParameter("@TankCap", SqlDbType.Decimal)                 { Value = (dr[tankCapOrdinal] == DBNull.Value) ? 0 : dr[tankCapOrdinal] },
+                new SqlParameter("@CapacityLimit", SqlDbType.Decimal)           { Value = (dr[capacityLimitOrdinal] == DBNull.Value) ? 0 : dr[capacityLimitOrdinal] },
+                new SqlParameter("@TankMinimum", SqlDbType.Decimal)             { Value = (dr[tankMinimumOrdinal] == DBNull.Value) ? 0 : dr[tankMinimumOrdinal] },
 
+                new SqlParameter("@ReorderUsage", SqlDbType.Int)                { Value = (dr[reorderUsageOrdinal] == DBNull.Value) ? 0 : dr[reorderUsageOrdinal] },
+                new SqlParameter("@SafetyStockUsage", SqlDbType.Int)            { Value = (dr[safetyStockUsageOrdinal] == DBNull.Value) ? 0 : dr[safetyStockUsageOrdinal] },
+                new SqlParameter("@Callsperday", SqlDbType.Int)                 { Value = (dr[callsPerDayOrdinal] == DBNull.Value) ? 0 : dr[callsPerDayOrdinal] },
+                new SqlParameter("@CallDay", SqlDbType.Int)                     { Value = (dr[callDayOrdinal] == DBNull.Value) ? 0 : dr[callDayOrdinal] },
+
+                new SqlParameter("@StartTime", SqlDbType.DateTime)              { Value = (dr[startTimeOrdinal] == DBNull.Value) ? 0 : dr[startTimeOrdinal] },
+                new SqlParameter("@Interval", SqlDbType.NVarChar)               { Value = (dr[intervalOrdinal] == DBNull.Value) ? 0 : dr[intervalOrdinal] },
+                new SqlParameter("@DiagCallDayMask", SqlDbType.Int)             { Value = (dr[diagCallDayMaskOrdinal] == DBNull.Value) ? 0 : dr[diagCallDayMaskOrdinal] },
+                new SqlParameter("@HighSetPoint", SqlDbType.Decimal)            { Value = (dr[highSetPointOrdinal] == DBNull.Value) ? 0 : dr[highSetPointOrdinal] },
+                new SqlParameter("@LowSetPoint", SqlDbType.Decimal)             { Value = (dr[lowSetPointOrdinal] == DBNull.Value) ? 0 : dr[lowSetPointOrdinal] },
+
+                new SqlParameter("@SensorOffset", SqlDbType.Decimal)            { Value = (dr[sensorOffsetOrdinal] == DBNull.Value) ? 0 : dr[sensorOffsetOrdinal] },
+                new SqlParameter("@CoeffExp", SqlDbType.Decimal)                { Value = (dr[coeffExpOrdinal] == DBNull.Value) ? 0 : dr[coeffExpOrdinal] },
+                new SqlParameter("@SpecGrav", SqlDbType.Decimal)                { Value = (dr[specGravOrdinal] == DBNull.Value) ? 0 : dr[specGravOrdinal] },
+                new SqlParameter("@LowLowLevel", SqlDbType.Int)                 { Value = (dr[lowLowLevelOrdinal] == DBNull.Value) ? 0 : dr[lowLowLevelOrdinal] },
+                new SqlParameter("@LowLevel", SqlDbType.Int)                    { Value = (dr[lowLevelOrdinal] == DBNull.Value) ? 0 : dr[lowLevelOrdinal] },
+
+                new SqlParameter("@HighLevel", SqlDbType.Int)                       { Value = (dr[highLevelOrdinal] == DBNull.Value) ? 0 : dr[highLevelOrdinal] },
+                new SqlParameter("@HighHighLevel", SqlDbType.Int)               { Value = (dr[highHighLevelOrdinal] == DBNull.Value) ? 0 : dr[highHighLevelOrdinal] },
+                new SqlParameter("@ShortFillDelta", SqlDbType.Decimal)          { Value = (dr[shortFillDeltaOrdinal] == DBNull.Value) ? 0 : dr[shortFillDeltaOrdinal] },
+                new SqlParameter("@FillDetectDelta", SqlDbType.Decimal)         { Value = (dr[fillDetectDeltaOrdinal] == DBNull.Value) ? 0 : dr[fillDetectDeltaOrdinal] },
+                new SqlParameter("@VolumeDelta", SqlDbType.Int)                 { Value = (dr[volumeDeltaOrdinal] == DBNull.Value) ? 0 : dr[volumeDeltaOrdinal] },
+
+                new SqlParameter("@RateChangeDelta", SqlDbType.Int)                 { Value = (dr[rateChangeDeltaOrdinal] == DBNull.Value) ? 0 : dr[rateChangeDeltaOrdinal] },
+                new SqlParameter("@DeviceCriticalLowLevel", SqlDbType.Bit)      { Value = (dr[deviceCriticalLowLevelOrdinal] == DBNull.Value) ? 0 : dr[deviceCriticalLowLevelOrdinal] },
+                new SqlParameter("@DeviceLowLevel", SqlDbType.Bit)              { Value = (dr[deviceLowLevelOrdinal] == DBNull.Value) ? 0 : dr[deviceLowLevelOrdinal] },
+                new SqlParameter("@DeviceHighLevel", SqlDbType.Bit)             { Value = (dr[deviceHighLevelOrdinal] == DBNull.Value) ? 0 : dr[deviceHighLevelOrdinal] },
+                new SqlParameter("@DeviceCriticalHighLevel", SqlDbType.Bit)     { Value = (dr[deviceCriticalHighLevelOrdinal] == DBNull.Value) ? 0 : dr[deviceCriticalHighLevelOrdinal] },
+                
+                new SqlParameter("@DeviceFillDetect", SqlDbType.Bit)                { Value = (dr[deviceFillDetectOrdinal] == DBNull.Value) ? 0 : dr[deviceFillDetectOrdinal] },
+                new SqlParameter("@DeviceFillDetectDelta", SqlDbType.Decimal)   { Value = (dr[deviceFillDetectDeltaOrdinal] == DBNull.Value) ? 0 : dr[deviceFillDetectDeltaOrdinal] },
+                new SqlParameter("@DeviceFillHysteresis", SqlDbType.Bit)        { Value = (dr[deviceFillHysteresisOrdinal] == DBNull.Value) ? 0 : dr[deviceFillHysteresisOrdinal] },
+                new SqlParameter("@DataLogDelta", SqlDbType.Int)                { Value = (dr[dataLogDeltaOrdinal] == DBNull.Value) ? 0 : dr[dataLogDeltaOrdinal] },
+                new SqlParameter("@UsageDelta", SqlDbType.Bit)                  { Value = (dr[usageDeltaOrdinal] == DBNull.Value) ? 0 : dr[usageDeltaOrdinal] },
+                new SqlParameter("@WakeInterval", SqlDbType.Int)                { Value = (dr[wakeIntervalOrdinal] == DBNull.Value) ? 0 : dr[wakeIntervalOrdinal] },
+               // new SqlParameter("@DeviceUsageAlarm ", SqlDbType.Bit),        { Value = (dr[tankHgtOrdinal] == DBNull.Value) ? 0 : dr[tankHgtOrdinal] },
+                new SqlParameter("@HasExpectedCallAlarm", SqlDbType.Bit)        { Value = (dr[hasExpectedCallAlarmOrdinal] == DBNull.Value) ? 0 : dr[hasExpectedCallAlarmOrdinal] },
+                new SqlParameter("@TankNormallyFills", SqlDbType.Bit)           { Value = (dr[tankNormallyFillsOrdinal] == DBNull.Value) ? 0 : dr[tankHgtOrdinal] },
+                new SqlParameter("@EnableGPS", SqlDbType.Bit)                   { Value = (dr[enableGPSOrdinal] == DBNull.Value) ? 0 : dr[enableGPSOrdinal] },
+                new SqlParameter("@EnableLocation", SqlDbType.Bit)              { Value = (dr[enableLocationOrdinal] == DBNull.Value) ? 0 : dr[enableLocationOrdinal] }
+        };
             return prm;
         }
   
