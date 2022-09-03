@@ -4,40 +4,30 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using static PortalWebApp.Utilities.Util;
 
 namespace PortalWebApp.Models
 {
     public class BulkUpdate
     {
-        public sealed class Env
-        {
-            public static readonly Env Dev = new Env("Server=TankdataLSN1\\TankData;Database=TankData_TDG;User ID=EmailManager;pwd=tanklink5410");
-            public static readonly Env Prod = new Env("Server=Prod");
-
-            private Env(string value)
-            {
-                Value = value;
-            }
-
-            public string Value { get; private set; }
-        }
-
+        [Display(Name = "Environment")]
         public string Environment { get; set; }
 
-        public string JavascriptToRun { get; set; }
-
+        [Display(Name = "User ID")]
         [Required(ErrorMessage = "Required")]
-        [RegularExpression("^[0-9]*$", ErrorMessage = "Must be numeric")]
         public int UserID { get; set; }
 
+        [Display(Name = "Records To Throttle")]
         [Required(ErrorMessage = "Required")]
         [RegularExpression("^[0-9]*$", ErrorMessage = "Must be numeric")]
         public int ThrottleNum { get; set; }
 
+        [Display(Name = "Throttle Duration")]
         [Required(ErrorMessage = "Required")]
         [RegularExpression("^[0-9]*$", ErrorMessage = "Must be numeric")]
         public int ThrottleDuration { get; set; }
 
+        [Display(Name ="Enable RTU Validation")]
         public bool RTU { get; set; }
 
         public string FileName { get; set; }
@@ -45,6 +35,9 @@ namespace PortalWebApp.Models
 
         public int TotalRows { get; set; }
         public int RowsProcessed { get; set; }
+
+
+        public string JavascriptToRun { get; set; }
 
     }
 }

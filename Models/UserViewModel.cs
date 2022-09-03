@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using static PortalWebApp.Models.BulkUpdate;
+using static PortalWebApp.Utilities.Util;
 
 namespace PortalWebApp.Models
 {

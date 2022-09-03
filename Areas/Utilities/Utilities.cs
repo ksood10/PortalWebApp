@@ -9,11 +9,67 @@ using System.Threading;
 using System.Data.OleDb;
 using System.IO;
 using PortalWebApp.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace PortalWebApp.Utilities { 
     public class Util
     {
         public static float psiPerCubicInch = 27.729623F;
+        public static int tankIDOrdinal { get; set; }
+        public static int tankNameOrdinal { get; set; }
+        public static int rtuNumberOrdinal { get; set; }
+        public static int tankHgtOrdinal  { get; set; }
+        public static int tankCapOrdinal  { get; set; }
+        public static int capacityLimitOrdinal  { get; set; }
+        public static int tankMinimumOrdinal  { get; set; }
+        public static int reorderUsageOrdinal  { get; set; }
+        public static int safetyStockUsageOrdinal  { get; set; }
+        public static int lowLowLevelOrdinal { get; set; }
+        public static int lowLevelOrdinal  { get; set; }
+        public static int highLevelOrdinal  { get; set; }
+        public static int highHighLevelOrdinal { get; set; }
+        public static int fillDetectDeltaOrdinal { get; set; }
+        public static int shortFillDeltaOrdinal { get; set; }
+        public static int volumeDeltaOrdinal { get; set; }
+        public static int rateChangeDeltaOrdinal { get; set; }
+        public static int callsPerDayOrdinal { get; set; }
+        public static int callDayOrdinal { get; set; }
+        public static int intervalOrdinal { get; set; }
+        public static int diagCallDayMaskOrdinal { get; set; }
+        public static int dataLogDeltaOrdinal { get; set; }
+        public static int usageDeltaOrdinal { get; set; }
+        public static int wakeIntervalOrdinal { get; set; }
+        public static int startTimeOrdinal { get; set; }
+        public static int highSetPointOrdinal { get; set; }
+        public static int lowSetPointOrdinal { get; set; }
+        public static int sensorOffsetOrdinal { get; set; }
+        public static int coeffExpOrdinal { get; set; }
+        public static int specGravOrdinal { get; set; }
+        public static int deviceFillDetectDeltaOrdinal { get; set; }
+        public static int deviceFillHysteresisOrdinal { get; set; }
+        public static int deviceCriticalLowLevelOrdinal { get; set; }
+        public static int deviceLowLevelOrdinal { get; set; }
+        public static int deviceHighLevelOrdinal { get; set; }
+        public static int deviceCriticalHighLevelOrdinal { get; set; }
+        public static int deviceFillDetectOrdinal { get; set; }
+        public static int deviceUsageAlarmOrdinal { get; set; }
+        public static int hasExpectedCallAlarmOrdinal { get; set; }
+        public static int tankNormallyFillsOrdinal { get; set; }
+        public static int enableGPSOrdinal { get; set; }
+        public static int enableLocationOrdinal { get; set; }
+
+        public sealed class Env
+        {
+            public static readonly Env Dev = new Env("Server=TankdataLSN1\\TankData;Database=TankData_TDG;User ID=EmailManager;pwd=tanklink5410");
+            public static readonly Env Prod = new Env("Server=Prod");
+
+            private Env(string value)
+            {
+                Value = value;
+            }
+
+            public string Value { get; private set; }
+        }
 
         public static bool ValidateApplication()
         {
@@ -37,6 +93,8 @@ namespace PortalWebApp.Utilities {
             }
             return multipleInstances;
         }
+
+  
 
 
         public static DataTable GetDataTableFromExcelFile(BulkUpdate model)
@@ -89,8 +147,105 @@ namespace PortalWebApp.Utilities {
             return dt;
         }
 
+        public static SqlParameter[] GetSqlParams()
+        {
 
+        var prm= new[]
+            {
+                new SqlParameter("@TankID", SqlDbType.Int)    ,                 /* { Value = dr[tankIDOrdinal] },*/
+                new SqlParameter("@RTUNumber", SqlDbType.NVarChar)     ,        /* { Value = dr[rtuNumberOrdinal] },*/
+                new SqlParameter("@TankHgt", SqlDbType.Decimal)   ,             /* { Value = (dr[tankHgtOrdinal] == DBNull.Value) ? 0 : dr[tankHgtOrdinal] },*/
+                new SqlParameter("@TankCap", SqlDbType.Decimal)      ,          /* { Value = (dr[tankCapOrdinal] == DBNull.Value) ? 0 : dr[tankCapOrdinal] },*/
+                new SqlParameter("@CapacityLimit", SqlDbType.Decimal)    ,      /* { Value = (dr[capacityLimitOrdinal] == DBNull.Value) ? 0 : dr[capacityLimitOrdinal] },*/
+                new SqlParameter("@TankMinimum", SqlDbType.Decimal)    ,        /* { Value = (dr[tankMinimumOrdinal] == DBNull.Value) ? 0 : dr[tankMinimumOrdinal] },*/
+                new SqlParameter("@SafetyStockUsage", SqlDbType.Int)  ,         /* { Value = (dr[safetyStockUsageOrdinal] == DBNull.Value) ? 0 : dr[safetyStockUsageOrdinal] },*/
+                new SqlParameter("@ReorderUsage", SqlDbType.Int)    ,           /* { Value = (dr[reorderUsageOrdinal] == DBNull.Value) ? 0 : dr[reorderUsageOrdinal] },*/
+                new SqlParameter("@StartTime", SqlDbType.DateTime)   ,          /* { Value = (dr[startTimeOrdinal] == DBNull.Value) ? 0 : dr[startTimeOrdinal] },*/
+                new SqlParameter("@Callsperday", SqlDbType.Int)     ,           /* { Value = (dr[callsPerDayOrdinal] == DBNull.Value) ? 0 : dr[callsPerDayOrdinal] },*/
+                new SqlParameter("@CallDay", SqlDbType.Int)       ,             /* { Value = (dr[callDayOrdinal] == DBNull.Value) ? 0 : dr[callDayOrdinal] },*/
+                new SqlParameter("@Interval", SqlDbType.NVarChar)     ,         /* { Value = (dr[intervalOrdinal] == DBNull.Value) ? 0 : dr[intervalOrdinal] },*/
+                new SqlParameter("@DiagCallDayMask", SqlDbType.Int)    ,        /* { Value = (dr[diagCallDayMaskOrdinal] == DBNull.Value) ? 0 : dr[diagCallDayMaskOrdinal] },*/
+                new SqlParameter("@HighSetPoint", SqlDbType.Decimal)  ,         /* { Value = (dr[highSetPointOrdinal] == DBNull.Value) ? 0 : dr[highSetPointOrdinal] },*/
+                new SqlParameter("@LowSetPoint", SqlDbType.Decimal)   ,         /* { Value = (dr[lowSetPointOrdinal] == DBNull.Value) ? 0 : dr[lowSetPointOrdinal] },*/
+                new SqlParameter("@SensorOffset", SqlDbType.Decimal) ,          /* { Value = (dr[sensorOffsetOrdinal] == DBNull.Value) ? 0 : dr[sensorOffsetOrdinal] },*/
+                new SqlParameter("@CoeffExp", SqlDbType.Decimal)     ,          /* { Value = (dr[coeffExpOrdinal] == DBNull.Value) ? 0 : dr[coeffExpOrdinal] },*/
+                new SqlParameter("@SpecGrav", SqlDbType.Decimal)  ,             /* { Value = (dr[specGravOrdinal] == DBNull.Value) ? 0 : dr[specGravOrdinal] },*/
+                new SqlParameter("@LowLowLevel", SqlDbType.Int)    ,            /* { Value = (dr[lowLowLevelOrdinal] == DBNull.Value) ? 0 : dr[lowLowLevelOrdinal] },*/
+                new SqlParameter("@LowLevel", SqlDbType.Int)    ,               /* { Value = (dr[lowLevelOrdinal] == DBNull.Value) ? 0 : dr[lowLevelOrdinal] },*/
+                new SqlParameter("@HighLevel", SqlDbType.Int)        ,          /* { Value = (dr[highLevelOrdinal] == DBNull.Value) ? 0 : dr[highLevelOrdinal] },*/
+                new SqlParameter("@HighHighLevel", SqlDbType.Int)       ,       /* { Value = (dr[highHighLevelOrdinal] == DBNull.Value) ? 0 : dr[highHighLevelOrdinal] },*/
+                new SqlParameter("@ShortFillDelta", SqlDbType.Decimal)   ,      /* { Value = (dr[shortFillDeltaOrdinal] == DBNull.Value) ? 0 : dr[shortFillDeltaOrdinal] },*/
+                new SqlParameter("@FillDetectDelta", SqlDbType.Decimal)  ,      /* { Value = (dr[fillDetectDeltaOrdinal] == DBNull.Value) ? 0 : dr[fillDetectDeltaOrdinal] },*/
+                new SqlParameter("@VolumeDelta", SqlDbType.Int)         ,       /* { Value = (dr[volumeDeltaOrdinal] == DBNull.Value) ? 0 : dr[volumeDeltaOrdinal] },*/
+                new SqlParameter("@RateChangeDelta", SqlDbType.Int)   ,         /* { Value = (dr[rateChangeDeltaOrdinal] == DBNull.Value) ? 0 : dr[rateChangeDeltaOrdinal] },*/
+                new SqlParameter("@DeviceCriticalLowLevel", SqlDbType.Bit) ,    /* { Value = (dr[deviceCriticalLowLevelOrdinal] == DBNull.Value) ? 0 : dr[deviceCriticalLowLevelOrdinal] },*/
+                new SqlParameter("@DeviceLowLevel", SqlDbType.Bit)    ,         /* { Value = (dr[deviceLowLevelOrdinal] == DBNull.Value) ? 0 : dr[deviceLowLevelOrdinal] },*/
+                new SqlParameter("@DeviceHighLevel", SqlDbType.Bit)   ,         /* { Value = (dr[deviceHighLevelOrdinal] == DBNull.Value) ? 0 : dr[deviceHighLevelOrdinal] },*/
+                new SqlParameter("@DeviceCriticalHighLevel", SqlDbType.Bit) ,   /* { Value = (dr[deviceCriticalHighLevelOrdinal] == DBNull.Value) ? 0 : dr[deviceCriticalHighLevelOrdinal] },*/
+                new SqlParameter("@DeviceFillDetect", SqlDbType.Bit)      ,     /* { Value = (dr[deviceFillDetectOrdinal] == DBNull.Value) ? 0 : dr[deviceFillDetectOrdinal] },*/
+                new SqlParameter("@DeviceFillDetectDelta", SqlDbType.Decimal),  /* { Value = (dr[deviceFillDetectDeltaOrdinal] == DBNull.Value) ? 0 : dr[deviceFillDetectDeltaOrdinal] },*/
+                new SqlParameter("@DeviceFillHysteresis", SqlDbType.Bit) ,      /* { Value = (dr[deviceFillHysteresisOrdinal] == DBNull.Value) ? 0 : dr[deviceFillHysteresisOrdinal] },*/
+                new SqlParameter("@DataLogDelta", SqlDbType.Int)  ,             /* { Value = (dr[dataLogDeltaOrdinal] == DBNull.Value) ? 0 : dr[dataLogDeltaOrdinal] },*/
+                new SqlParameter("@UsageDelta", SqlDbType.Bit)    ,             /* { Value = (dr[usageDeltaOrdinal] == DBNull.Value) ? 0 : dr[usageDeltaOrdinal] },*/
+                new SqlParameter("@WakeInterval", SqlDbType.Int)        ,       /* { Value = (dr[wakeIntervalOrdinal] == DBNull.Value) ? 0 : dr[wakeIntervalOrdinal] },*/
+               // new SqlParameter("@DeviceUsageAlarm ", SqlDbType.Bit),       /* { Value = (dr[tankHgtOrdinal] == DBNull.Value) ? 0 : dr[tankHgtOrdinal] },*/
+                new SqlParameter("@HasExpectedCallAlarm", SqlDbType.Bit)  ,     /* { Value = (dr[hasExpectedCallAlarmOrdinal] == DBNull.Value) ? 0 : dr[hasExpectedCallAlarmOrdinal] },*/
+                new SqlParameter("@TankNormallyFills", SqlDbType.Bit)  ,        /* { Value = (dr[tankNormallyFillsOrdinal] == DBNull.Value) ? 0 : dr[tankHgtOrdinal] },*/
+                new SqlParameter("@EnableGPS", SqlDbType.Bit)      ,            /* { Value = (dr[tankCapOrdinal] == DBNull.Value) ? 0 : dr[tankCapOrdinal] },*/
+                new SqlParameter("@EnableLocation", SqlDbType.Bit)             /* { Value = (dr[tankHgtOrdinal] == DBNull.Value) ? 0 : dr[tankHgtOrdinal] }*/
+            };                                                                    
 
+            return prm;
+        }
+  
+
+        public static void GetColumnOrdinals(DataTable dt)
+        {
+             tankIDOrdinal = dt.Columns["TankID"].Ordinal;
+             tankNameOrdinal = dt.Columns["TankName"].Ordinal;
+             rtuNumberOrdinal = dt.Columns["RTUNumber"].Ordinal;
+             tankHgtOrdinal = dt.Columns["TankHgt"].Ordinal;
+             tankCapOrdinal = dt.Columns["TankCap"].Ordinal;
+             capacityLimitOrdinal = dt.Columns["CapacityLimit"].Ordinal;
+             tankMinimumOrdinal = dt.Columns["TankMinimum"].Ordinal;
+             reorderUsageOrdinal = dt.Columns["ReOrderUsage"].Ordinal;
+             safetyStockUsageOrdinal = dt.Columns["SafetyStockUsage"].Ordinal;
+             lowLowLevelOrdinal = dt.Columns["LowLowLevel"].Ordinal;
+             lowLevelOrdinal = dt.Columns["LowLevel"].Ordinal;
+             highLevelOrdinal = dt.Columns["HighLevel"].Ordinal;
+             highHighLevelOrdinal = dt.Columns["HighHighLevel"].Ordinal;
+             fillDetectDeltaOrdinal = dt.Columns["FillDetectDelta"].Ordinal;
+             shortFillDeltaOrdinal = dt.Columns["ShortFillDelta"].Ordinal;
+             volumeDeltaOrdinal = dt.Columns["VolumeDelta"].Ordinal;
+             rateChangeDeltaOrdinal = dt.Columns["RateChangeDelta"].Ordinal;
+             callsPerDayOrdinal = dt.Columns["CallsPerDay"].Ordinal;
+             callDayOrdinal = dt.Columns["CallDay"].Ordinal;
+             intervalOrdinal = dt.Columns["Interval"].Ordinal;
+             diagCallDayMaskOrdinal = dt.Columns["DiagCallDayMask"].Ordinal;
+             dataLogDeltaOrdinal = dt.Columns["DataLogDelta"].Ordinal;
+             usageDeltaOrdinal = dt.Columns["UsageDelta"].Ordinal;
+             wakeIntervalOrdinal = dt.Columns["WakeInterval"].Ordinal;
+             startTimeOrdinal = dt.Columns["StartTime"].Ordinal;
+             highSetPointOrdinal = dt.Columns["HighSetPoint"].Ordinal;
+             lowSetPointOrdinal = dt.Columns["LowSetPoint"].Ordinal;
+             sensorOffsetOrdinal = dt.Columns["SensorOffset"].Ordinal;
+             coeffExpOrdinal = dt.Columns["CoeffExp"].Ordinal;
+             specGravOrdinal = dt.Columns["SpecGrav"].Ordinal;
+             deviceFillDetectDeltaOrdinal = dt.Columns["DeviceFillDetectDelta"].Ordinal;
+             deviceFillHysteresisOrdinal = dt.Columns["DeviceFillHysteresis"].Ordinal;
+             deviceCriticalLowLevelOrdinal = dt.Columns["DeviceCriticalLowLevel"].Ordinal;
+             deviceLowLevelOrdinal = dt.Columns["DeviceLowLevel"].Ordinal;
+             deviceHighLevelOrdinal = dt.Columns["DeviceHighLevel"].Ordinal;
+             deviceCriticalHighLevelOrdinal = dt.Columns["DeviceCriticalHighLevel"].Ordinal;
+             deviceFillDetectOrdinal = dt.Columns["DeviceFillDetect"].Ordinal;
+             deviceUsageAlarmOrdinal = dt.Columns["DeviceUsageAlarm"].Ordinal;
+             hasExpectedCallAlarmOrdinal = dt.Columns["HasExpectedCallAlarm"].Ordinal;
+             tankNormallyFillsOrdinal = dt.Columns["TankNormallyFills"].Ordinal;
+            //new code added to accomodate EnableLocation and EnableGPS+   D Arcilla    Oct 2020
+             enableLocationOrdinal = dt.Columns["EnableLocation"].Ordinal;
+             enableGPSOrdinal = dt.Columns["EnableGPS"].Ordinal;
+        }
+       
 
         public static int MinutesToMilliseconds(int minutes)
         {

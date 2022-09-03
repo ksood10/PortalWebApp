@@ -145,14 +145,14 @@
     <div style="width:70%">
         <table class="table table-striped">
 
-            <tr style="background-color:lightblue">
-                <td style="width:25%;font-weight:bold">@Html.LabelFor(model => model.Environment, "Environment ", new { Class = "form-label" })</td>
+            <tr style="background-color:lightblue;font-weight:bold">
+                <td style="width:25%">@Html.LabelFor(model => model.Environment)</td>
                 <td style="width:25%">
-                    @Html.RadioButtonFor(model => model.Environment, BulkUpdate.Env.Dev, new { Id = "Development" })
+                    @Html.RadioButtonFor(model => model.Environment, PortalWebApp.Utilities.Util.Env.Dev.Value, new { Id = "Development" })
                     <label for="Development">&nbsp;Development</label>
                 </td>
                 <td style="width:25%">
-                    @Html.RadioButtonFor(model => model.Environment, BulkUpdate.Env.Prod, new { Id = "Production" })
+                    @Html.RadioButtonFor(model => model.Environment, PortalWebApp.Utilities.Util.Env.Prod.Value, new { Id = "Production" })
                     <label for="Production">&nbsp;Production</label>
                 </td>
             </tr>
@@ -160,7 +160,7 @@
             <tr><td>&nbsp;</td></tr>
 
             <tr>
-                <td style="width:25%">@Html.LabelFor(model => model.UserID, "User ID", new { Class = "form-label" })</td>
+                <td style="width:25%">@Html.LabelFor(model => model.UserID)</td>
                 <td>
                     <select asp-for="UserID" class="form-control" asp-items="@(new SelectList(ViewBag.ListofUser,"Value","Text"))">
                     </select>
@@ -169,7 +169,7 @@
             </tr>
 
             <tr>
-                <td>@Html.LabelFor(model => model.ThrottleNum, "Records to Throttle", new { Class = "form-label" })</td>
+                <td>@Html.LabelFor(model => model.ThrottleNum)</td>
                 <td>
 
                     @Html.EditorFor(model => model.ThrottleNum, new
@@ -189,7 +189,7 @@
             </tr>
 
             <tr>
-                <td>@Html.LabelFor(model => model.ThrottleDuration, "Throttle Duration", new { Class = "form-label" })</td>
+                <td>@Html.LabelFor(model => model.ThrottleDuration)</td>
                 <td>
                     @Html.EditorFor(model => model.ThrottleDuration, new
                     {
@@ -209,7 +209,7 @@
 
             <tr>
                 <td>
-                    @Html.LabelFor(model => model.RTU, "Enable RTU Validation", new { Class = "form-label" })
+                    @Html.LabelFor(model => model.RTU)
                 </td>
                 <td colspan="2">
                     @Html.CheckBoxFor(model => model.RTU, new { Class = "form-check", @checked = "checked" })
