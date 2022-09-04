@@ -66,6 +66,10 @@
         <br />
         <br />
         <br />
+
+        <div class="progress">
+            <div id="prog" class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" ></div>
+        </div>
     </div>
     @section scripts{
         <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
@@ -103,24 +107,24 @@
             });
 
             function LoadProgressBar(result) {
-                var progressbar = $("#progressbar-5");
+                var progressbar = $("#prog");
                 var progressLabel = $(".progress-label");
                 progressbar.show();
-                $("#progressbar-5").progressbar({
+                $("#prog").progressbar({
                     //value: false,
                     change: function () {
-                        progressLabel.text(
-                            progressbar.progressbar("value") + "%");  // Showing the progress increment value in progress bar
+                        //progressLabel.text(
+                        //    progressbar.progressbar("value") + "%");  // Showing the progress increment value in progress bar
                     },
                     complete: function () {
-                        progressLabel.text("Loading Completed!");
+                       // progressLabel.text("Loading Completed!");
                         progressbar.progressbar("value", 0);  //Reinitialize the progress bar value 0
-                        progressLabel.text("");
+                        //progressLabel.text("");
                         progressbar.hide(); //Hiding the progress bar
                         var markup = "<tr><td>" + result + "</td><td><a href='#' onclick='DeleteFile(\"" + result + "\")'><span class='glyphicon glyphicon-remove red'></span></a></td></tr>"; // Binding the file name
-                        $("#ListofFiles tbody").append(markup);
-                        $('#Files').val('');
-                        $('#FileBrowse').find("*").prop("disabled", false);
+                        //$("#ListofFiles tbody").append(markup);
+                       // $('#Files').val('');
+                       // $('#FileBrowse').find("*").prop("disabled", false);
                     }
                 });
                 function progress() {

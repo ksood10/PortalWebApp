@@ -3,10 +3,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Primitives;
 using PortalWebApp.Data;
 using PortalWebApp.Models;
-using PortalWebApp.Utilities;
 using System;
 using System.Data;
 using System.Data.SqlClient;
@@ -22,16 +20,11 @@ namespace PortalWebApp.Controllers
         private PortalWebAppContext _databaseContext;
         private readonly ILogger<HomeController> _logger;
         private IWebHostEnvironment Environment;
-        private StringValues file_1;
-        int rws = 0;
-
         public bool HaveEXCELReadError = false;
 
         public HomeController(ILogger<HomeController> logger, PortalWebAppContext databaseContext, IWebHostEnvironment _environment)
         {
-            _logger = logger;
-            _databaseContext = databaseContext;
-            Environment = _environment;
+            _logger = logger;            _databaseContext = databaseContext;            Environment = _environment;
         }
 
         public IActionResult Index()
@@ -39,11 +32,9 @@ namespace PortalWebApp.Controllers
             return View();
         }   
 
-        public IActionResult check(IFormFile postedFile, string button, BulkUpdate model)
+        public IActionResult check(BulkUpdate model)
         {
-           // myBulkConfigurator = new BulkConfiguratorQueue();  string s = myBulkConfigurator.TestDLL();  connectionString = Properties.Resources.TankDataTestDatabase;
-            var filename = Path.GetFileName(model.FileName);
-            TempData["ButtonValue"] = string.Format("Env--{0} :::  User -- {1}::: ThrottleNum -- {2}:::Duration-- {3}:::RTU--{4}:::File--{5}", model.Environment, model.UserID, model.ThrottleNum, model.ThrottleDuration, model.RTU, model.FileName);
+            TempData["Status"] = string.Format("Env--{0} :::  User -- {1}::: ThrottleNum -- {2}:::Duration-- {3}:::RTU--{4}:::File--{5}", model.Environment, model.UserID, model.ThrottleNum, model.ThrottleDuration, model.RTU, model.FileName);
             return RedirectToAction("BulkConfig");
         }
         
@@ -70,52 +61,64 @@ namespace PortalWebApp.Controllers
             ViewBag.ListofUser = userList;
             return View();
         }
-        [HttpPost]
-        public IActionResult Index(UserViewModel userViewModel)
-        {
-            return View(userViewModel);
-        }
-
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-        
+        public ActionResult UploadFiles(BulkUpdate model)
+        {
+            
+                var filename = Path.GetFileName(model.FileName);
+                var MainPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Uploads");
+                //create directory "Uploads" if it doesn't exists
+              
+             //   var filePath = Path.Combine(MainPath, filename);
+            
+
+            return RedirectToAction("Privacy");
+        }
+
         [HttpPost]
         public IActionResult ImportExcelFile(BulkUpdate model)
         {
+           
             var dt= GetDataTableFromExcelFile(model); 
-            if (dt == null) HaveEXCELReadError = true;
+            if (dt.Columns.Contains("Error")) HaveEXCELReadError = true;
             if(!HaveEXCELReadError) {
                 GetColumnOrdinals(dt);
-                using (var con = new SqlConnection(model.Environment))
+
+                try
                 {
-                    using (var cmd = new SqlCommand(SPBulkInsert, con))
+                    using (var con = new SqlConnection(model.Environment))
                     {
-                        con.Open();
-                        cmd.CommandType = CommandType.StoredProcedure;
-                        foreach (DataRow dr in dt.Rows)
+                        using (var cmd = new SqlCommand(SPBulkInsert, con))
                         {
-                            cmd.Parameters.Clear();
-                            cmd.Parameters.AddRange(GetSqlParams(dr));
-                            cmd.ExecuteNonQuery();
+                            con.Open();
+                            cmd.CommandType = CommandType.StoredProcedure;
+                            foreach (DataRow dr in dt.Rows)
+                            {
+                                cmd.Parameters.Clear();
+                                cmd.Parameters.AddRange(GetSqlParams(dr));
+                                cmd.ExecuteNonQuery();
+                            }
                         }
                     }
+                    TempData["Status"] = "Excel File Imported !";
                 }
+                catch(Exception e)
+                {
+                    TempData["Status"] = e.Message;
+                }
+               
+                TempData["RowsToProcess"] = dt.Rows.Count.ToString();
             }
-            else
-            {
-                TempData["ButtonValue"] = "Excel File Read error !";
-            }
-            //if the code reach here means everthing goes fine and excel data is imported into database
-            ViewBag.Message = "File Imported and excel data saved into database";
-            TempData["RowsToProcess"] = dt.Rows.Count.ToString();
-            TempData["ButtonValue"] = "Excel File Imported !";
-          //  return View("BulkConfig");
+            else     TempData["Status"] = "Excel File Read error !";
+           
+            ViewBag.Message = "File Imported and excel data saved into database"; //if the code reach here means everthing goes fine and excel data is imported into database
+            
             return RedirectToAction("BulkConfig");
-
         }
     }
 }

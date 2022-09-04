@@ -119,21 +119,34 @@ namespace PortalWebApp.Utilities {
 
             var dt = new DataTable();
             conString = string.Format(conString, filePath);
-
-            using (OleDbConnection connExcel = new OleDbConnection(conString))
+            try
             {
-                using OleDbCommand cmdExcel = new OleDbCommand();
-                using OleDbDataAdapter odaExcel = new OleDbDataAdapter();
-                cmdExcel.Connection = connExcel;
+                using (OleDbConnection connExcel = new OleDbConnection(conString))
+                {
+                    using OleDbCommand cmdExcel = new OleDbCommand();
+                    using OleDbDataAdapter odaExcel = new OleDbDataAdapter();
+                    cmdExcel.Connection = connExcel;
 
-                //Get the name of First Sheet.
-                connExcel.Open();
-                var dtExcelSchema = connExcel.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
-                string sheetName = dtExcelSchema.Rows[0]["TABLE_NAME"].ToString();
-                cmdExcel.CommandText = "SELECT * From [" + sheetName + "]";
-                odaExcel.SelectCommand = cmdExcel;
-                odaExcel.Fill(dt);
-                connExcel.Close();
+                    //Get the name of First Sheet.
+                    connExcel.Open();
+                    var dtExcelSchema = connExcel.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
+                    string sheetName = dtExcelSchema.Rows[0]["TABLE_NAME"].ToString();
+                    cmdExcel.CommandText = "SELECT * From [" + sheetName + "]";
+                    odaExcel.SelectCommand = cmdExcel;
+                    odaExcel.Fill(dt);
+                    connExcel.Close();
+                }
+            } catch (Exception e)
+            {
+                dt = new DataTable();
+                dt.Clear();
+                dt.Columns.Add("Error");
+                dt.Columns.Add("ErrorDetail");
+                var dr = dt.NewRow();
+                dr["Error"] = "File Read Error!";
+                dr["ErrorDetail"] = e.Message;
+                dt.Rows.Add(dr);
+                return dt;
             }
            
             return dt;

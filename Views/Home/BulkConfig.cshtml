@@ -56,10 +56,6 @@
         }
     }
 
-
-</script>
-<script>
-
     $('#UploadBtn').click(function () {
 
         var fileUpload = $("#Files").get(0);
@@ -212,7 +208,7 @@
                     @Html.LabelFor(model => model.RTU)
                 </td>
                 <td colspan="2">
-                    @Html.CheckBoxFor(model => model.RTU, new { Class = "form-check", @checked = "checked" })
+                    @Html.CheckBoxFor(model => model.RTU)
                 </td>
             </tr>
             <tr>
@@ -223,9 +219,6 @@
                     <input type="file" model onchange="uploadFile();document.getElementById('FileName').value = this.value;" name="file1" id="file1" value="s" />
                 </td>
 
-                @*<td>
-                        <progress id="progressBar" value="0" max="100" style="width:250px;"></progress> <h3 id="status"></h3>
-                    </td>*@
             </tr>
 
             <tr>
@@ -239,10 +232,10 @@
                     </div>
                     <br /><br />
                     <div class="progress">
-                        <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                        <div id="prog" class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                     <div id="divAlert" runat="server" class="alert alert-success alert-dismissible  fade show" role="alert">
-                        <strong>&nbsp;@TempData["ButtonValue"]</strong>
+                        <strong>&nbsp;@TempData["Status"]</strong>
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -259,6 +252,11 @@
                 </td>
             </tr>
         </table>
+    </div>
+    <div id="progressbar-5">
+        <div class="progress-label">
+            Loading...
+        </div>
     </div>
 
     <!-- Modal -->
@@ -287,13 +285,13 @@
         }
     </script>
 
-    @if(ViewBag.JavaScriptFunctiuon!=null)
-        {
-            <script type="text/javascript">
+    @if (ViewBag.JavaScriptFunctiuon != null)
+    {
+        <script type="text/javascript">
                 @Html.Raw(ViewBag.JavaScriptFunction)
-            </script>
-        }
+        </script>
     }
+}
 
 
 @section Scripts {
