@@ -148,7 +148,8 @@
                     <label for="Development">&nbsp;Development</label>
                 </td>
                 <td style="width:25%">
-                    @Html.RadioButtonFor(model => model.Environment, PortalWebApp.Utilities.Util.Env.Prod.Value, new { Id = "Production" })
+                    <input id="Production" name="Environment" type="radio" value="Server=Prod" data-toggle="modal" data-target="#warningModal">
+                   
                     <label for="Production">&nbsp;Production</label>
                 </td>
             </tr>
