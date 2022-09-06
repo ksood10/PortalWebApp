@@ -67,17 +67,13 @@ namespace PortalWebApp.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-        public ActionResult UploadFiles(BulkUpdate model)
+        public string UploadFiles(BulkUpdate model)
         {
             
                 var filename = Path.GetFileName(model.FileName);
                 var MainPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Uploads");
-                //create directory "Uploads" if it doesn't exists
-              
-             //   var filePath = Path.Combine(MainPath, filename);
-            
-
-            return RedirectToAction("Privacy");
+           // ImportExcelFile(model);
+            return "test result";
         }
 
         [HttpPost]

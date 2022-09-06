@@ -1,8 +1,4 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
-
-// Write your JavaScript code.
-$(document).ready(function () {
+﻿$(document).ready(function () {
     $("#Development").prop("checked", true);
     $('select>option:eq(3)').attr('selected', true);
     $("#ThrottleNum").val("2");
@@ -14,5 +10,4 @@ $(document).ready(function () {
         else
             $('#Submit').prop("disabled", true);
     });
-
 });
