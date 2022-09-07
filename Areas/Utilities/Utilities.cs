@@ -95,9 +95,9 @@ namespace PortalWebApp.Utilities {
             return multipleInstances;
         }
 
-        public static DataTable GetDataTableFromExcelFile(BulkUpdate model)
+        public static DataTable GetDataTableFromExcelFile(string filename)
         {
-            var filename = Path.GetFileName(model.FileName);
+           // var filename = Path.GetFileName(model.FileName);
             var MainPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Uploads");
 
             //create directory "Uploads" if it doesn't exists

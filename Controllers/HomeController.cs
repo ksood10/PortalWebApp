@@ -25,6 +25,7 @@ namespace PortalWebApp.Controllers
         public HomeController(ILogger<HomeController> logger, PortalWebAppContext databaseContext, IWebHostEnvironment _environment)
         {
             _logger = logger;            _databaseContext = databaseContext;            Environment = _environment;
+ 
         }
 
         public IActionResult Index()
@@ -45,6 +46,7 @@ namespace PortalWebApp.Controllers
 
         public IActionResult BulkConfig()
         {
+           
             var userList = (from user in _databaseContext.User
                             where user.OrganizationID == 10
                             orderby user.UserId
@@ -67,27 +69,35 @@ namespace PortalWebApp.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-        public string UploadFiles(BulkUpdate model)
+
+        [Route("/Home/UploadFiles/{userid}/{throttlenum}/{throttleduration}/{rtu}/{filename}")]
+        public string UploadFiles(int userid, int throttlenum, int throttleduration , bool rtu, string filename)
         {
-            
-                var filename = Path.GetFileName(model.FileName);
-                var MainPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Uploads");
-           // ImportExcelFile(model);
-            return "test result";
+            int x = userid;
+            int y = throttlenum;
+            int z = throttleduration;
+            bool r = rtu;
+            string f = filename;
+
+               // var filename = Path.GetFileName(model.FileName);
+               //  var MainPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Uploads");
+              // ImportExcelFile(f);
+            return "test result :::" +x.ToString() + y.ToString() + z.ToString()+ r.ToString() + f;
         }
 
+        [Route("/Home/ImportExcelFile/{userid}/{throttlenum}/{throttleduration}/{rtu}/{filename}")]
         [HttpPost]
-        public IActionResult ImportExcelFile(BulkUpdate model)
+        public IActionResult ImportExcelFile(int userid, int throttlenum, int throttleduration, bool rtu, string filename)
         {
            
-            var dt= GetDataTableFromExcelFile(model); 
+            var dt= GetDataTableFromExcelFile(filename); 
             if (dt.Columns.Contains("Error")) HaveEXCELReadError = true;
             if(!HaveEXCELReadError) {
                 GetColumnOrdinals(dt);
 
                 try
                 {
-                    using (var con = new SqlConnection(model.Environment))
+                    using (var con = new SqlConnection(Env.Dev.Value))
                     {
                         using (var cmd = new SqlCommand(SPBulkInsert, con))
                         {
