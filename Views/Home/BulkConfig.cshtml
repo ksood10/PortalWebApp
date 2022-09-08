@@ -13,8 +13,13 @@
             }
         }
         function updateui() {
-            document.getElementById('Submit').value = 'Running CONFIG IMPORT...';
+            document.getElementById('Submit').value = 'Running CONFIG IMPORT..';
             document.getElementById('spin').style.visibility = "visible";
+            document.getElementById('divAlert').style.visibility = "visible";
+            document.getElementById("divAlert").children[0].innerHTML = "Running ...";
+            
+             document.getElementById('UploadBtn').value = 'Running CONFIG IMPORT..';
+
         }
     </script>
 
@@ -113,22 +118,22 @@
                         <button name="button" runat="server" class="btn btn-success" id="btnRun" value="cph" asp-action="check">Run</button>
                         <input id="Submit" class="btn btn-success" type="submit" value="Run BULK CONFIG IMPORT" disabled onclick="updateui() " />
                         &nbsp;&nbsp;&nbsp;
-                        <input type="button" id="UploadBtn" class="btn btn-danger" value="Upload" disabled />
+                        <input type="button" id="UploadBtn" class="btn btn-danger" value="Run CONFIG IMPORT   " disabled onclick="updateui()" />
                         <div id="spin" class="spinner-border" role="status" style="visibility:hidden">
                             <span class="sr-only">Loading...</span>
                         </div>
                         <br /><br />
 
-                        <div id="divAlert" runat="server" class="alert alert-success alert-dismissible  fade show" role="alert">
+                        <div id="divAlert" runat="server" class="alert alert-success alert-dismissible  fade show" style="visibility:hidden" role="alert">
                             <strong>&nbsp;@TempData["Status"]</strong>
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <div id="divProcessed1">
+                        @*<div id="divProcessed1">
                             <strong>Total Rows::::</strong>
                             @Html.LabelFor(model => model.TotalRows, "Rows to process", new { Class = "form-label" })
-                        </div>
+                        </div>*@
                         <div id="progress" style="display:none">
                             <div class="progress" id="uu">
                                 <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
@@ -140,15 +145,7 @@
                 </tr>
             </table>
         </div>
-        <div>
-
-            <div class="container">
-                <div class="col-sm-2">           </div>
-                <div class="progress">
-                    <div id="prog" class="progress-bar progress-bar-striped" role="progressbar" style="min-width: 100%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-            </div>
-        </div>
+        
 
         <!-- Modal -->
         <div class="modal fade" id="warningModal" tabindex="-1" role="dialog" aria-labelledby="warningModalLabel" aria-hidden="true">
@@ -185,7 +182,7 @@
                 var rtu = document.getElementById("RTU").checked;
                 var fullPath = document.getElementById("FileName").value;
                 var filename = fullPath.replace(/^.*[\\\/]/, '');
-                alert(userid + "---" + throttlenum + "--" + throttleduration+"--" + rtu +"--" + filename);
+                console.log(userid + "---" + throttlenum + "--" + throttleduration+"--" + rtu +"--" + filename);
                // var fileData = new FormData();
                 $.ajax({
                     url: '/Home/ImportExcelFile/'+ userid+'/'+throttlenum + '/'+ throttleduration+'/'+rtu +'/'+filename,
@@ -194,7 +191,7 @@
                     type: "POST",
                     contentType: false, // Not to set any content header
                     processData: false, // Not to process data
-                  // data: { customerID: 5, fname: "hello" }, 
+            
                     async: true,
                     beforeSend: function () {
                         $("#UploadBtn").attr('disabled', 'disabled');
@@ -202,14 +199,20 @@
                     },
                     progress: function (result) {
                         var percentage = 0;
+                        console('amithere');
                         var timer = setInterval(() => {
-                            percentage = percentage + 20;
+                            percentage = percentage + 2;
                             progress_bar_process(percentage, timer);
-                        }, 1000);
-                        console.log(result);
+                        }, 3000);
+                        console.log("running....");
                     },
                     success: function (result) {
                         console.log(result);
+                        document.getElementById('spin').style.visibility = "hidden";
+                        document.getElementById('UploadBtn').value = 'Run CONFIG IMPORT   ';
+                        document.getElementById("divAlert").children[0].innerHTML = "File Import DONE";
+                        $('#UploadBtn').prop("disabled", "disabled");
+                        document.getElementById("file1").value = null;
                         if (result != "") {
                             LoadProgressBar(); //calling LoadProgressBar function to load the progress bar.
                         }
@@ -217,15 +220,16 @@
                     xhr: function () {
                     // get the native XmlHttpRequest object
                     var xhr = $.ajaxSettings.xhr();
-                        $("#uu .progress-bar").css("width", 5 + "%").text(5 + "%");
+                        $("#uu .progress-bar").css("width", 9 + "%");
                         LoadProgressBar();
+                        console.log('xhr start');
                         var percentage = 0;
                         var timer = setInterval(() => {
-                            percentage = percentage + 20;
+                            percentage = percentage + 9;
                             progress_bar_process(percentage, timer);
-                        }, 1000);
+                        }, 1800);
                         xhr.onprogress = function (evt) {
-                            console.log('in progress!');
+                            console.log('in progress- main area!');
                             LoadProgressBar();
                         if (evt.lengthComputable) { // it always is false
                             console.log(evt.loaded + " " + evt.total + " " + evt.currentTarget.LOADING + " " + evt.currentTarget.DONE)
@@ -272,12 +276,13 @@
                 function progress() {
                     var val = progressbar.progressbar("value") || 0;
                     progressbar.progressbar("value", val + 1);
-                    console.log("inside the fuction");
+                    console.log("inside the fuction progress");
                     if (val < 99) {
-                        setTimeout(progress, 25);
+                        setTimeout(progress, 100);
+                        console.log('trying to slow down ..');
                     }
                 }
-                setTimeout(progress, 100);
+                setTimeout(progress, 1000);
             }
         </script>
     }

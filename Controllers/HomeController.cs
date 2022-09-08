@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -6,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using PortalWebApp.Data;
 using PortalWebApp.Models;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
@@ -38,7 +40,7 @@ namespace PortalWebApp.Controllers
             TempData["Status"] = string.Format("Env--{0} :::  User -- {1}::: ThrottleNum -- {2}:::Duration-- {3}:::RTU--{4}:::File--{5}", model.Environment, model.UserID, model.ThrottleNum, model.ThrottleDuration, model.RTU, model.FileName);
             return RedirectToAction("BulkConfig");
         }
-        
+        [Authorize]
         public IActionResult Privacy()
         {
             return View();
@@ -46,21 +48,39 @@ namespace PortalWebApp.Controllers
 
         public IActionResult BulkConfig()
         {
-           
-            var userList = (from user in _databaseContext.User
-                            where user.OrganizationID == 10
-                            orderby user.UserId
-                            select new SelectListItem()
-                            {
-                                Text = user.AbbreviatedName + " (" + user.UserId.ToString() + ")",
-                                Value = user.UserId.ToString()
-                            }).ToList();
-            userList.Insert(0, new SelectListItem()
+            try
             {
-                Text = "---------Select-------------",
-                Value = string.Empty
-            });
-            ViewBag.ListofUser = userList;
+
+                var userList = new List<SelectListItem>();
+                userList = (from user in _databaseContext.User
+                                where user.OrganizationID == 10
+                                orderby user.UserId
+                                select new SelectListItem()
+                                {
+                                    Text = user.AbbreviatedName + " (" + user.UserId.ToString() + ")",
+                                    Value = user.UserId.ToString()
+                                }).ToList();
+                userList.Insert(0, new SelectListItem()
+                {
+                    Text = "---------Select-------------",
+                    Value = string.Empty
+                });
+                ViewBag.ListofUser = userList;
+
+            }
+            catch(Exception e)
+            {
+                var userList = new List<SelectListItem>();
+                userList.Insert(0, new SelectListItem()
+                {
+                    Text = "---------Select-------------",
+                    Value = string.Empty
+                });
+                ViewBag.ListofUser = userList;
+                TempData["Status"] = e.Message;
+            }
+            
+            
             return View();
         }
 
