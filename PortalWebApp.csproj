@@ -22,4 +22,10 @@
     <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="Adage_CSLA">
+      <HintPath>bin\Debug\Adage_CSLA.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

@@ -690,5 +690,83 @@ namespace PortalWebApp.Utilities {
             return successfulupdate;
         }
 
+        public static int ValidateUser(string connectionstring, string username)
+        {
+            int userID = -1;
+            try
+            {
+                using (var con = new SqlConnection(connectionstring))
+                {
+                    using (var cmd = new SqlCommand("select userid from [user] where username = @username", con))
+                    {
+                        con.Open();
+                        cmd.Parameters.Add(new SqlParameter("username", username));
+                        userID = (int)cmd.ExecuteScalar();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string errorMessage = ex.Message;
+                userID = -1;
+            }
+            return userID;
+        }
+
+        public static string GetPassword(string connectionstring, int userid)
+        {
+            string encryptedPassword = string.Empty;
+            string passwordSalt = string.Empty;
+            string userPassword = string.Empty;
+            try
+            {
+                using (var con = new SqlConnection(Env.Dev.Value))
+                {
+                    using (var cmd = new SqlCommand("select password, passwordsalt from[user] u where userid = @userid", con))
+                    {
+                        con.Open();
+                        cmd.Parameters.Add(new SqlParameter("userid", userid));
+                        SqlDataReader reader = cmd.ExecuteReader();
+                        if (reader != null)
+                        {
+                            int saltOrdinal = reader.GetOrdinal("passwordsalt");
+                            int passwordOrdinal = reader.GetOrdinal("password");
+                            while (reader.Read())
+                            {
+                                encryptedPassword = reader.GetString(passwordOrdinal);
+                                passwordSalt = reader.GetString(saltOrdinal);
+                            }
+                            reader.Close();
+                            Adage.Functions.Encryption.Decryptor dec = new Adage.Functions.Encryption.Decryptor(Adage.Functions.Encryption.EncryptionAlogrithm.Rijndael);
+                            dec.IV = System.Convert.FromBase64String(passwordSalt);
+                            byte[] tmpPass = dec.Decrypt(System.Convert.FromBase64String(encryptedPassword), Constants.IV());
+                            userPassword = System.Text.Encoding.ASCII.GetString(tmpPass);
+                        }
+                        else
+                            userPassword = string.Empty;
+                    }
+                }
+               
+            }
+            catch (Exception ex)
+            {
+                string errorMsg = ex.Message;
+                userPassword = string.Empty;
+            }
+            return userPassword;
+        }
+
     }
+
+    public class Constants
+    {
+        //This is the Initialization vector we use for SupplyNetTankLink - Do not change this.
+        public static byte[] IV()
+        {
+            byte[] InitializationVector = { 121, 241, 71, 121, 44, 234, 242, 1, 34, 72, 50, 43, 76, 123, 20, 25 };
+            return InitializationVector;
+        }
+    }
+
 }
+

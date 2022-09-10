@@ -33,36 +33,30 @@
         <section>
             <form id="account" method="post">
                 <h4>Use a local account to log in.</h4>
+                <div asp-validation-summary="All" class="text-danger"></div>
                 <hr />
-                <table class="table table-striped">
-                    <tr>
-                        <td style="width:25%">@Html.LabelFor(model => model.UserID, "User ID", new { Class = "form-label" })</td>
-                        <td>
-                            <select asp-for="UserID"
-                                    class="form-control"
-                                    asp-items="@(new SelectList(LoginUsers(),"Value","Text"))">
-                            </select>
-                        </td>
-                        <td style="color:red;font: all-petite-caps;font-weight:bold"> @Html.ValidationMessageFor(model => model.UserID)</td>
-                    </tr>
-                    </table>
-                    <div asp-validation-summary="All" class="text-danger"></div>
-                   
-                    <div class="form-group">
-                        <label asp-for="Input.Password"></label>
-                        <input asp-for="Input.Password" class="form-control" />
-                        <span asp-validation-for="Input.Password" class="text-danger"></span>
-                    </div>
-                   
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-primary">Log in</button>
-                    </div>
-                    <div class="form-group">
-                        <p>
-                            <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
-                        </p>
-                        
-                    </div>
+                <div class="form-group">
+                    <label asp-for="Input.UserName"></label>
+                    <input asp-for="Input.UserName" class="form-control" />
+                    <span asp-validation-for="Input.UserName" class="text-danger"></span>
+                </div>
+
+
+                <div class="form-group">
+                    <label asp-for="Input.Password"></label>
+                    <input asp-for="Input.Password" class="form-control" />
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Log in</button>
+                </div>
+                <div class="form-group">
+                    <p>
+                        <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
+                    </p>
+
+                </div>
             </form>
         </section>
     </div>

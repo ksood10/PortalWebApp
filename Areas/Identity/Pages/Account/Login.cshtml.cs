@@ -6,10 +6,13 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using PortalWebApp.Areas.Identity.Data;
+using PortalWebApp.Models;
+using PortalWebApp.Utilities;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using static PortalWebApp.Utilities.Util;
 
 namespace PortalWebApp.Areas.Identity.Pages.Account
 {
@@ -47,8 +50,8 @@ namespace PortalWebApp.Areas.Identity.Pages.Account
         public class InputModel
         {
             [Required]
-            [EmailAddress]
-            public string Email { get; set; }
+            [Display(Name = "User Name")]
+            public string UserName { get; set; }
 
             [Required]
             [DataType(DataType.Password)]
@@ -75,32 +78,35 @@ namespace PortalWebApp.Areas.Identity.Pages.Account
             ReturnUrl = returnUrl;
         }
 
-        public async Task<IActionResult> OnPostAsync(string returnUrl = null)
+
+        public IActionResult OnPost(string returnUrl = null)
         {
             returnUrl = returnUrl ?? Url.Content("~/");
 
             if (ModelState.IsValid)
             {
-                // This doesn't count login failures towards account lockout
-                // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
-                if (result.Succeeded)
+                // var result = await _signInManager.PasswordSignInAsync(Input.UserName, Input.Password,isPersistent: false, lockoutOnFailure: false);
+                var userid = ValidateUser(Env.Dev.Value, Input.UserName);
+                if(userid == -1)
                 {
+                    ModelState.AddModelError(string.Empty, "Invalid User ID ");
+                    return Page();
+                }
+                var password = GetPassword(Env.Dev.Value, userid);
+                
+                if (password == Input.Password)
+                {
+                    var userDB = LoginModel._databasecontext.User.Where(u => u.UserId == userid).FirstOrDefault();
+                    TempData["LoginCheck"]="LoggedIn";
+                    TempData["Username"] =  userDB.AbbreviatedName;
+                  
                     _logger.LogInformation("User logged in.");
-                    return LocalRedirect(returnUrl);
+                    return LocalRedirect("/Home/BulkConfig");
                 }
-                if (result.RequiresTwoFactor)
-                {
-                    return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
-                }
-                if (result.IsLockedOut)
-                {
-                    _logger.LogWarning("User account locked out.");
-                    return RedirectToPage("./Lockout");
-                }
+
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    ModelState.AddModelError(string.Empty, "Invalid login attempt. Wrong password for this user");
                     return Page();
                 }
             }

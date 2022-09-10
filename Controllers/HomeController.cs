@@ -30,10 +30,11 @@ namespace PortalWebApp.Controllers
  
         }
 
+        [Authorize]
         public IActionResult Index()
         {
-            return View();
-        }   
+           return View();
+        }
 
         public IActionResult check(BulkUpdate model)
         {
@@ -48,39 +49,41 @@ namespace PortalWebApp.Controllers
 
         public IActionResult BulkConfig()
         {
-            try
-            {
-
-                var userList = new List<SelectListItem>();
-                userList = (from user in _databaseContext.User
-                                where user.OrganizationID == 10
-                                orderby user.UserId
-                                select new SelectListItem()
-                                {
-                                    Text = user.AbbreviatedName + " (" + user.UserId.ToString() + ")",
-                                    Value = user.UserId.ToString()
-                                }).ToList();
-                userList.Insert(0, new SelectListItem()
+          
+                TempData["LoginCheck"] = "LoggedIn";
+                try
                 {
-                    Text = "---------Select-------------",
-                    Value = string.Empty
-                });
-                ViewBag.ListofUser = userList;
 
-            }
-            catch(Exception e)
-            {
-                var userList = new List<SelectListItem>();
-                userList.Insert(0, new SelectListItem()
+                    var userList = new List<SelectListItem>();
+                    userList = (from user in _databaseContext.User
+                                    where user.OrganizationID == 10
+                                    orderby user.UserId
+                                    select new SelectListItem()
+                                    {
+                                        Text = user.AbbreviatedName + " (" + user.UserId.ToString() + ")",
+                                        Value = user.UserId.ToString()
+                                    }).ToList();
+                    userList.Insert(0, new SelectListItem()
+                    {
+                        Text = "---------Select-------------",
+                        Value = string.Empty
+                    });
+                    ViewBag.ListofUser = userList;
+
+                }
+                catch(Exception e)
                 {
-                    Text = "---------Select-------------",
-                    Value = string.Empty
-                });
-                ViewBag.ListofUser = userList;
-                TempData["Status"] = e.Message;
-            }
+                    var userList = new List<SelectListItem>();
+                    userList.Insert(0, new SelectListItem()
+                    {
+                        Text = "---------Select-------------",
+                        Value = string.Empty
+                    });
+                    ViewBag.ListofUser = userList;
+                    TempData["Status"] = e.Message;
+                }
             
-            
+
             return View();
         }
 
