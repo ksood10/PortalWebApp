@@ -8,7 +8,17 @@
 @if(TempData["LoginCheck"] != null)
 {
     <li class="nav-item">
-        <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @TempData["Username"] !</a>
+        <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+            @{
+                if (TempData["Username"] != null)
+                {
+                     @TempData["Username"]
+                }
+                TempData.Keep("Username");
+                TempData.Keep("LoginCheck");
+            }
+
+        </a>
     </li>
     <li class="nav-item">
         <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">

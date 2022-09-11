@@ -98,9 +98,19 @@ namespace PortalWebApp.Areas.Identity.Pages.Account
                 {
                     var userDB = LoginModel._databasecontext.User.Where(u => u.UserId == userid).FirstOrDefault();
                     TempData["LoginCheck"]="LoggedIn";
+                    TempData.Keep("LoginCheck");
                     TempData["Username"] =  userDB.AbbreviatedName;
-                  
+                    var user = new PortalWebAppUser();
+                    user.UserName = userDB.UserName;
+                    user.Id = userDB.UserId.ToString();
+
+                    _userManager.CreateAsync(user);
+                  // var x= _userManager.Users.Count();
+                    _signInManager.SignInAsync(user, false);
                     _logger.LogInformation("User logged in.");
+                  
+                  //   var x= _userManager.Users.Count();
+                
                     return LocalRedirect("/Home/BulkConfig");
                 }
 

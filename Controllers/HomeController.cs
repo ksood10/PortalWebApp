@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
+using PortalWebApp.Areas.Identity.Data;
 using PortalWebApp.Data;
 using PortalWebApp.Models;
 using System;
@@ -23,11 +25,15 @@ namespace PortalWebApp.Controllers
         private readonly ILogger<HomeController> _logger;
         private IWebHostEnvironment Environment;
         public bool HaveEXCELReadError = false;
-
-        public HomeController(ILogger<HomeController> logger, PortalWebAppContext databaseContext, IWebHostEnvironment _environment)
+        private readonly SignInManager<PortalWebAppUser> _signInManager;
+        private readonly UserManager<PortalWebAppUser> _userManager;
+        public HomeController(SignInManager<PortalWebAppUser> signInManager, UserManager<PortalWebAppUser> userManager, ILogger<HomeController> logger, PortalWebAppContext databaseContext, IWebHostEnvironment _environment)
         {
-            _logger = logger;            _databaseContext = databaseContext;            Environment = _environment;
- 
+            _logger = logger;        
+            _databaseContext = databaseContext;           
+            Environment = _environment;
+            _signInManager = signInManager;
+
         }
 
         [Authorize]
@@ -47,22 +53,24 @@ namespace PortalWebApp.Controllers
             return View();
         }
 
+
         public IActionResult BulkConfig()
         {
-          
-                TempData["LoginCheck"] = "LoggedIn";
+            if (TempData.Peek("LoginCheck") != null)
+            {
+                var y = TempData["usermanager"];
                 try
                 {
 
                     var userList = new List<SelectListItem>();
                     userList = (from user in _databaseContext.User
-                                    where user.OrganizationID == 10
-                                    orderby user.UserId
-                                    select new SelectListItem()
-                                    {
-                                        Text = user.AbbreviatedName + " (" + user.UserId.ToString() + ")",
-                                        Value = user.UserId.ToString()
-                                    }).ToList();
+                                where user.OrganizationID == 10
+                                orderby user.UserId
+                                select new SelectListItem()
+                                {
+                                    Text = user.AbbreviatedName + " (" + user.UserId.ToString() + ")",
+                                    Value = user.UserId.ToString()
+                                }).ToList();
                     userList.Insert(0, new SelectListItem()
                     {
                         Text = "---------Select-------------",
@@ -71,7 +79,7 @@ namespace PortalWebApp.Controllers
                     ViewBag.ListofUser = userList;
 
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     var userList = new List<SelectListItem>();
                     userList.Insert(0, new SelectListItem()
@@ -82,10 +90,16 @@ namespace PortalWebApp.Controllers
                     ViewBag.ListofUser = userList;
                     TempData["Status"] = e.Message;
                 }
-            
 
-            return View();
+
+                return View();
+            }
+            else
+                return LocalRedirect("/Home/Index");
+
+
         }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
