@@ -8,7 +8,7 @@
 @if(TempData["LoginCheck"] != null)
 {
     <li class="nav-item">
-        <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+        <div id="manage" class="nav-link text-dark"  title="Manage"> Hello
             @{
                 if (TempData["Username"] != null)
                 {
@@ -18,7 +18,7 @@
                 TempData.Keep("LoginCheck");
             }
 
-        </a>
+        </div>
     </li>
     <li class="nav-item">
         <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
@@ -26,13 +26,11 @@
         </form>
     </li>
 }
-else
+@*else
 {
-    @*<li class="nav-item">
-        <a class="nav-link text-dark" id="register" asp-area="Identity" asp-page="/Account/Register">Register</a>
-    </li>*@
+   
     <li class="nav-item">
         <a class="nav-link text-dark" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a>
     </li>
-}
+}*@
 </ul>

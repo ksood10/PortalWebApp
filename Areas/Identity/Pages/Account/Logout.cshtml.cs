@@ -34,6 +34,7 @@ namespace PortalWebApp.Areas.Identity.Pages.Account
 
             TempData.Remove("Username");
             TempData.Remove("LoginCheck");
+            TempData.Remove("Userid");
             if (returnUrl != null)
             {
                 return LocalRedirect(returnUrl);

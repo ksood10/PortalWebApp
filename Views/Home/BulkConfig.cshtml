@@ -46,14 +46,14 @@
 
                 <tr><td>&nbsp;</td></tr>
 
-                <tr>
+                @*<tr>
                     <td style="width:25%">@Html.LabelFor(model => model.UserID)</td>
                     <td>
                         <select asp-for="UserID" class="form-control" asp-items="@(new SelectList(ViewBag.ListofUser,"Value","Text"))">
                         </select>
                     </td>
                     <td style="color:red;font: all-petite-caps;font-weight:bold"> @Html.ValidationMessageFor(model => model.UserID)</td>
-                </tr>
+                </tr>*@
 
                 <tr>
                     <td>@Html.LabelFor(model => model.ThrottleNum)</td>
@@ -176,16 +176,17 @@
         <script>
 
             $('#UploadBtn').click(function () {
-                var userid = document.getElementById("UserID").value;
+              //  var userid = @{TempData.Peek("Userid");};
+                
                 var throttlenum = document.getElementById("ThrottleNum").value;
                 var throttleduration = document.getElementById("ThrottleDuration").value;
                 var rtu = document.getElementById("RTU").checked;
                 var fullPath = document.getElementById("FileName").value;
                 var filename = fullPath.replace(/^.*[\\\/]/, '');
-                console.log(userid + "---" + throttlenum + "--" + throttleduration+"--" + rtu +"--" + filename);
+               // console.log(userid + "---" + throttlenum + "--" + throttleduration+"--" + rtu +"--" + filename);
                // var fileData = new FormData();
                 $.ajax({
-                    url: '/Home/ImportExcelFile/'+ userid+'/'+throttlenum + '/'+ throttleduration+'/'+rtu +'/'+filename,
+                    url: '/Home/ImportExcelFile/201' +'/'+throttlenum + '/'+ throttleduration+'/'+rtu +'/'+filename,
                     
                     //dataType: 'JSON', 
                     type: "POST",

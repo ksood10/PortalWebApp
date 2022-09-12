@@ -1,20 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
-using PortalWebApp.Areas.Identity.Data;
 using PortalWebApp.Data;
 using PortalWebApp.Models;
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
 using static PortalWebApp.Utilities.Util;
 
 namespace PortalWebApp.Controllers
@@ -25,15 +19,11 @@ namespace PortalWebApp.Controllers
         private readonly ILogger<HomeController> _logger;
         private IWebHostEnvironment Environment;
         public bool HaveEXCELReadError = false;
-        private readonly SignInManager<PortalWebAppUser> _signInManager;
-        private readonly UserManager<PortalWebAppUser> _userManager;
-        public HomeController(SignInManager<PortalWebAppUser> signInManager, UserManager<PortalWebAppUser> userManager, ILogger<HomeController> logger, PortalWebAppContext databaseContext, IWebHostEnvironment _environment)
+        public HomeController(ILogger<HomeController> logger, PortalWebAppContext databaseContext, IWebHostEnvironment _environment)
         {
             _logger = logger;        
             _databaseContext = databaseContext;           
             Environment = _environment;
-            _signInManager = signInManager;
-
         }
 
         [Authorize]
@@ -53,51 +43,12 @@ namespace PortalWebApp.Controllers
             return View();
         }
 
-
         public IActionResult BulkConfig()
         {
             if (TempData.Peek("LoginCheck") != null)
-            {
-                var y = TempData["usermanager"];
-                try
-                {
-
-                    var userList = new List<SelectListItem>();
-                    userList = (from user in _databaseContext.User
-                                where user.OrganizationID == 10
-                                orderby user.UserId
-                                select new SelectListItem()
-                                {
-                                    Text = user.AbbreviatedName + " (" + user.UserId.ToString() + ")",
-                                    Value = user.UserId.ToString()
-                                }).ToList();
-                    userList.Insert(0, new SelectListItem()
-                    {
-                        Text = "---------Select-------------",
-                        Value = string.Empty
-                    });
-                    ViewBag.ListofUser = userList;
-
-                }
-                catch (Exception e)
-                {
-                    var userList = new List<SelectListItem>();
-                    userList.Insert(0, new SelectListItem()
-                    {
-                        Text = "---------Select-------------",
-                        Value = string.Empty
-                    });
-                    ViewBag.ListofUser = userList;
-                    TempData["Status"] = e.Message;
-                }
-
-
                 return View();
-            }
             else
                 return LocalRedirect("/Home/Index");
-
-
         }
 
 
@@ -115,10 +66,6 @@ namespace PortalWebApp.Controllers
             int z = throttleduration;
             bool r = rtu;
             string f = filename;
-
-               // var filename = Path.GetFileName(model.FileName);
-               //  var MainPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Uploads");
-              // ImportExcelFile(f);
             return "test result :::" +x.ToString() + y.ToString() + z.ToString()+ r.ToString() + f;
         }
 
@@ -131,7 +78,6 @@ namespace PortalWebApp.Controllers
             if (dt.Columns.Contains("Error")) HaveEXCELReadError = true;
             if(!HaveEXCELReadError) {
                 GetColumnOrdinals(dt);
-
                 try
                 {
                     using (var con = new SqlConnection(Env.Dev.Value))
@@ -157,7 +103,8 @@ namespace PortalWebApp.Controllers
                
                 TempData["RowsToProcess"] = dt.Rows.Count.ToString();
             }
-            else     TempData["Status"] = "Excel File Read error !";
+            else     
+                TempData["Status"] = "Excel File Read error !";
            
             ViewBag.Message = "File Imported and excel data saved into database"; //if the code reach here means everthing goes fine and excel data is imported into database
             
