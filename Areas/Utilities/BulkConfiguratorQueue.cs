@@ -73,17 +73,20 @@ namespace PortalWebApp.Utilities
         }
 
         private PortalWebAppContext _databaseContext;
-        public BulkConfiguratorQueue(BulkUpdate bulkUpdate, PortalWebAppContext databaseContext)
+        public BulkConfiguratorQueue(string conn, string excelfilename, int userid, int recordthrottle, int throttleamount, bool checkrtu)
         {
-            _databaseContext = databaseContext;
-            this.ConnectionString = bulkUpdate.Environment;
-            this.FileName = bulkUpdate.FileName;
-            this.OleDBConnectionString = BuildOleDbConnectionString();
-            this.UserID = bulkUpdate.UserID;
-            this.RecordThrottle = bulkUpdate.ThrottleNum;
-            this.ThrottleAmount = bulkUpdate.ThrottleDuration;
+
+            BulkUpdate bulkUpdate = new BulkUpdate();
+           // if (conn == "DEVELOPMENT") conn = "Server=TankdataLSN1\\TankData;Database=TankData_TDG;User ID=EmailManager;pwd=tanklink5410";
+          //  if (conn == "PRODUCTION") conn = "Server=Prod";
+           // _databaseContext = databaseContext;
+            this.ConnectionString = conn;
+            this.FileName = excelfilename;
+            this.UserID = userid;
+            this.RecordThrottle = recordthrottle;
+            this.ThrottleAmount = throttleamount;
             wroteErrorFileHeadings = false;
-            checkRTUCondition = bulkUpdate.RTU;
+            this.checkRTUCondition = checkrtu;
             //this.ErrorFilePath = "C:\\BulkConfig\\ErrorFile\\";
             this.ErrorFilePath = AppDomain.CurrentDomain.BaseDirectory + "ErrorFile";
             //this.ErrorFileName = this.ErrorFilePath + "Errors_" + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + DateTime.Now.Second.ToString() + ".xlsx";
@@ -93,19 +96,19 @@ namespace PortalWebApp.Utilities
             //this.StatusFileName = this.StatusFilePath + "Summary_" + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".txt";
             this.StatusFileName = this.StatusFilePath + "\\" + "Summary_" + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".txt";
             DeleteOldReportFiles();
-            GetUserOrganization(UserID);
+            GetUserOrganization();
             if (!this.HaveError)
             {
                 if (!this.SuperUser)
                     BuildListOfUserOrganizations();
-                ReadEXCELFile();
-                if (!this.HaveEXCELReadError)
-                {
-                   // MessageBox.Show("# of EXCEL Records To Process: " + myTankConfigs.Count.ToString());
-                    this.TotalEXCELCount = myTankConfigs.Count;
-                    myThread = new Thread(new ThreadStart(ValidateTheEXCELFile));
-                    ValidateTheEXCELFile();
-                }
+                //ReadEXCELFile();
+                //if (!this.HaveEXCELReadError)
+                //{
+                //   // MessageBox.Show("# of EXCEL Records To Process: " + myTankConfigs.Count.ToString());
+                //    this.TotalEXCELCount = myTankConfigs.Count;
+                //    myThread = new Thread(new ThreadStart(ValidateTheEXCELFile));
+                //    ValidateTheEXCELFile();
+                //}
             }
         }
 
@@ -144,13 +147,13 @@ namespace PortalWebApp.Utilities
             }
         }
 
-        private void GetUserOrganization(int userid)
+        private void GetUserOrganization()
         {
             bool hasglobalorgsecurity = false;
             try
             {
                 var userList = (from user in _databaseContext.User
-                                where user.UserId == userid
+                                where user.UserId == this.UserID
                                 orderby user.UserId
                                 select new
                                 {

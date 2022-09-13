@@ -62,7 +62,7 @@ namespace PortalWebApp.Utilities {
         public sealed class Env
         {
             public static readonly Env Dev = new Env("Server=TankdataLSN1\\TankData;Database=TankData_TDG;User ID=EmailManager;pwd=tanklink5410");
-            public static readonly Env Prod = new Env("Server=Prod");
+            public static readonly Env Prod = new Env("Server=PRODUCTION");
 
             private Env(string value)
             {

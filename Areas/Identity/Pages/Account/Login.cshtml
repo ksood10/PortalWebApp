@@ -20,12 +20,50 @@
                     <input asp-for="Input.Password" class="form-control" />
                     <span asp-validation-for="Input.Password" class="text-danger"></span>
                 </div>
+              
+                <div>
+                    <table>
+                        <tr >
+                            <td style="width:25%"> <label asp-for="Input.Environment"></label>      </td>
+                            <td style="width:25%">
+                                <input type="radio" asp-for="Input.Environment"
+                                       value="DevString" id="Development" />
+                             
+                                <label for="Development">&nbsp;Dev</label>
+                            </td>
+                            <td style="width:25%">
+                                <input type="radio" asp-for="Input.Environment" value="ProdString" id="Production" data-toggle="modal" data-target="#warningModal">
+
+                                <label for="Production">&nbsp;Prod</label>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary">Log in</button>
                 </div>
-               
+
             </form>
         </section>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="warningModal" tabindex="-1" role="dialog" aria-labelledby="warningModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-confirm">
+        <div class="modal-content">
+            <div class="modal-header  justify-content-center flex-column icon-box">
+                <div class="modal-title w-100" style="text-align:center;">
+                    <i class="material-icons" style="font-size:48px; color:red">info</i>Confirm!
+                </div>
+            </div>
+            <div class="modal-body">
+                <div style="text-align:center;font-weight:bolder">You are about about to run in PROD.</div>
+                <div style="text-align:center;">Please change the radio button to DEV if this was in error.</div>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+            </div>
+        </div>
     </div>
 </div>
 

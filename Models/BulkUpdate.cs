@@ -35,7 +35,7 @@ namespace PortalWebApp.Models
 
         public int TotalRows { get; set; }
         public int RowsProcessed { get; set; }
-
+        public string StatusString { get; set; }
 
         public string JavascriptToRun { get; set; }
 

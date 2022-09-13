@@ -31,12 +31,15 @@ namespace PortalWebApp.Areas.Identity.Pages.Account
         [BindProperty]
         public InputModel Input { get; set; }
 
+       
+
         public System.Collections.Generic.IList<AuthenticationScheme> ExternalLogins { get; set; }
 
         public string ReturnUrl { get; set; }
 
         [TempData]
         public string ErrorMessage { get; set; }
+       
 
         public class InputModel
         {
@@ -50,6 +53,11 @@ namespace PortalWebApp.Areas.Identity.Pages.Account
 
             [Display(Name = "Remember me?")]
             public bool RememberMe { get; set; }
+
+            [Display(Name = "Environment")]
+            public string Environment { get; set; }
+
+
         }
       
         public async Task OnGetAsync(string returnUrl = null)
@@ -59,6 +67,10 @@ namespace PortalWebApp.Areas.Identity.Pages.Account
             returnUrl = returnUrl ?? Url.Content("~/");
             // Clear the existing external cookie to ensure a clean login process
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+            TempData.Remove("Username");
+            TempData.Remove("LoginCheck");
+            TempData.Remove("Userid");
+
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             ReturnUrl = returnUrl;
         }
@@ -69,13 +81,18 @@ namespace PortalWebApp.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 // var result = await _signInManager.PasswordSignInAsync(Input.UserName, Input.Password,isPersistent: false, lockoutOnFailure: false);
-                var userid = ValidateUser(Env.Dev.Value, Input.UserName);
+                string env = "";
+                if (Input.Environment == "DevString")
+                    env = Env.Dev.Value;
+                if (Input.Environment == "ProdString")
+                    env = Env.Prod.Value;
+                var userid = ValidateUser(env, Input.UserName);
                 if(userid == -1)
                 {
                     ModelState.AddModelError(string.Empty, "Invalid User ID ");
                     return Page();
                 }
-                var password = GetPassword(Env.Dev.Value, userid);
+                var password = GetPassword(env, userid);
                 if (password == Input.Password)
                 {
                     var userDB = LoginModel._databasecontext.User.Where(u => u.UserId == userid).FirstOrDefault();
@@ -88,6 +105,10 @@ namespace PortalWebApp.Areas.Identity.Pages.Account
 
                     TempData["Userid"] = userDB.UserId;
                     TempData.Keep("Userid");
+
+                    TempData["Environment"] = Input.Environment;
+                    TempData.Keep("Environment");
+
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect("/Home/BulkConfig");
                 }

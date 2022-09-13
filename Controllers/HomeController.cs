@@ -5,11 +5,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using PortalWebApp.Data;
 using PortalWebApp.Models;
+using PortalWebApp.Utilities;
 using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
+using System.Threading;
+using System.Timers;
 using static PortalWebApp.Utilities.Util;
+using Timer = System.Threading.Timer;
 
 namespace PortalWebApp.Controllers
 {
@@ -19,6 +23,77 @@ namespace PortalWebApp.Controllers
         private readonly ILogger<HomeController> _logger;
         private IWebHostEnvironment Environment;
         public bool HaveEXCELReadError = false;
+        private bool wroteErrorFileHeadings;
+        private object checkRTUCondition;
+        private string errorFilePath;
+        private string errorFileName;
+        private string filePath;
+        private string fileName;
+        private string connectionString;
+        private BulkConfiguratorQueue myBulkConfigurator;
+        private int totalEXCELCount;
+        private bool validationError;
+        private Thread th1;
+
+        internal string ConnectionString
+        {
+            get
+            {
+                return connectionString;
+            }
+            set
+            {
+                connectionString = value;
+            }
+        }
+        internal string ErrorFilePath
+        {
+            get
+            {
+                return errorFilePath;
+            }
+            set
+            {
+                errorFilePath = value;
+            }
+        }
+
+        internal string ErrorFileName
+        {
+            get
+            {
+                return errorFileName;
+            }
+            set
+            {
+                errorFileName = value;
+            }
+        }
+
+        internal string StatusFilePath
+        {
+            get
+            {
+                return filePath;
+            }
+            set
+            {
+                filePath = value;
+            }
+        }
+
+        internal string FileName
+        {
+            get
+            {
+                return fileName;
+            }
+            set
+            {
+                fileName = value;
+            }
+        }
+
         public HomeController(ILogger<HomeController> logger, PortalWebAppContext databaseContext, IWebHostEnvironment _environment)
         {
             _logger = logger;        
@@ -69,11 +144,63 @@ namespace PortalWebApp.Controllers
             return "test result :::" +x.ToString() + y.ToString() + z.ToString()+ r.ToString() + f;
         }
 
-        [Route("/Home/ImportExcelFile/{userid}/{throttlenum}/{throttleduration}/{rtu}/{filename}")]
-        [HttpPost]
-        public IActionResult ImportExcelFile(int userid, int throttlenum, int throttleduration, bool rtu, string filename)
+        private void ProcessAllEXCELRecords()
         {
-           
+            try
+            {
+                myBulkConfigurator.ApplyTankConfigChanges();
+            }
+            catch (Exception ex)
+            {
+                string errorMsg = ex.Message;
+            }
+        }
+
+        [Route("/Home/ImportExcelFile/{conn}/{userid}/{throttlenum}/{throttleduration}/{rtu}/{filename}")]
+        [HttpPost]
+        public IActionResult ImportExcelFile(string conn, int userid, int throttlenum, int throttleduration, bool rtu, string filename)
+        {
+
+            BulkUpdate bulkUpdate = new BulkUpdate();
+            ///////////////////////////////////////////////////////////////////////////////////////////////
+            ///
+            var realConn = "";
+            if (conn == "DevString")
+                realConn = Env.Dev.Value;
+            if (conn == "ProdString")
+                realConn = Env.Prod.Value;
+
+            myBulkConfigurator = new BulkConfiguratorQueue(realConn, filename, userid, throttlenum, throttleduration, rtu);
+            if (myBulkConfigurator.HaveEXCELReadError)
+            {
+               // statusLBL.ForeColor = Color.Red;
+               // statusLBL.Text = "Problem reading the EXCEL sheet. Make sure all columns are present";
+                validationError = true;
+            }
+            else
+            {
+                totalEXCELCount = myBulkConfigurator.TotalEXCELCount;
+               // progressBar1.Maximum = totalEXCELCount;
+                if (!myBulkConfigurator.HaveError)
+                {
+                    bulkUpdate.StatusString= "Data Validation Checks Finished.  Now processing updates";
+                    // ProcessAllEXCELRecords();
+                    th1 = new Thread(new ThreadStart(ProcessAllEXCELRecords));
+                    //Timer.Enabled = true;
+                    //Timer.Start();
+                    th1.Start();
+                }
+                else
+                {
+                   // statusLBL.ForeColor = Color.Red;
+                  //  statusLBL.Text = "Errors found in EXCEL file. Review error report";
+                    validationError = true;
+                }
+            }
+
+
+            ///////////////////////////////////////////////////////////////////////////////////////////////
+
             var dt= GetDataTableFromExcelFile(filename); 
             if (dt.Columns.Contains("Error")) HaveEXCELReadError = true;
             if(!HaveEXCELReadError) {
