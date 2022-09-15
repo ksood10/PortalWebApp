@@ -1,22 +1,22 @@
 ﻿using PortalWebApp.Areas.Utilities;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 using PortalWebApp.Utilities;
+using System.Data.SqlClient;
+using System.Text;
 
 namespace PortalWebApp.Models
 {
     [Table("TankConfig_Test")]
     public class TankConfig
     {
+
+        private StringBuilder sb = new StringBuilder();
         [Key]
-        public int TankID                           { get; set; }
-        public string xlTankID { get; set; }
+        public string TankID                           { get; set; }
         public string RTUNumber                     { get; set; }
-        public DateTime StartTime                   { get; set; }
+        public string StartTime                   { get; set; }
         public string Interval                      { get; set; }
         public int TankConfigId                     { get; set; }
         public string TankName                      { get; set; }
@@ -36,48 +36,48 @@ namespace PortalWebApp.Models
         public string Route                            { get; set; }
         public int ChartID                          { get; set; }
         public int UnitOfMeasureID                  { get; set; }
-        public decimal TankHgt                          { get; set; }
-        public decimal TankCap                          { get; set; }
-        public bool LimitCapacityFlag                { get; set; }
-        public decimal CapacityLimit                    { get; set; }
-        public bool TankNormallyFills                { get; set; }
+        public string TankHgt                          { get; set; }
+        public string TankCap                          { get; set; }
+        public string LimitCapacityFlag                { get; set; }
+        public string CapacityLimit                    { get; set; }
+        public string TankNormallyFills                { get; set; }
         public string ProdDesc                         { get; set; }
         public string UserProductNumber                { get; set; }
-        public decimal SpecGrav                         { get; set; }
-        public decimal CoeffExp                         { get; set; }
-        public decimal SensorOffset                     { get; set; }
-        public decimal LowSetPoint                      { get; set; }
-        public decimal HighSetPoint                     { get; set; }
+        public string SpecGrav                         { get; set; }
+        public string CoeffExp                         { get; set; }
+        public string SensorOffset                     { get; set; }
+        public string LowSetPoint                      { get; set; }
+        public string HighSetPoint                     { get; set; }
         public decimal TempOffset                       { get; set; }
         public decimal PulseValue                       { get; set; }
-        public int HighHighLevel                    { get; set; }
-        public int HighLevel                        { get; set; }
-        public int LowLevel                         { get; set; }
-        public int LowLowLevel                      { get; set; }
-        public decimal FillDetectDelta                  { get; set; }
-        public decimal ShortFillDelta                   { get; set; }
+        public string HighHighLevel                    { get; set; }
+        public string HighLevel                        { get; set; }
+        public string LowLevel                         { get; set; }
+        public string LowLowLevel                      { get; set; }
+        public string FillDetectDelta                  { get; set; }
+        public string ShortFillDelta                   { get; set; }
         public int HighTemp                         { get; set; }
         public int LowTemp                          { get; set; }
         public int TankSensorTypeID                 { get; set; }
         public string TankSensorLength                 { get; set; }
         public string TankSensorDesc                   { get; set; }
         public string TankSensorNumber                 { get; set; }
-        public int CallsPerDay                      { get; set; }
-        public int CallDay                          { get; set; }
-        public int DiagCallDayMask                  { get; set; }
-        public int UsageDelta                       { get; set; }
-        public int WakeInterval                     { get; set; }
+        public string CallsPerDay                      { get; set; }
+        public string CallDay                          { get; set; }
+        public string DiagCallDayMask                  { get; set; }
+        public string UsageDelta                       { get; set; }
+        public string WakeInterval                     { get; set; }
         public string TankNum                          { get; set; }
         public bool UpdateInventory                  { get; set; }
-        public bool DeviceUsageAlarm                 { get; set; }
-        public bool DeviceCriticalHighLevel          { get; set; }
-        public bool DeviceHighLevel                  { get; set; }
-        public bool DeviceLowLevel                   { get; set; }
-        public bool DeviceCriticalLowLevel           { get; set; }
-        public bool DeviceFillDetect                 { get; set; }
+        public string DeviceUsageAlarm                 { get; set; }
+        public string DeviceCriticalHighLevel          { get; set; }
+        public string DeviceHighLevel                  { get; set; }
+        public string DeviceLowLevel                   { get; set; }
+        public string DeviceCriticalLowLevel           { get; set; }
+        public string DeviceFillDetect                 { get; set; }
         public bool DeviceHighTemp                   { get; set; }
         public bool DeviceLowTemp                    { get; set; }
-        public bool HasExpectedCallAlarm             { get; set; }
+        public string HasExpectedCallAlarm             { get; set; }
         public int ExpectedCallInterval             { get; set; }
         public bool Active                           { get; set; }
         public int CreatedBy                        { get; set; }
@@ -88,21 +88,21 @@ namespace PortalWebApp.Models
         public int GroupId                          { get; set; }
         public bool DeviceSuspiciousFilter           { get; set; }
         public int DeviceSuspiciousDelta            { get; set; }
-        public decimal DeviceFillDetectDelta            { get; set; }
-        public decimal DeviceFillHysteresis             { get; set; }
-        public int DataLogDelta                     { get; set; }
+        public string DeviceFillDetectDelta            { get; set; }
+        public string DeviceFillHysteresis             { get; set; }
+        public string DataLogDelta                     { get; set; }
         public int EnableDeliveryReport             { get; set; }
-        public int VolumeDelta                      { get; set; }
+        public string VolumeDelta                      { get; set; }
         public decimal VaporSensorRange                 { get; set; }
         public decimal ProductSensorRange               { get; set; }
         public decimal ForecastDailyUsage               { get; set; }
-        public decimal TankMinimum                      { get; set; }
-        public int ReorderUsage                     { get; set; }
-        public int SafetyStockUsage                 { get; set; }
+        public string TankMinimum                      { get; set; }
+        public string ReorderUsage                     { get; set; }
+        public string SafetyStockUsage                 { get; set; }
         public int DistributionLocationID           { get; set; }
-        public int EnableLocation                   { get; set; }
-        public int EnableGPS                        { get; set; }
-        public int RateChangeDelta                  { get; set; }
+        public string EnableLocation                   { get; set; }
+        public string EnableGPS                        { get; set; }
+        public string RateChangeDelta                  { get; set; }
         public int ProductID                        { get; set; }
 
         public string ConnectionString { get; set; }
@@ -111,67 +111,40 @@ namespace PortalWebApp.Models
         public bool CheckRTUCondition { get; set; }
         public bool HaveError { get; set; }
         public string StatusMessage { get; set; }
-        public string BadColumn { get; private set; }
-        public string BadColumnValue { get; private set; }
-        public bool PerformUpdate { get; private set; }
-        public bool DeviceHasModem { get; private set; }
-        public bool DeviceHasGPS { get; private set; }
-        public decimal CurrentShortFillDelta { get; private set; }
-        public decimal CurrentFillDetectDelta { get; private set; }
-        public decimal CurrentCapacityLimit { get; private set; }
-        public bool CurrentDeviceFillDetect { get; private set; }
-        public decimal CurrentTankCap { get; private set; }
-        public string CurrentModelNumber { get; private set; }
-        public int CurrentTankConfigID { get; private set; }
+        public string BadColumn { get;  set; }
+        public string BadColumnValue { get; set; }
+        public bool PerformUpdate { get;  set; }
+        public bool DeviceHasModem { get;  set; }
+        public bool DeviceHasGPS { get;  set; }
+        public decimal CurrentShortFillDelta { get;  set; }
+        public decimal CurrentFillDetectDelta { get;  set; }
+        public decimal CurrentCapacityLimit { get;  set; }
+        public decimal CurrentDeviceFillDetect { get;  set; }
+        public decimal CurrentTankCap { get;  set; }
+        public string CurrentModelNumber { get;  set; }
+        public int CurrentTankConfigID { get;  set; }
        
 
         private string fileName;
-        private string xlReorderUsage;
-        private string xlSafetyStockUsage;
-        private string xlCallDay;
-        private string xlInterval;
-        private string xlDiagCallDayMask;
-        private string xlLowLowLevel;
-        private string xlLowLevel;
-        private string xlHighLevel;
-        private string xlHighHighLevel;
-        private string xlVolumeDelta;
-        private string xlRateChangeDelta;
-        private string xlDataLogDelta;
-        private string xlWakeInterval;
-        private string xlUsageDelta;
-        private string xlTankHgt;
-        private string xlTankCap;
-        private string xlCapacityLimit;
-        private string xlTankMinimum;
-        private string xlFillDetectDelta;
-        private string xlShortFillDelta;
-        private string xlLowSetPoint;
-        private string xlSensorOffset;
-        private string xlCoeffExp;
-        private string xlSpecGrav;
-        private string xlDeviceFillDetectDelta;
-        private string xlDeviceFillHysteresis;
-        private string xlDeviceLowLevel;
-        private string xlDeviceHighLevel;
-        private string xlDeviceCriticalHighLevel;
-        private string xlEnableGPS;
-        private string xlEnableLocation;
-        private string xlTankNormallyFills;
-        private string xlHasExpectedCallAlarm;
-        private string xlDeviceFillDetect;
-        private string xlDeviceUsageAlarm;
-        private string xlStartTime;
-        private string xlLimitCapacityFlag;
-        private decimal xlCurrentTankCap;
-        private string xlCallsDay;
-        private int xlCurrentCallsDay;
-        private int xlCurrentInterval;
-        private string xlHighSetPoint;
-        private string xlDeviceCriticalLowLevel;
+        private int CurrentInterval;
+        public int OrganizationID { get; set; }
 
-        public TankConfig() {
-            TankID = 0;
+        internal int CurrentTankDeviceID { get; set; }
+
+        public decimal CurrentTankHgt { get;  set; }
+        public int CurrentLowLevel { get;  set; }
+        public int CurrentLowLowLevel { get;  set; }
+        public int CurrentHighHighLevel { get;  set; }
+        public int CurrentVolumeDelta { get; set; }
+        public int CurrentRateChangeDelta { get; private set; }
+        public decimal CurrentSensorOffset { get; private set; }
+        public decimal CurrentDeviceFillHysteresis { get;  set; }
+        public int CurrentHighLevel { get;  set; }
+        public int CurrentCallsPerDay { get;  set; }
+
+        public TankConfig()
+        {
+            //TankID = 0;
         }
         public TankConfig(string conn, int userid)
         {
@@ -179,12 +152,117 @@ namespace PortalWebApp.Models
             this.UserID = userid;
         }
 
+        internal void GetCurrentDeviceID()
+        {
+            try
+            {
+                using (var con = new SqlConnection(this.ConnectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand("select deviceid from tank where tankid = @tankid", con))
+                    {
+                        con.Open();
+                        cmd.Parameters.Add(new SqlParameter("tankid", this.TankID));
+                        this.CurrentTankDeviceID = (int)cmd.ExecuteScalar();
+
+                        //valid = bool.Parse(DAL.ReturnScalar(sb.ToString(), this.ConnectionString, paramArray, true, 20).ToString());
+                    }
+                }
+                          }
+            catch (Exception ex)
+            {
+                string errorMsg = ex.Message;
+                fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
+                FileWriter errorWriter = new FileWriter(fileName);
+                errorWriter.Write("****************************");
+                errorWriter.Write(DateTime.Now.ToString());
+                errorWriter.Write("Error at GetCurrentDeviceID - ");
+                errorWriter.Write(ex.Message);
+                errorWriter.Close();
+            }
+        }
+
+        internal int GetCurrentTankConfigInfo()
+        {
+            int organizationid = 0;
+            try
+            {
+                sb.Length = 0;
+                sb.Append("select t.organizationid, t.tankconfigid, CapacityLimit, TankCap, ");
+                sb.Append("LowLowLevel, LowLevel, HighLevel, FillDetectDelta, ShortFillDelta, ");
+                sb.Append("HighHighLevel, VolumeDelta, RateChangeDelta, SensorOffset, DeviceFillHysteresis, ");
+                sb.Append("CallsPerDay, Interval, ModelNumber, HasGPS, HasModem  ");
+                sb.Append("from tank t ");
+                sb.Append("inner join tankconfig tc on t.tankconfigid = tc.tankconfigid ");
+                sb.Append("inner join device d on t.deviceid = d.deviceid ");
+                sb.Append("inner join devicetype dt on d.devicetypeid = dt.devicetypeid ");
+                sb.Append("where t.tankid = @tankid");
+
+                using (var con = new SqlConnection(this.ConnectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand(sb.ToString(), con))
+                    {
+                        con.Open();
+                        cmd.Parameters.Add(new SqlParameter("tankid", this.TankID));
+                        SqlDataReader dr = cmd.ExecuteReader();
+
+                        //valid = bool.Parse(DAL.ReturnScalar(sb.ToString(), this.ConnectionString, paramArray, true, 20).ToString());
+                 
+
+                        if (dr.HasRows)
+                        {
+                            while (dr.Read())
+                            {
+                                this.OrganizationID = dr.GetInt32(0);
+                                this.CurrentTankConfigID = dr.GetInt32(1);
+                                this.CurrentCapacityLimit = dr.GetDecimal(2);
+                                this.CurrentTankCap = dr.GetDecimal(3);
+                                this.CurrentLowLowLevel = dr.GetInt32(4);
+                                this.CurrentLowLevel = dr.GetInt32(5);
+                                this.CurrentHighLevel = dr.GetInt32(6);
+                                this.CurrentFillDetectDelta = dr.GetDecimal(7);
+                                this.CurrentShortFillDelta = dr.GetDecimal(8);
+                                this.CurrentHighHighLevel = dr.GetInt32(9);
+                                this.CurrentVolumeDelta = dr.GetInt32(10);
+                                this.CurrentRateChangeDelta = dr.GetInt32(11);
+                                this.CurrentSensorOffset = dr.GetDecimal(12);
+                                this.CurrentDeviceFillHysteresis = dr.GetDecimal(13);
+                                this.CurrentCallsPerDay = dr.GetInt32(14);
+                                this.CurrentInterval = dr.GetInt32(15);
+                                //this.CurrentDeviceFillDetect = dr.GetDecimal(16);
+                                this.CurrentModelNumber = dr.GetString(16);
+                                DeviceHasGPS = dr.GetBoolean(17);
+                                DeviceHasModem = dr.GetBoolean(18);
+                            }
+                            dr.Close();
+                        }
+                        else
+                        {
+                            this.HaveError = true;
+                        }
+
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                string errorMsg = ex.Message;
+                fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
+                FileWriter errorWriter = new FileWriter(fileName);
+                errorWriter.Write("****************************");
+                errorWriter.Write(DateTime.Now.ToString());
+                errorWriter.Write("Error at GetCurrentTankConfigInfo - ");
+                errorWriter.Write(ex.Message);
+                errorWriter.Close();
+            }
+            return organizationid;
+        }
 
         internal void TankIDRTUNumberCheck()
         {
             try
             {
-                if (this.TankID == 0)
+                if (this.TankID == "*** Empty ***")
                 {
                     this.HaveError = true;
                     this.StatusMessage = "Missing TankID or value is invalid";
@@ -215,6 +293,44 @@ namespace PortalWebApp.Models
             }
         }
 
+        internal bool ValidateRTUNumber()
+        {
+            bool valid = false;
+            try
+            {
+                using (var con = new SqlConnection(this.ConnectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand("if exists(select 1 from device where deviceid = @deviceid and rtunumber = @rtunumber)select 'true' else select 'false'", con))
+                    {
+                        con.Open();
+                        cmd.Parameters.Add(new SqlParameter("deviceid", this.CurrentTankDeviceID));
+                        cmd.Parameters.Add(new SqlParameter("rtunumber", this.RTUNumber));
+                        valid = (bool)cmd.ExecuteScalar();
+                    //valid = bool.Parse(DAL.ReturnScalar(sb.ToString(), this.ConnectionString, paramArray, true, 20).ToString());
+                }
+                }
+
+                //sb.Length = 0;
+                //sb.Append("if exists(select 1 from device where deviceid = @deviceid and rtunumber = @rtunumber)select 'true' else select 'false'");
+                //SqlParameter[] paramArray = new SqlParameter[2];
+                //paramArray[0] = DAL.Parameter("@deviceid", this.CurrentTankDeviceID);
+                //paramArray[1] = DAL.Parameter("@rtunumber", this.RTUNumber);
+                //valid = bool.Parse(DAL.ReturnScalar(sb.ToString(), this.ConnectionString, paramArray, true, 20).ToString());
+            }
+            catch (Exception ex)
+            {
+                string errorMsg = ex.Message;
+                fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
+                FileWriter errorWriter = new FileWriter(fileName);
+                errorWriter.Write("****************************");
+                errorWriter.Write(DateTime.Now.ToString());
+                errorWriter.Write("Error at ValidateRTUNumber - ");
+                errorWriter.Write(ex.Message);
+                errorWriter.Close();
+            }
+            return valid;
+        }
+
 
         #region DataType Checks
 
@@ -241,25 +357,25 @@ namespace PortalWebApp.Models
                         else
                             break;
                     case "TankID":
-                        if (this.xlTankID != "*** Empty ***")
+                        if (this.TankID != "*** Empty ***")
                         {
-                            if (Util.ConvertStringToInt(this.xlTankID))
+                            if (Util.ConvertStringToInt(this.TankID))
                                 break;
                             else
                             {
                                 this.HaveError = true;
                                 this.StatusMessage = "TankID Is Not An Integer";
                                 this.BadColumn = "TankID";
-                                this.BadColumnValue = this.xlTankID;
+                                this.BadColumnValue = this.TankID;
                                 break;
                             }
                         }
                         else
                             break;
                     case "ReorderUsage":
-                        if (this.xlReorderUsage != "*** Empty ***")
+                        if (this.ReorderUsage != "*** Empty ***")
                         {
-                            if (Util.ConvertStringToInt(xlReorderUsage))
+                            if (Util.ConvertStringToInt(ReorderUsage))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -269,16 +385,16 @@ namespace PortalWebApp.Models
                                 this.HaveError = true;
                                 this.StatusMessage = "ReorderUsage Is Not An Integer";
                                 this.BadColumn = "ReorderUsage";
-                                this.BadColumnValue = this.xlReorderUsage;
+                                this.BadColumnValue = this.ReorderUsage;
                                 break;
                             }
                         }
                         else
                             break;
                     case "SafetyStockUsage":
-                        if (this.xlSafetyStockUsage != "*** Empty ***")
+                        if (this.SafetyStockUsage != "*** Empty ***")
                         {
-                            if (Util.ConvertStringToInt(this.xlSafetyStockUsage))
+                            if (Util.ConvertStringToInt(this.SafetyStockUsage))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -288,7 +404,7 @@ namespace PortalWebApp.Models
                                 this.HaveError = true;
                                 this.StatusMessage = "SafetyStockUsage Is Not An Integer";
                                 this.BadColumn = "SafetyStockUsage";
-                                this.BadColumnValue = this.xlSafetyStockUsage;
+                                this.BadColumnValue = this.SafetyStockUsage;
                                 break;
                             }
                         }
@@ -314,9 +430,9 @@ namespace PortalWebApp.Models
                     //    else
                     //        break;
                     case "CallDay":
-                        if (this.xlCallDay != "*** Empty ***")
+                        if (this.CallDay != "*** Empty ***")
                         {
-                            if (Util.ConvertStringToInt(this.xlCallDay))
+                            if (Util.ConvertStringToInt(this.CallDay))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -326,16 +442,16 @@ namespace PortalWebApp.Models
                                 this.HaveError = true;
                                 this.StatusMessage = "CallDay Is Not An Integer";
                                 this.BadColumn = "CallDay";
-                                this.BadColumnValue = this.xlCallDay;
+                                this.BadColumnValue = this.CallDay;
                                 break;
                             }
                         }
                         else
                             break;
                     case "Interval":
-                        if (this.xlInterval != "*** Empty ***")
+                        if (this.Interval != "*** Empty ***")
                         {
-                            if (Util.ConvertStringToInt(this.xlInterval))
+                            if (Util.ConvertStringToInt(this.Interval))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -352,9 +468,9 @@ namespace PortalWebApp.Models
                         else
                             break;
                     case "DiagCallDayMask":
-                        if (this.xlDiagCallDayMask != "*** Empty ***")
+                        if (this.DiagCallDayMask != "*** Empty ***")
                         {
-                            if (Util.ConvertStringToInt(this.xlDiagCallDayMask))
+                            if (Util.ConvertStringToInt(this.DiagCallDayMask))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -364,16 +480,16 @@ namespace PortalWebApp.Models
                                 this.HaveError = true;
                                 this.StatusMessage = "DiagCallDayMask Is Not An Integer";
                                 this.BadColumn = "DiagCallDayMask";
-                                this.BadColumnValue = this.xlDiagCallDayMask;
+                                this.BadColumnValue = this.DiagCallDayMask;
                                 break;
                             }
                         }
                         else
                             break;
                     case "LowLowLevel":
-                        if (this.xlLowLowLevel != "*** Empty ***")
+                        if (this.LowLowLevel != "*** Empty ***")
                         {
-                            if (Util.ConvertStringToInt(this.xlLowLowLevel))
+                            if (Util.ConvertStringToInt(this.LowLowLevel))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -383,16 +499,16 @@ namespace PortalWebApp.Models
                                 this.HaveError = true;
                                 this.StatusMessage = "LowLowLevel Is Not An Integer";
                                 this.BadColumn = "LowLowLevel";
-                                this.BadColumnValue = this.xlLowLowLevel;
+                                this.BadColumnValue = this.LowLowLevel;
                                 break;
                             }
                         }
                         else
                             break;
                     case "LowLevel":
-                        if (this.xlLowLevel != "*** Empty ***")
+                        if (this.LowLevel != "*** Empty ***")
                         {
-                            if (Util.ConvertStringToInt(this.xlLowLevel))
+                            if (Util.ConvertStringToInt(this.LowLevel))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -402,16 +518,16 @@ namespace PortalWebApp.Models
                                 this.HaveError = true;
                                 this.StatusMessage = "LowLevel Is Not An Integer";
                                 this.BadColumn = "LowLevel";
-                                this.BadColumnValue = this.xlLowLevel;
+                                this.BadColumnValue = this.LowLevel;
                                 break;
                             }
                         }
                         else
                             break;
                     case "HighLevel":
-                        if (this.xlHighLevel != "*** Empty ***")
+                        if (this.HighLevel != "*** Empty ***")
                         {
-                            if (Util.ConvertStringToInt(this.xlHighLevel))
+                            if (Util.ConvertStringToInt(this.HighLevel))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -421,16 +537,16 @@ namespace PortalWebApp.Models
                                 this.HaveError = true;
                                 this.StatusMessage = "HighLevel Is Not An Integer";
                                 this.BadColumn = "HighLevel";
-                                this.BadColumnValue = this.xlHighLevel;
+                                this.BadColumnValue = this.HighLevel;
                                 break;
                             }
                         }
                         else
                             break;
                     case "HighHighLevel":
-                        if (this.xlHighHighLevel != "*** Empty ***")
+                        if (this.HighHighLevel != "*** Empty ***")
                         {
-                            if (Util.ConvertStringToInt(this.xlHighHighLevel))
+                            if (Util.ConvertStringToInt(this.HighHighLevel))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -440,16 +556,16 @@ namespace PortalWebApp.Models
                                 this.HaveError = true;
                                 this.StatusMessage = "HighHighLevel Is Not An Integer";
                                 this.BadColumn = "HighHighLevel";
-                                this.BadColumnValue = this.xlHighHighLevel;
+                                this.BadColumnValue = this.HighHighLevel;
                                 break;
                             }
                         }
                         else
                             break;
                     case "VolumeDelta":
-                        if (this.xlVolumeDelta != "*** Empty ***")
+                        if (this.VolumeDelta != "*** Empty ***")
                         {
-                            if (Util.ConvertStringToInt(this.xlVolumeDelta))
+                            if (Util.ConvertStringToInt(this.VolumeDelta))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -459,16 +575,16 @@ namespace PortalWebApp.Models
                                 this.HaveError = true;
                                 this.StatusMessage = "VolumeDelta Is Not An Integer";
                                 this.BadColumn = "VolumeDelta";
-                                this.BadColumnValue = this.xlVolumeDelta;
+                                this.BadColumnValue = this.VolumeDelta;
                                 break;
                             }
                         }
                         else
                             break;
                     case "RateChangeDelta":
-                        if (this.xlRateChangeDelta != "*** Empty ***")
+                        if (this.RateChangeDelta != "*** Empty ***")
                         {
-                            if (Util.ConvertStringToInt(this.xlRateChangeDelta))
+                            if (Util.ConvertStringToInt(this.RateChangeDelta))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -478,16 +594,16 @@ namespace PortalWebApp.Models
                                 this.HaveError = true;
                                 this.StatusMessage = "RateChangeDelta Is Not An Integer";
                                 this.BadColumn = "RateChangeDelta";
-                                this.BadColumnValue = this.xlRateChangeDelta;
+                                this.BadColumnValue = this.RateChangeDelta;
                                 break;
                             }
                         }
                         else
                             break;
                     case "DataLogDelta":
-                        if (this.xlDataLogDelta != "*** Empty ***")
+                        if (this.DataLogDelta != "*** Empty ***")
                         {
-                            if (Util.ConvertStringToInt(this.xlDataLogDelta))
+                            if (Util.ConvertStringToInt(this.DataLogDelta))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -497,16 +613,16 @@ namespace PortalWebApp.Models
                                 this.HaveError = true;
                                 this.StatusMessage = "DataLogDelta Is Not An Integer";
                                 this.BadColumn = "DataLogDelta";
-                                this.BadColumnValue = this.xlDataLogDelta;
+                                this.BadColumnValue = this.DataLogDelta;
                                 break;
                             }
                         }
                         else
                             break;
                     case "UsageDelta":
-                        if (this.xlUsageDelta != "*** Empty ***")
+                        if (this.UsageDelta != "*** Empty ***")
                         {
-                            if (Util.ConvertStringToInt(this.xlUsageDelta))
+                            if (Util.ConvertStringToInt(this.UsageDelta))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -516,16 +632,16 @@ namespace PortalWebApp.Models
                                 this.HaveError = true;
                                 this.StatusMessage = "UsageDelta Is Not An Integer";
                                 this.BadColumn = "UsageDelta";
-                                this.BadColumnValue = this.xlUsageDelta;
+                                this.BadColumnValue = this.UsageDelta;
                                 break;
                             }
                         }
                         else
                             break;
                     case "WakeInterval":
-                        if (this.xlWakeInterval != "*** Empty ***")
+                        if (this.WakeInterval != "*** Empty ***")
                         {
-                            if (Util.ConvertStringToInt(this.xlWakeInterval))
+                            if (Util.ConvertStringToInt(this.WakeInterval))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -535,7 +651,7 @@ namespace PortalWebApp.Models
                                 this.HaveError = true;
                                 this.StatusMessage = "WakeInterval Is Not An Integer";
                                 this.BadColumn = "WakeInterval";
-                                this.BadColumnValue = this.xlWakeInterval;
+                                this.BadColumnValue = this.WakeInterval;
                                 break;
                             }
                         }
@@ -565,18 +681,18 @@ namespace PortalWebApp.Models
                 switch (columnname)
                 {
                     case "TankHgt":
-                        if (this.xlTankHgt != "*** Empty ***")
+                        if (this.TankHgt != "*** Empty ***")
                         {
                             decimal tankhgt = 0;
-                            if (Util.ConvertStringToDecimal(this.xlTankHgt))
+                            if (Util.ConvertStringToDecimal(this.TankHgt))
                             {
-                                tankhgt = decimal.Parse(this.xlTankHgt);
+                                tankhgt = decimal.Parse(this.TankHgt);
                                 if (tankhgt < 0)
                                 {
                                     this.HaveError = true;
                                     this.StatusMessage = "TankHgt < 0";
                                     this.BadColumn = "TankHgt";
-                                    this.BadColumnValue = this.xlTankHgt;
+                                    this.BadColumnValue = this.TankHgt;
                                     break;
                                 }
                                 else
@@ -590,25 +706,25 @@ namespace PortalWebApp.Models
                                 this.HaveError = true;
                                 this.StatusMessage = "TankHgt Is Not A Decimal";
                                 this.BadColumn = "TankHgt";
-                                this.BadColumnValue = this.xlTankHgt;
+                                this.BadColumnValue = this.TankHgt;
                                 break;
                             }
                         }
                         else
                             break;
                     case "TankCap":
-                        if (this.xlTankCap != "*** Empty ***")
+                        if (this.TankCap != "*** Empty ***")
                         {
                             decimal tankcap = 0;
-                            if (Util.ConvertStringToDecimal(this.xlTankCap))
+                            if (Util.ConvertStringToDecimal(this.TankCap))
                             {
-                                tankcap = decimal.Parse(this.xlTankCap);
+                                tankcap = decimal.Parse(this.TankCap);
                                 if (tankcap < 0)
                                 {
                                     this.HaveError = true;
                                     this.StatusMessage = "TankCap < 0";
                                     this.BadColumn = "TankCap";
-                                    this.BadColumnValue = this.xlTankCap;
+                                    this.BadColumnValue = this.TankCap;
                                     break;
                                 }
                                 else
@@ -622,25 +738,25 @@ namespace PortalWebApp.Models
                                 this.HaveError = true;
                                 this.StatusMessage = "TankCap Is Not A Decimal";
                                 this.BadColumn = "TankCap";
-                                this.BadColumnValue = this.xlTankCap;
+                                this.BadColumnValue = this.TankCap;
                                 break;
                             }
                         }
                         else
                             break;
                     case "CapacityLimit":
-                        if (this.xlCapacityLimit != "*** Empty ***")
+                        if (this.CapacityLimit != "*** Empty ***")
                         {
                             decimal capacitylimit = 0;
-                            if (Util.ConvertStringToDecimal(this.xlCapacityLimit))
+                            if (Util.ConvertStringToDecimal(this.CapacityLimit))
                             {
-                                capacitylimit = decimal.Parse(this.xlCapacityLimit);
+                                capacitylimit = decimal.Parse(this.CapacityLimit);
                                 if (capacitylimit < 0)
                                 {
                                     this.HaveError = true;
                                     this.StatusMessage = "CapacityLimit < 0";
                                     this.BadColumn = "CapacityLimit";
-                                    this.BadColumnValue = this.xlCapacityLimit;
+                                    this.BadColumnValue = this.CapacityLimit;
                                     break;
                                 }
                                 else
@@ -654,25 +770,25 @@ namespace PortalWebApp.Models
                                 this.HaveError = true;
                                 this.StatusMessage = "CapacityLimit Is Not An Decimal";
                                 this.BadColumn = "CapacityLimit";
-                                this.BadColumnValue = this.xlCapacityLimit;
+                                this.BadColumnValue = this.CapacityLimit;
                                 break;
                             }
                         }
                         else
                             break;
                     case "TankMinimum":
-                        if (this.xlTankMinimum != "*** Empty ***")
+                        if (this.TankMinimum != "*** Empty ***")
                         {
                             decimal tankminimum = 0;
-                            if (Util.ConvertStringToDecimal(this.xlTankMinimum))
+                            if (Util.ConvertStringToDecimal(this.TankMinimum))
                             {
-                                tankminimum = decimal.Parse(this.xlTankMinimum);
+                                tankminimum = decimal.Parse(this.TankMinimum);
                                 if (tankminimum < 0)
                                 {
                                     this.HaveError = true;
                                     this.StatusMessage = "TankMinimum < 0";
                                     this.BadColumn = "TankMinimum";
-                                    this.BadColumnValue = this.xlTankMinimum;
+                                    this.BadColumnValue = this.TankMinimum;
                                     break;
                                 }
                                 else
@@ -686,16 +802,16 @@ namespace PortalWebApp.Models
                                 this.HaveError = true;
                                 this.StatusMessage = "TankMinimum Is Not An Decimal";
                                 this.BadColumn = "TankMinimum";
-                                this.BadColumnValue = this.xlTankMinimum;
+                                this.BadColumnValue = this.TankMinimum;
                                 break;
                             }
                         }
                         else
                             break;
                     case "FillDetectDelta":
-                        if (this.xlFillDetectDelta != "*** Empty ***")
+                        if (this.FillDetectDelta != "*** Empty ***")
                         {
-                            if (Util.ConvertStringToDecimal(this.xlFillDetectDelta))
+                            if (Util.ConvertStringToDecimal(this.FillDetectDelta))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -705,16 +821,16 @@ namespace PortalWebApp.Models
                                 this.HaveError = true;
                                 this.StatusMessage = "FillDetectDelta Is Not A Decimal";
                                 this.BadColumn = "FillDetectDelta";
-                                this.BadColumnValue = this.xlFillDetectDelta;
+                                this.BadColumnValue = this.FillDetectDelta;
                                 break;
                             }
                         }
                         else
                             break;
                     case "ShortFillDelta":
-                        if (this.xlShortFillDelta != "*** Empty ***")
+                        if (this.ShortFillDelta != "*** Empty ***")
                         {
-                            if (Util.ConvertStringToDecimal(this.xlShortFillDelta))
+                            if (Util.ConvertStringToDecimal(this.ShortFillDelta))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -724,16 +840,16 @@ namespace PortalWebApp.Models
                                 this.HaveError = true;
                                 this.StatusMessage = "ShortFillDelta Is Not A Decimal";
                                 this.BadColumn = "ShortFillDelta";
-                                this.BadColumnValue = this.xlShortFillDelta;
+                                this.BadColumnValue = this.ShortFillDelta;
                                 break;
                             }
                         }
                         else
                             break;
                     case "HighSetPoint":
-                        if (this.xlHighSetPoint != "*** Empty ***")
+                        if (this.HighSetPoint != "*** Empty ***")
                         {
-                            if (Util.ConvertStringToDecimal(this.xlHighSetPoint))
+                            if (Util.ConvertStringToDecimal(this.HighSetPoint))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -743,16 +859,16 @@ namespace PortalWebApp.Models
                                 this.HaveError = true;
                                 this.StatusMessage = "HighSetPoint Is Not A Decimal";
                                 this.BadColumn = "HighSetPoint";
-                                this.BadColumnValue = this.xlHighSetPoint;
+                                this.BadColumnValue = this.HighSetPoint;
                                 break;
                             }
                         }
                         else
                             break;
                     case "LowSetPoint":
-                        if (this.xlLowSetPoint != "*** Empty ***")
+                        if (this.LowSetPoint != "*** Empty ***")
                         {
-                            if (Util.ConvertStringToDecimal(this.xlLowSetPoint))
+                            if (Util.ConvertStringToDecimal(this.LowSetPoint))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -762,16 +878,16 @@ namespace PortalWebApp.Models
                                 this.HaveError = true;
                                 this.StatusMessage = "LowSetPoint Is Not A Decimal";
                                 this.BadColumn = "LowSetPoint";
-                                this.BadColumnValue = this.xlLowSetPoint;
+                                this.BadColumnValue = this.LowSetPoint;
                                 break;
                             }
                         }
                         else
                             break;
                     case "SensorOffset":
-                        if (this.xlSensorOffset != "*** Empty ***")
+                        if (this.SensorOffset != "*** Empty ***")
                         {
-                            if (Util.ConvertStringToDecimal(this.xlSensorOffset))
+                            if (Util.ConvertStringToDecimal(this.SensorOffset))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -781,16 +897,16 @@ namespace PortalWebApp.Models
                                 this.HaveError = true;
                                 this.StatusMessage = "SensorOffset Is Not A Decimal";
                                 this.BadColumn = "SensorOffset";
-                                this.BadColumnValue = this.xlSensorOffset;
+                                this.BadColumnValue = this.SensorOffset;
                                 break;
                             }
                         }
                         else
                             break;
                     case "CoeffExp":
-                        if (this.xlCoeffExp != "*** Empty ***")
+                        if (this.CoeffExp != "*** Empty ***")
                         {
-                            if (Util.ConvertStringToDecimal(this.xlCoeffExp))
+                            if (Util.ConvertStringToDecimal(this.CoeffExp))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -800,16 +916,16 @@ namespace PortalWebApp.Models
                                 this.HaveError = true;
                                 this.StatusMessage = "CoeffExp Is Not A Decimal";
                                 this.BadColumn = "CoeffExp";
-                                this.BadColumnValue = this.xlCoeffExp;
+                                this.BadColumnValue = this.CoeffExp;
                                 break;
                             }
                         }
                         else
                             break;
                     case "SpecGrav":
-                        if (this.xlSpecGrav != "*** Empty ***")
+                        if (this.SpecGrav != "*** Empty ***")
                         {
-                            if (Util.ConvertStringToDecimal(this.xlSpecGrav))
+                            if (Util.ConvertStringToDecimal(this.SpecGrav))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -819,16 +935,16 @@ namespace PortalWebApp.Models
                                 this.HaveError = true;
                                 this.StatusMessage = "SpecGrav Is Not A Decimal";
                                 this.BadColumn = "SpecGrav";
-                                this.BadColumnValue = this.xlSpecGrav;
+                                this.BadColumnValue = this.SpecGrav;
                                 break;
                             }
                         }
                         else
                             break;
                     case "DeviceFillDetectDelta":
-                        if (this.xlDeviceFillDetectDelta != "*** Empty ***")
+                        if (this.DeviceFillDetectDelta != "*** Empty ***")
                         {
-                            if (Util.ConvertStringToDecimal(this.xlDeviceFillDetectDelta))
+                            if (Util.ConvertStringToDecimal(this.DeviceFillDetectDelta))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -838,25 +954,25 @@ namespace PortalWebApp.Models
                                 this.HaveError = true;
                                 this.StatusMessage = "DeviceFillDetectDelta Is Not A Decimal";
                                 this.BadColumn = "DeviceFillDetectDelta";
-                                this.BadColumnValue = this.xlDeviceFillDetectDelta;
+                                this.BadColumnValue = this.DeviceFillDetectDelta;
                                 break;
                             }
                         }
                         else
                             break;
                     case "DeviceFillHysteresis":
-                        if (this.xlDeviceFillHysteresis != "*** Empty ***")
+                        if (this.DeviceFillHysteresis != "*** Empty ***")
                         {
                             decimal devicefillhysteresis = 0;
-                            if (Util.ConvertStringToDecimal(this.xlDeviceFillHysteresis))
+                            if (Util.ConvertStringToDecimal(this.DeviceFillHysteresis))
                             {
-                                devicefillhysteresis = decimal.Parse(this.xlDeviceFillHysteresis);
+                                devicefillhysteresis = decimal.Parse(this.DeviceFillHysteresis);
                                 if (devicefillhysteresis < 0)
                                 {
                                     this.HaveError = true;
                                     this.StatusMessage = "DeviceFillHysteresis < 0";
                                     this.BadColumn = "DeviceFillHysteresis";
-                                    this.BadColumnValue = this.xlDeviceFillHysteresis;
+                                    this.BadColumnValue = this.DeviceFillHysteresis;
                                     break;
                                 }
                                 else
@@ -870,7 +986,7 @@ namespace PortalWebApp.Models
                                 this.HaveError = true;
                                 this.StatusMessage = "DeviceFillHysteresis Is Not An Decimal";
                                 this.BadColumn = "DeviceFillHysteresis";
-                                this.BadColumnValue = this.xlDeviceFillHysteresis;
+                                this.BadColumnValue = this.DeviceFillHysteresis;
                                 break;
                             }
                         }
@@ -900,9 +1016,9 @@ namespace PortalWebApp.Models
                 switch (columnname)
                 {
                     case "DeviceCriticalLowLevel":
-                        if (this.xlDeviceCriticalLowLevel != "*** Empty ***")
+                        if (this.DeviceCriticalLowLevel != "*** Empty ***")
                         {
-                            if (Util.ConvertStringToBool(this.xlDeviceCriticalLowLevel))
+                            if (Util.ConvertStringToBool(this.DeviceCriticalLowLevel))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -912,16 +1028,16 @@ namespace PortalWebApp.Models
                                 this.HaveError = true;
                                 this.StatusMessage = "DeviceCriticalLowLevel Is Not A Boolean";
                                 this.BadColumn = "DeviceCriticalLowLevel";
-                                this.BadColumnValue = this.xlDeviceCriticalLowLevel;
+                                this.BadColumnValue = this.DeviceCriticalLowLevel;
                                 break;
                             }
                         }
                         else
                             break;
                     case "DeviceLowLevel":
-                        if (this.xlDeviceLowLevel != "*** Empty ***")
+                        if (this.DeviceLowLevel != "*** Empty ***")
                         {
-                            if (Util.ConvertStringToBool(this.xlDeviceLowLevel))
+                            if (Util.ConvertStringToBool(this.DeviceLowLevel))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -931,16 +1047,16 @@ namespace PortalWebApp.Models
                                 this.HaveError = true;
                                 this.StatusMessage = "DeviceLowLevel Is Not A Boolean";
                                 this.BadColumn = "DeviceLowLevel";
-                                this.BadColumnValue = this.xlDeviceLowLevel;
+                                this.BadColumnValue = this.DeviceLowLevel;
                                 break;
                             }
                         }
                         else
                             break;
                     case "DeviceHighLevel":
-                        if (this.xlDeviceHighLevel != "*** Empty ***")
+                        if (this.DeviceHighLevel != "*** Empty ***")
                         {
-                            if (Util.ConvertStringToBool(this.xlDeviceHighLevel))
+                            if (Util.ConvertStringToBool(this.DeviceHighLevel))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -950,16 +1066,16 @@ namespace PortalWebApp.Models
                                 this.HaveError = true;
                                 this.StatusMessage = "DeviceHighLevel Is Not A Boolean";
                                 this.BadColumn = "DeviceHighLevel";
-                                this.BadColumnValue = this.xlDeviceHighLevel;
+                                this.BadColumnValue = this.DeviceHighLevel;
                                 break;
                             }
                         }
                         else
                             break;
                     case "DeviceCriticalHighLevel":
-                        if (this.xlDeviceCriticalHighLevel != "*** Empty ***")
+                        if (this.DeviceCriticalHighLevel != "*** Empty ***")
                         {
-                            if (Util.ConvertStringToBool(this.xlDeviceCriticalHighLevel))
+                            if (Util.ConvertStringToBool(this.DeviceCriticalHighLevel))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -969,16 +1085,16 @@ namespace PortalWebApp.Models
                                 this.HaveError = true;
                                 this.StatusMessage = "DeviceCriticalHighLevel Is Not A Boolean";
                                 this.BadColumn = "DeviceCriticalHighLevel";
-                                this.BadColumnValue = this.xlDeviceCriticalHighLevel;
+                                this.BadColumnValue = this.DeviceCriticalHighLevel;
                                 break;
                             }
                         }
                         else
                             break;
                     case "DeviceFillDetect":
-                        if (this.xlDeviceFillDetect != "*** Empty ***")
+                        if (this.DeviceFillDetect != "*** Empty ***")
                         {
-                            if (Util.ConvertStringToBool(this.xlDeviceFillDetect))
+                            if (Util.ConvertStringToBool(this.DeviceFillDetect))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -988,16 +1104,16 @@ namespace PortalWebApp.Models
                                 this.HaveError = true;
                                 this.StatusMessage = "DeviceFillDetect Is Not A Boolean";
                                 this.BadColumn = "DeviceFillDetect";
-                                this.BadColumnValue = this.xlDeviceFillDetect;
+                                this.BadColumnValue = this.DeviceFillDetect;
                                 break;
                             }
                         }
                         else
                             break;
                     case "DeviceUsageAlarm":
-                        if (this.xlDeviceUsageAlarm != "*** Empty ***")
+                        if (this.DeviceUsageAlarm != "*** Empty ***")
                         {
-                            if (Util.ConvertStringToBool(this.xlDeviceUsageAlarm))
+                            if (Util.ConvertStringToBool(this.DeviceUsageAlarm))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -1007,16 +1123,16 @@ namespace PortalWebApp.Models
                                 this.HaveError = true;
                                 this.StatusMessage = "DeviceUsageAlarm Is Not A Boolean";
                                 this.BadColumn = "DeviceUsageAlarm";
-                                this.BadColumnValue = this.xlDeviceUsageAlarm;
+                                this.BadColumnValue = this.DeviceUsageAlarm;
                                 break;
                             }
                         }
                         else
                             break;
                     case "HasExpectedCallAlarm":
-                        if (this.xlHasExpectedCallAlarm != "*** Empty ***")
+                        if (this.HasExpectedCallAlarm != "*** Empty ***")
                         {
-                            if (Util.ConvertStringToBool(this.xlHasExpectedCallAlarm))
+                            if (Util.ConvertStringToBool(this.HasExpectedCallAlarm))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -1026,16 +1142,16 @@ namespace PortalWebApp.Models
                                 this.HaveError = true;
                                 this.StatusMessage = "HasExpectedCallAlarm Is Not A Boolean";
                                 this.BadColumn = "HasExpectedCallAlarm";
-                                this.BadColumnValue = this.xlHasExpectedCallAlarm;
+                                this.BadColumnValue = this.HasExpectedCallAlarm;
                                 break;
                             }
                         }
                         else
                             break;
                     case "TankNormallyFills":
-                        if (this.xlTankNormallyFills != "*** Empty ***")
+                        if (this.TankNormallyFills != "*** Empty ***")
                         {
-                            if (Util.ConvertStringToBool(this.xlTankNormallyFills))
+                            if (Util.ConvertStringToBool(this.TankNormallyFills))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -1045,16 +1161,16 @@ namespace PortalWebApp.Models
                                 this.HaveError = true;
                                 this.StatusMessage = "TankNormallyFills Is Not A Boolean";
                                 this.BadColumn = "TankNormallyFills";
-                                this.BadColumnValue = this.xlTankNormallyFills;
+                                this.BadColumnValue = this.TankNormallyFills;
                                 break;
                             }
                         }
                         else
                             break;
                     case "EnableGPS":
-                        if (xlEnableGPS != "*** Empty ***")
+                        if (EnableGPS != "*** Empty ***")
                         {
-                            if (Util.ConvertStringToBool(xlEnableGPS))
+                            if (Util.ConvertStringToBool(EnableGPS))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -1064,16 +1180,16 @@ namespace PortalWebApp.Models
                                 this.HaveError = true;
                                 this.StatusMessage = "EnableGPS Is Not A Boolean";
                                 this.BadColumn = "EnableGPS";
-                                this.BadColumnValue = xlEnableGPS;
+                                this.BadColumnValue = EnableGPS;
                                 break;
                             }
                         }
                         else
                             break;
                     case "EnableLocation":
-                        if (xlEnableLocation != "*** Empty ***")
+                        if (EnableLocation != "*** Empty ***")
                         {
-                            if (Util.ConvertStringToBool(xlEnableLocation))
+                            if (Util.ConvertStringToBool(EnableLocation))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -1083,7 +1199,7 @@ namespace PortalWebApp.Models
                                 this.HaveError = true;
                                 this.StatusMessage = "EnableLocation Is Not A Boolean";
                                 this.BadColumn = "EnableLocation";
-                                this.BadColumnValue = xlEnableLocation;
+                                this.BadColumnValue = EnableLocation;
                                 break;
                             }
                         }
@@ -1113,9 +1229,9 @@ namespace PortalWebApp.Models
                 switch (columnname)
                 {
                     case "StartTime":
-                        if (this.xlStartTime != "*** Empty ***")
+                        if (this.StartTime != "*** Empty ***")
                         {
-                            if (Util.ConvertStringToDateTime(this.xlStartTime))
+                            if (Util.ConvertStringToDateTime(this.StartTime))
                             {
                                 this.PerformUpdate = true;
                                 break;
@@ -1125,7 +1241,7 @@ namespace PortalWebApp.Models
                                 this.HaveError = true;
                                 this.StatusMessage = "StartTime Is Not A DateTime";
                                 this.BadColumn = "StartTime";
-                                this.BadColumnValue = this.xlStartTime;
+                                this.BadColumnValue = this.StartTime;
                                 break;
                             }
                         }
@@ -1159,14 +1275,14 @@ namespace PortalWebApp.Models
         {
             try
             {
-                if (xlEnableGPS.ToUpper() == "TRUE")
+                if (EnableGPS.ToUpper() == "TRUE")
                 {
                     if (!DeviceHasGPS || !DeviceHasModem)
                     {
                         HaveError = true;
                         StatusMessage = "Device is not GPS enabled";
                         BadColumn = "EnableGPS";
-                        BadColumnValue = xlEnableGPS;
+                        BadColumnValue = EnableGPS;
                     }
                 }
             }
@@ -1190,14 +1306,14 @@ namespace PortalWebApp.Models
         {
             try
             {
-                if (xlEnableLocation.ToUpper() == "TRUE")
+                if (EnableLocation.ToUpper() == "TRUE")
                 {
                     if (!DeviceHasModem)
                     {
                         HaveError = true;
                         StatusMessage = "Device has no modem";
                         BadColumn = "EnableLocation";
-                        BadColumnValue = xlEnableLocation;
+                        BadColumnValue = EnableLocation;
                     }
                 }
             }
@@ -1246,14 +1362,14 @@ namespace PortalWebApp.Models
         {
             try
             {
-                if (this.TankHgt != 0)
+                if (this.TankHgt != "*** Empty ***")
                 {
-                    if (TankHgt < 1)
+                    if (decimal.Parse(this.TankHgt, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture) < 1)
                     {
                         this.HaveError = true;
                         this.StatusMessage = "TankHgt < 1";
                         this.BadColumn = "TankHgt";
-                        this.BadColumnValue = this.xlTankHgt;
+                        this.BadColumnValue = this.TankHgt;
                     }
                 }
             }
@@ -1275,15 +1391,15 @@ namespace PortalWebApp.Models
             decimal tankcap = 0;
             try
             {
-                if (this.TankCap != 0)
+                if (this.TankCap != "*** Empty ***")
                 {
-                   // tankcap = decimal.Parse(TankCap);
-                    if (TankCap < 1)
+                    tankcap = decimal.Parse(this.TankCap);
+                    if (tankcap < 1)
                     {
                         this.HaveError = true;
                         this.StatusMessage = "TankCap < 1";
                         this.BadColumn = "TankCap";
-                        this.BadColumnValue = TankCap.ToString();
+                        this.BadColumnValue = this.TankCap;
                     }
                 }
             }
@@ -1306,24 +1422,24 @@ namespace PortalWebApp.Models
             {
                 decimal tankcapacity = 0;
                 decimal capacitylimit = 0;
-                if (this.CapacityLimit != 0)
+                if (this.CapacityLimit != "*** Empty ***")
                 {
-                   // capacitylimit = decimal.Parse(this.xlCapacityLimit);
-                    //if (this.TankCap != 0)
-                    //    tankcapacity = decimal.Parse(TankCap);
-                    //else
-                    //    tankcapacity = this.xlCurrentTankCap;
-                    if (CapacityLimit > TankCap)
+                    capacitylimit = decimal.Parse(this.CapacityLimit);
+                    if (this.TankCap != "*** Empty ***")
+                        tankcapacity = decimal.Parse(this.TankCap);
+                    else
+                        tankcapacity = this.CurrentTankCap;
+                    if (capacitylimit > tankcapacity)
                     {
                         this.HaveError = true;
                         this.StatusMessage = "CapacityLimit > TankCap";
                         this.BadColumn = "CapcityLimit";
-                        this.BadColumnValue = this.CapacityLimit.ToString();
+                        this.BadColumnValue = this.CapacityLimit;
                     }
                     else if (capacitylimit != tankcapacity)
-                        this.LimitCapacityFlag = true;
+                        this.LimitCapacityFlag = "True";
                     else
-                        this.LimitCapacityFlag = false;
+                        this.LimitCapacityFlag = "False";
                 }
             }
             catch (Exception ex)
@@ -1343,21 +1459,21 @@ namespace PortalWebApp.Models
         {
             try
             {
-                //decimal tankminimum = 0;
-              //  decimal tankcapacity = 0;
-                if (this.TankMinimum != 0)
+                decimal tankminimum = 0;
+                decimal tankcapacity = 0;
+                if (this.TankMinimum != "*** Empty ***")
                 {
-                    //tankminimum = decimal.Parse(this.xlTankMinimum);
-                    //if (this.xlTankCap != "*** Empty ***")
-                    //    tankcapacity = decimal.Parse(this.xlTankCap);
-                    //else
-                    //    tankcapacity = this.xlCurrentTankCap;
-                    if (TankMinimum > TankCap)
+                    tankminimum = decimal.Parse(this.TankMinimum);
+                    if (this.TankCap != "*** Empty ***")
+                        tankcapacity = decimal.Parse(this.TankCap);
+                    else
+                        tankcapacity = this.CurrentTankCap;
+                    if (tankminimum > tankcapacity)
                     {
                         this.HaveError = true;
                         this.StatusMessage = "TankMinimum > TankCap";
                         this.BadColumn = "TankMinimum";
-                        this.BadColumnValue = this.xlTankMinimum;
+                        this.BadColumnValue = this.TankMinimum;
                     }
                 }
             }
@@ -1378,14 +1494,14 @@ namespace PortalWebApp.Models
         {
             try
             {
-                if (this.ReorderUsage != 0)
+                if (this.ReorderUsage != "*** Empty ***")
                 {
-                    if (int.Parse(this.xlReorderUsage) < 0)
+                    if (int.Parse(this.ReorderUsage) < 0)
                     {
                         this.HaveError = true;
                         this.StatusMessage = "ReorderUsage < 0";
                         this.BadColumn = "ReorderUsage";
-                        this.BadColumnValue = this.ReorderUsage.ToString();
+                        this.BadColumnValue = this.ReorderUsage;
                     }
                 }
             }
@@ -1406,14 +1522,14 @@ namespace PortalWebApp.Models
         {
             try
             {
-                if (this.SafetyStockUsage !=0)
+                if (this.SafetyStockUsage != "*** Empty ***")
                 {
-                    if (this.SafetyStockUsage < 0)
+                    if (int.Parse(this.SafetyStockUsage) < 0)
                     {
                         this.HaveError = true;
                         this.StatusMessage = "SafetyStockUsage < 0";
                         this.BadColumn = "SafetyStockUsage";
-                        this.BadColumnValue = this.SafetyStockUsage.ToString();
+                        this.BadColumnValue = this.SafetyStockUsage;
                     }
                 }
             }
@@ -1434,18 +1550,18 @@ namespace PortalWebApp.Models
         {
             try
             {
-                //DateTime starttime = new DateTime();
+                DateTime starttime = new DateTime();
                 int hour = 0;
-                if (this.StartTime != DateTime.MinValue)
+                if (this.StartTime != "*** Empty ***")
                 {
-                   // starttime = DateTime.Parse(this.StartTime);
-                    hour = StartTime.Hour;
+                    starttime = DateTime.Parse(this.StartTime);
+                    hour = starttime.Hour;
                     if (hour < 0 || hour > 23)
                     {
                         this.HaveError = true;
                         this.StatusMessage = "Invalid StartTime (Bad Hour)";
                         this.BadColumn = "StartTime";
-                        this.BadColumnValue = this.StartTime.ToString(); ;
+                        this.BadColumnValue = this.StartTime;
                     }
                     else
                     {
@@ -1458,7 +1574,7 @@ namespace PortalWebApp.Models
                             this.HaveError = true;
                             this.StatusMessage = "Interval StartTime Hour Conflict";
                             this.BadColumn = "StartTime";
-                            this.BadColumnValue = this.xlStartTime;
+                            this.BadColumnValue = this.StartTime;
                         }
                     }
                 }
@@ -1483,14 +1599,14 @@ namespace PortalWebApp.Models
             int interval = 0;
             try
             {
-                if (this.xlCallsDay != "*** Empty ***")
-                    callsperday = int.Parse(this.xlCallsDay);
+                if (this.CallsPerDay != "*** Empty ***")
+                    callsperday = int.Parse(this.CallsPerDay);
                 else
-                    callsperday = this.xlCurrentCallsDay;
+                    callsperday = this.CurrentCallsPerDay;
                 if (this.Interval != "*** Empty ***")
                     interval = int.Parse(this.Interval);
                 else
-                    interval = this.xlCurrentInterval;
+                    interval = this.CurrentInterval;
                 for (int counter = 1; counter <= callsperday - 1; counter++)
                 {
                     maxHour = maxHour + interval;
@@ -1545,15 +1661,15 @@ namespace PortalWebApp.Models
             try
             {
                 int callsperday = 0;
-                if (this.xlCallsDay != "*** Empty ***")
+                if (this.CallsPerDay != "*** Empty ***")
                 {
-                    callsperday = int.Parse(this.xlCallsDay);
+                    callsperday = int.Parse(this.CallsPerDay);
                     if (callsperday < 1 || callsperday > 23)
                     {
                         this.HaveError = true;
                         this.StatusMessage = "Invalid CallsPerDay";
                         this.BadColumn = "CallsPerDay";
-                        this.BadColumnValue = this.xlCallsDay;
+                        this.BadColumnValue = this.CallsPerDay;
                     }
                 }
             }
@@ -1574,11 +1690,11 @@ namespace PortalWebApp.Models
         {
             try
             {
-                //int callday = 0;
-                if (this.CallDay != 0)
+                int callday = 0;
+                if (this.CallDay != "*** Empty ***")
                 {
-                   // callday = int.Parse(this.xlCallsDay);
-                    if (CallDay >= 1 && CallDay <= 127)
+                    callday = int.Parse(this.CallDay);
+                    if (callday >= 1 && callday <= 127)
                     {
                     }
                     else
@@ -1586,7 +1702,7 @@ namespace PortalWebApp.Models
                         this.HaveError = true;
                         this.StatusMessage = "Invalid CallDay Mask";
                         this.BadColumn = "CallDay";
-                        this.BadColumnValue = this.CallDay.ToString();
+                        this.BadColumnValue = this.CallDay;
                     }
                 }
             }
@@ -1607,16 +1723,19 @@ namespace PortalWebApp.Models
         {
             try
             {
-               // int diagcalldaymask = 0;
-                if (this.DiagCallDayMask != 0)
+                int diagcalldaymask = 0;
+                if (this.DiagCallDayMask != "*** Empty ***")
                 {
-                    //diagcalldaymask = int.Parse(this.xlDiagCallDayMask);
-                    if (DiagCallDayMask < 1 && DiagCallDayMask > 127)
-                    { 
+                    diagcalldaymask = int.Parse(this.DiagCallDayMask);
+                    if (diagcalldaymask >= 1 && diagcalldaymask <= 127)
+                    {
+                    }
+                    else
+                    {
                         this.HaveError = true;
                         this.StatusMessage = "Invalid DiagCallDay Mask";
                         this.BadColumn = "DiagCallDayMask";
-                        this.BadColumnValue = this.xlDiagCallDayMask;
+                        this.BadColumnValue = this.DiagCallDayMask;
                     }
                 }
             }
@@ -1639,13 +1758,13 @@ namespace PortalWebApp.Models
             {
                 decimal tankhgt = 0;
                 decimal sensoroffset = 0;
-                if (this.xlSensorOffset != "*** Empty ***")
+                if (this.SensorOffset != "*** Empty ***")
                 {
-                    sensoroffset = decimal.Parse(this.xlSensorOffset, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
-                    if (this.xlTankHgt != "*** Empty ***")
-                        tankhgt = decimal.Parse(this.xlTankHgt, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
+                    sensoroffset = decimal.Parse(this.SensorOffset, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
+                    if (this.TankHgt != "*** Empty ***")
+                        tankhgt = decimal.Parse(this.TankHgt, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
                     else
-                        tankhgt = this.TankHgt;
+                        tankhgt = this.CurrentTankHgt;
                     if (sensoroffset <= tankhgt && sensoroffset >= 0)
                     {
                     }
@@ -1654,14 +1773,14 @@ namespace PortalWebApp.Models
                         this.HaveError = true;
                         this.StatusMessage = "SensorOffset < 0";
                         this.BadColumn = "SensorOffset";
-                        this.BadColumnValue = this.xlSensorOffset;
+                        this.BadColumnValue = this.SensorOffset;
                     }
                     else
                     {
                         this.HaveError = true;
                         this.StatusMessage = "SensorOffset > TankHgt";
                         this.BadColumn = "SensorOffset";
-                        this.BadColumnValue = this.xlSensorOffset;
+                        this.BadColumnValue = this.SensorOffset;
                     }
                 }
             }
@@ -1683,22 +1802,22 @@ namespace PortalWebApp.Models
             try
             {
                 decimal coeffexp = 0;
-                if (this.xlCoeffExp != "*** Empty ***")
+                if (this.CoeffExp != "*** Empty ***")
                 {
-                    coeffexp = decimal.Parse(this.xlCoeffExp, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
+                    coeffexp = decimal.Parse(this.CoeffExp, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
                     if (coeffexp <= 0)
                     {
                         this.HaveError = true;
                         this.StatusMessage = "CoeffExp <= 0";
                         this.BadColumn = "CoeffExp";
-                        this.BadColumnValue = this.xlCoeffExp;
+                        this.BadColumnValue = this.CoeffExp;
                     }
                     if (coeffexp >= 1)
                     {
                         this.HaveError = true;
                         this.StatusMessage = "CoeffExp >= 1";
                         this.BadColumn = "CoeffExp";
-                        this.BadColumnValue = this.xlCoeffExp;
+                        this.BadColumnValue = this.CoeffExp;
                     }
                 }
             }
@@ -1719,16 +1838,16 @@ namespace PortalWebApp.Models
         {
             try
             {
-              //  decimal specgrav = 0;
-                if (this.SpecGrav != 0)
+                decimal specgrav = 0;
+                if (this.SpecGrav != "*** Empty ***")
                 {
-                   // specgrav = decimal.Parse(this.SpecGrav, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
-                    if (SpecGrav <= 0)
+                    specgrav = decimal.Parse(this.SpecGrav, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
+                    if (specgrav <= 0)
                     {
                         this.HaveError = true;
                         this.StatusMessage = "SpecGrav <= 0";
                         this.BadColumn = "SpecGrav";
-                        this.BadColumnValue = this.SpecGrav.ToString();
+                        this.BadColumnValue = this.SpecGrav;
                     }
                 }
             }
@@ -1750,15 +1869,15 @@ namespace PortalWebApp.Models
             try
             {
                 int ratechangedelta = 0;
-                if (this.RateChangeDelta != 0)
+                if (this.RateChangeDelta != "*** Empty ***")
                 {
-                    //ratechangedelta = int.Parse(this.RateChangeDelta);
-                    if (RateChangeDelta < 0)
+                    ratechangedelta = int.Parse(this.RateChangeDelta);
+                    if (ratechangedelta < 0)
                     {
                         this.HaveError = true;
                         this.StatusMessage = "RateChangeDelta < 0";
                         this.BadColumn = "RateChangeDelta";
-                        this.BadColumnValue = this.RateChangeDelta.ToString();
+                        this.BadColumnValue = this.RateChangeDelta;
                     }
                 }
             }
@@ -1779,35 +1898,35 @@ namespace PortalWebApp.Models
         {
             try
             {
-               // int lowlowlevel = 0;
-               // int lowlevel = 0;
-                if (this.LowLowLevel != 0)
+                int lowlowlevel = 0;
+                int lowlevel = 0;
+                if (this.LowLowLevel != "*** Empty ***")
                 {
-                   // lowlowlevel = int.Parse(this.LowLowLevel);
-                    //if (this.LowLevel != 0)
-                    //    lowlevel = int.Parse(this.LowLevel);
-                    //else
-                    //    lowlevel = this.CurrentLowLevel;
-                    if (LowLowLevel > LowLevel)
+                    lowlowlevel = int.Parse(this.LowLowLevel);
+                    if (this.LowLevel != "*** Empty ***")
+                        lowlevel = int.Parse(this.LowLevel);
+                    else
+                        lowlevel = this.CurrentLowLevel;
+                    if (lowlowlevel > lowlevel)
                     {
                         this.HaveError = true;
                         this.StatusMessage = "LowLowLevel > LowLevel";
                         this.BadColumn = "LowLowLevel";
-                        this.BadColumnValue = this.LowLowLevel.ToString();
+                        this.BadColumnValue = this.LowLowLevel;
                     }
-                    if (LowLowLevel < 0)
+                    if (lowlowlevel < 0)
                     {
                         this.HaveError = true;
                         this.StatusMessage = "LowLowLevel < 0";
                         this.BadColumn = "LowLowLevel";
-                        this.BadColumnValue = this.LowLowLevel.ToString();
+                        this.BadColumnValue = this.LowLowLevel;
                     }
-                    if (LowLowLevel > 100)
+                    if (lowlowlevel > 100)
                     {
                         this.HaveError = true;
                         this.StatusMessage = "LowLowLevel > 100";
                         this.BadColumn = "LowLowLevel";
-                        this.BadColumnValue = this.LowLowLevel.ToString();
+                        this.BadColumnValue = this.LowLowLevel;
                     }
                 }
             }
@@ -1828,35 +1947,35 @@ namespace PortalWebApp.Models
         {
             try
             {
-                //int lowlowlevel = 0;
-                //int lowlevel = 0;
-                if (this.LowLevel != 0)
+                int lowlowlevel = 0;
+                int lowlevel = 0;
+                if (this.LowLevel != "*** Empty ***")
                 {
-                    //lowlevel = int.Parse(this.LowLevel);
-                    //if (this.LowLowLevel != "*** Empty ***")
-                    //    lowlowlevel = int.Parse(this.LowLowLevel);
-                    //else
-                    //    lowlowlevel = this.CurrentLowLowLevel;
-                    if (LowLowLevel > LowLevel)
+                    lowlevel = int.Parse(this.LowLevel);
+                    if (this.LowLowLevel != "*** Empty ***")
+                        lowlowlevel = int.Parse(this.LowLowLevel);
+                    else
+                        lowlowlevel = this.CurrentLowLowLevel;
+                    if (lowlowlevel > lowlevel)
                     {
                         this.HaveError = true;
                         this.StatusMessage = "LowLevel < LowLowLevel";
                         this.BadColumn = "LowLevel";
-                        this.BadColumnValue = this.LowLevel.ToString();
+                        this.BadColumnValue = this.LowLevel;
                     }
-                    if (LowLevel < 0)
+                    if (lowlevel < 0)
                     {
                         this.HaveError = true;
                         this.StatusMessage = "LowLevel < 0";
                         this.BadColumn = "LowLevel";
-                        this.BadColumnValue = this.LowLevel.ToString();
+                        this.BadColumnValue = this.LowLevel;
                     }
-                    if (LowLevel > 100)
+                    if (lowlevel > 100)
                     {
                         this.HaveError = true;
                         this.StatusMessage = "LowLevel > 100";
                         this.BadColumn = "LowLevel";
-                        this.BadColumnValue = this.LowLevel.ToString();
+                        this.BadColumnValue = this.LowLevel;
                     }
                 }
             }
@@ -1877,35 +1996,35 @@ namespace PortalWebApp.Models
         {
             try
             {
-               // int highhighlevel = 0;
-               // int highlevel = 0;
-                if (this.HighHighLevel != 0)
+                int highhighlevel = 0;
+                int highlevel = 0;
+                if (this.HighHighLevel != "*** Empty ***")
                 {
-                    //highhighlevel = int.Parse(this.HighHighLevel);
-                    //if (this.HighLevel != "*** Empty ***")
-                    //    highlevel = int.Parse(this.HighLevel);
-                    //else
-                    //    highlevel = this.CurrentHighLevel;
-                    if (HighHighLevel < HighLevel)
+                    highhighlevel = int.Parse(this.HighHighLevel);
+                    if (this.HighLevel != "*** Empty ***")
+                        highlevel = int.Parse(this.HighLevel);
+                    else
+                        highlevel = this.CurrentHighLevel;
+                    if (highhighlevel < highlevel)
                     {
                         this.HaveError = true;
                         this.StatusMessage = "HighHighLevel < HighLevel";
                         this.BadColumn = "HighHighLevel";
-                        this.BadColumnValue = this.HighHighLevel.ToString();
+                        this.BadColumnValue = this.HighHighLevel;
                     }
-                    if (HighHighLevel < 0)
+                    if (highhighlevel < 0)
                     {
                         this.HaveError = true;
                         this.StatusMessage = "HighHighLevel < 0";
                         this.BadColumn = "HighHighLevel";
-                        this.BadColumnValue = this.HighHighLevel.ToString();
+                        this.BadColumnValue = this.HighHighLevel;
                     }
-                    if (HighHighLevel > 100)
+                    if (highhighlevel > 100)
                     {
                         this.HaveError = true;
                         this.StatusMessage = "HighHighLevel > 100";
                         this.BadColumn = "HighHighLevel";
-                        this.BadColumnValue = this.HighHighLevel.ToString();
+                        this.BadColumnValue = this.HighHighLevel;
                     }
                 }
             }
@@ -1926,35 +2045,35 @@ namespace PortalWebApp.Models
         {
             try
             {
-                //int highhighlevel = 0;
-                //int highlevel = 0;
-                if (this.HighLevel != 0)
+                int highhighlevel = 0;
+                int highlevel = 0;
+                if (this.HighLevel != "*** Empty ***")
                 {
-                    //highlevel = int.Parse(this.HighLevel);
-                    //if (this.HighHighLevel != "*** Empty ***")
-                    //    highhighlevel = int.Parse(this.HighHighLevel);
-                    //else
-                    //    highhighlevel = this.CurrentHighHighLevel;
-                    if (HighLevel > HighHighLevel)
+                    highlevel = int.Parse(this.HighLevel);
+                    if (this.HighHighLevel != "*** Empty ***")
+                        highhighlevel = int.Parse(this.HighHighLevel);
+                    else
+                        highhighlevel = this.CurrentHighHighLevel;
+                    if (highlevel > highhighlevel)
                     {
                         this.HaveError = true;
                         this.StatusMessage = "HighLevel > HighHighLevel";
                         this.BadColumn = "HighLevel";
-                        this.BadColumnValue = this.HighLevel.ToString();
+                        this.BadColumnValue = this.HighLevel;
                     }
-                    if (HighLevel < 0)
+                    if (highlevel < 0)
                     {
                         this.HaveError = true;
                         this.StatusMessage = "HighLevel < 0";
                         this.BadColumn = "HighLevel";
-                        this.BadColumnValue = this.HighLevel.ToString();
+                        this.BadColumnValue = this.HighLevel;
                     }
-                    if (HighLevel > 100)
+                    if (highlevel > 100)
                     {
                         this.HaveError = true;
                         this.StatusMessage = "HighLevel > 100";
                         this.BadColumn = "HighLevel";
-                        this.BadColumnValue = this.HighLevel.ToString();
+                        this.BadColumnValue = this.HighLevel;
                     }
                 }
             }
@@ -1975,38 +2094,40 @@ namespace PortalWebApp.Models
         {
             try
             {
-                //decimal capacitylimit = 0;
-                //decimal filldetectdelta = 0;
-                //decimal shortfilldelta = 0;
-                if (this.FillDetectDelta != 0)
+                decimal capacitylimit = 0;
+                decimal filldetectdelta = 0;
+                decimal shortfilldelta = 0;
+                if (this.FillDetectDelta != "*** Empty ***")
                 {
-                    //filldetectdelta = decimal.Parse(this.FillDetectDelta);
-                    //if (this.TankCap != "*** Empty ***")
-                    //    capacitylimit = decimal.Parse(this.CapacityLimit);
-                    //else
-                    //    capacitylimit = this.CurrentCapacityLimit;
-                    if (FillDetectDelta <= 0)
+                    filldetectdelta = decimal.Parse(this.FillDetectDelta);
+                    if (this.TankCap != "*** Empty ***")
+                        capacitylimit = decimal.Parse(this.CapacityLimit);
+                    else
+                        capacitylimit = this.CurrentCapacityLimit;
+                    if (filldetectdelta <= 0)
                     {
                         this.HaveError = true;
                         this.StatusMessage = "FillDetectDelta <= 0";
                         this.BadColumn = "FillDetectDelta";
-                        this.BadColumnValue = this.FillDetectDelta.ToString();
+                        this.BadColumnValue = this.FillDetectDelta;
                     }
-                    if (FillDetectDelta > CapacityLimit)
+                    if (filldetectdelta > capacitylimit)
                     {
                         this.HaveError = true;
                         this.StatusMessage = "FillDetectDelta > CapacityLimit";
                         this.BadColumn = "FillDetectDelta";
-                        this.BadColumnValue = this.FillDetectDelta.ToString();
+                        this.BadColumnValue = this.FillDetectDelta;
                     }
-                    if (this.ShortFillDelta ==0)
-                        ShortFillDelta = this.CurrentShortFillDelta;
-                    if (FillDetectDelta <= ShortFillDelta)
+                    if (this.ShortFillDelta != "*** Empty ***")
+                        shortfilldelta = decimal.Parse(this.ShortFillDelta);
+                    else
+                        shortfilldelta = this.CurrentShortFillDelta;
+                    if (filldetectdelta <= shortfilldelta)
                     {
                         this.HaveError = true;
                         this.StatusMessage = "FillDetecDelta <= ShortFillDelta";
                         this.BadColumn = "FillDetectDelta";
-                        this.BadColumnValue = this.FillDetectDelta.ToString();
+                        this.BadColumnValue = this.FillDetectDelta;
                     }
                 }
             }
@@ -2027,38 +2148,40 @@ namespace PortalWebApp.Models
         {
             try
             {
-                //decimal capacitylimit = 0;
-                //decimal filldetectdelta = 0;
-                //decimal shortfilldelta = 0;
-                if (this.ShortFillDelta != 0)
+                decimal capacitylimit = 0;
+                decimal filldetectdelta = 0;
+                decimal shortfilldelta = 0;
+                if (this.ShortFillDelta != "*** Empty ***")
                 {
-                    //shortfilldelta = decimal.Parse(this.ShortFillDelta);
-                    //if (this.CapacityLimit != "*** Empty ***")
-                    //    capacitylimit = decimal.Parse(this.CapacityLimit);
-                    //else
-                    //    capacitylimit = this.CurrentCapacityLimit;
-                    if (ShortFillDelta <= 0)
+                    shortfilldelta = decimal.Parse(this.ShortFillDelta);
+                    if (this.CapacityLimit != "*** Empty ***")
+                        capacitylimit = decimal.Parse(this.CapacityLimit);
+                    else
+                        capacitylimit = this.CurrentCapacityLimit;
+                    if (shortfilldelta <= 0)
                     {
                         this.HaveError = true;
                         this.StatusMessage = "ShortFillDelta <= 0";
                         this.BadColumn = "ShortFillDelta";
-                        this.BadColumnValue = this.ShortFillDelta.ToString();
+                        this.BadColumnValue = this.ShortFillDelta;
                     }
-                    if (ShortFillDelta > CapacityLimit)
+                    if (shortfilldelta > capacitylimit)
                     {
                         this.HaveError = true;
                         this.StatusMessage = "ShortFillDelta > CapacityLimit";
                         this.BadColumn = "ShortFillDelta";
-                        this.BadColumnValue = this.ShortFillDelta.ToString();
+                        this.BadColumnValue = this.ShortFillDelta;
                     }
-                    if (this.FillDetectDelta==0)
-                        FillDetectDelta = this.CurrentFillDetectDelta;
-                    if (FillDetectDelta <= ShortFillDelta)
+                    if (this.FillDetectDelta != "*** Empty ***")
+                        filldetectdelta = decimal.Parse(this.FillDetectDelta);
+                    else
+                        filldetectdelta = this.CurrentFillDetectDelta;
+                    if (filldetectdelta <= shortfilldelta)
                     {
                         this.HaveError = true;
                         this.StatusMessage = "ShortFillDelta >= FillDetectDelta";
                         this.BadColumn = "ShortFillDelta";
-                        this.BadColumnValue = this.ShortFillDelta.ToString();
+                        this.BadColumnValue = this.ShortFillDelta;
                     }
                 }
             }
@@ -2079,23 +2202,23 @@ namespace PortalWebApp.Models
         {
             try
             {
-               // int volumedelta = 0;
-                if (this.VolumeDelta != 0)
+                int volumedelta = 0;
+                if (this.VolumeDelta != "*** Empty ***")
                 {
-                    //volumedelta = int.Parse(this.VolumeDelta.ToString());
-                    if (VolumeDelta < 0)
+                    volumedelta = int.Parse(this.VolumeDelta);
+                    if (volumedelta < 0)
                     {
                         this.HaveError = true;
                         this.StatusMessage = "VolumeDelta < 0";
                         this.BadColumn = "VolumeDelta";
-                        this.BadColumnValue = this.VolumeDelta.ToString();
+                        this.BadColumnValue = this.VolumeDelta;
                     }
-                    if (VolumeDelta > 100)
+                    if (volumedelta > 100)
                     {
                         this.HaveError = true;
                         this.StatusMessage = "VolumeDelta > 100";
                         this.BadColumn = "VolumeDelta";
-                        this.BadColumnValue = this.VolumeDelta.ToString();
+                        this.BadColumnValue = this.VolumeDelta;
                     }
                 }
             }
@@ -2119,30 +2242,30 @@ namespace PortalWebApp.Models
             decimal capacitylimit = 0;
             try
             {
-                if (this.DeviceFillDetectDelta != 0)
+                if (this.DeviceFillDetectDelta != "*** Empty ***")
                 {
-                    //devicefilldetectdelta = decimal.Parse(this.DeviceFillDetectDelta);
-                    //if (this.DeviceFillHysteresis != "*** Empty ***")
-                    //    devicefillhysteresis = decimal.Parse(this.DeviceFillHysteresis);
-                    //else
-                    //    devicefillhysteresis = this.CurrentDeviceFillHysteresis;
-                    if (this.CapacityLimit == 0)
-                    //    capacitylimit = decimal.Parse(this.CapacityLimit);
-                    //else
-                        CapacityLimit = this.CurrentCapacityLimit;
-                    if (DeviceFillDetectDelta < DeviceFillHysteresis)
+                    devicefilldetectdelta = decimal.Parse(this.DeviceFillDetectDelta);
+                    if (this.DeviceFillHysteresis != "*** Empty ***")
+                        devicefillhysteresis = decimal.Parse(this.DeviceFillHysteresis);
+                    else
+                        devicefillhysteresis = this.CurrentDeviceFillHysteresis;
+                    if (this.CapacityLimit != "*** Empty ***")
+                        capacitylimit = decimal.Parse(this.CapacityLimit);
+                    else
+                        capacitylimit = this.CurrentCapacityLimit;
+                    if (devicefilldetectdelta < devicefillhysteresis)
                     {
                         this.HaveError = true;
                         this.StatusMessage = "DeviceFillDetectDelta < DeviceFillHysteresis";
                         this.BadColumn = "DeviceFillDetectDelta";
-                        this.BadColumnValue = this.DeviceFillDetectDelta.ToString();
+                        this.BadColumnValue = this.DeviceFillDetectDelta;
                     }
-                    if (DeviceFillDetectDelta >= CapacityLimit)
+                    if (devicefilldetectdelta >= capacitylimit)
                     {
                         this.HaveError = true;
                         this.StatusMessage = "DeviceFillDetectDelta > CapacityLimit";
                         this.BadColumn = "DeviceFillDetectDelta";
-                        this.BadColumnValue = this.DeviceFillDetectDelta.ToString();
+                        this.BadColumnValue = this.DeviceFillDetectDelta;
                     }
                 }
             }
@@ -2166,28 +2289,30 @@ namespace PortalWebApp.Models
             decimal tankcap = 0;
             try
             {
-                if (this.DeviceFillHysteresis != 0)
+                if (this.DeviceFillHysteresis != "*** Empty ***")
                 {
-                   // devicefillhysteresis = decimal.Parse(this.DeviceFillHysteresis);
-                    //if (this.DeviceFillDetect == 0)
-                    //    devicefilldetect = decimal.Parse(this.DeviceFillDetect);
-                    //else
-                        DeviceFillDetect = this.CurrentDeviceFillDetect;
-                    if (this.TankCap == 0)
-                         TankCap = this.CurrentTankCap;
-                    if (DeviceFillDetectDelta  < DeviceFillHysteresis)
+                    devicefillhysteresis = decimal.Parse(this.DeviceFillHysteresis);
+                    if (this.DeviceFillDetect != "*** Empty ***")
+                        devicefilldetect = decimal.Parse(this.DeviceFillDetect);
+                    else
+                        devicefilldetect = this.CurrentDeviceFillDetect;
+                    if (this.TankCap != "*** Empty ***")
+                        tankcap = decimal.Parse(this.TankCap);
+                    else
+                        tankcap = this.CurrentTankCap;
+                    if (devicefilldetect < devicefillhysteresis)
                     {
                         this.HaveError = true;
                         this.StatusMessage = "DeviceFillHysteresis > DeviceFillDetect";
                         this.BadColumn = "DeviceFillHysteresis";
-                        this.BadColumnValue = this.DeviceFillHysteresis.ToString();
+                        this.BadColumnValue = this.DeviceFillHysteresis;
                     }
-                    if (DeviceFillHysteresis > TankCap)
+                    if (devicefillhysteresis > tankcap)
                     {
                         this.HaveError = true;
                         this.StatusMessage = "DeviceFillHysteresis > TankCap";
                         this.BadColumn = "DeviceFillHysteresis";
-                        this.BadColumnValue = this.DeviceFillHysteresis.ToString();
+                        this.BadColumnValue = this.DeviceFillHysteresis;
                     }
                 }
             }
@@ -2209,22 +2334,22 @@ namespace PortalWebApp.Models
             decimal datalogdelta = 0; ;
             try
             {
-                if (this.DataLogDelta !=0)
+                if (this.DataLogDelta != "*** Empty ***")
                 {
-                  //  datalogdelta = decimal.Parse(this.DataLogDelta, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
-                    if (DataLogDelta > (1000))
+                    datalogdelta = decimal.Parse(this.DataLogDelta, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
+                    if (datalogdelta > (1000))
                     {
                         this.HaveError = true;
                         this.StatusMessage = "DataLogDelta > 1000";
                         this.BadColumn = "DataLogDelta";
-                        this.BadColumnValue = this.DataLogDelta.ToString();
+                        this.BadColumnValue = this.DataLogDelta;
                     }
                     if (datalogdelta < 0)
                     {
                         this.HaveError = true;
                         this.StatusMessage = "DataLogDelta < 0";
                         this.BadColumn = "DataLogDelta";
-                        this.BadColumnValue = this.DataLogDelta.ToString();
+                        this.BadColumnValue = this.DataLogDelta;
                     }
                 }
             }
@@ -2243,30 +2368,30 @@ namespace PortalWebApp.Models
 
         internal void UsageDeltaCheck()
         {
-           // decimal usagedelta = 0; ;
-           // decimal tankcap = 0;
+            decimal usagedelta = 0; ;
+            decimal tankcap = 0;
             try
             {
-                if (this.UsageDelta != 0)
+                if (this.UsageDelta != "*** Empty ***")
                 {
-                   // usagedelta = decimal.Parse(this.UsageDelta, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
-                    if (this.TankCap == 0)
-                    //    tankcap = decimal.Parse(this.TankCap, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
-                    //else
-                        TankCap = CurrentTankCap;
-                    if (UsageDelta > 1000)
+                    usagedelta = decimal.Parse(this.UsageDelta, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
+                    if (this.TankCap != "*** Empty ***")
+                        tankcap = decimal.Parse(this.TankCap, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
+                    else
+                        tankcap = this.CurrentTankCap;
+                    if (usagedelta > 1000)
                     {
                         this.HaveError = true;
                         this.StatusMessage = "UsageDelta > 1000";
                         this.BadColumn = "UsageDelta";
-                        this.BadColumnValue = this.UsageDelta.ToString();
+                        this.BadColumnValue = this.UsageDelta;
                     }
-                    if (UsageDelta < 0)
+                    if (usagedelta < 0)
                     {
                         this.HaveError = true;
                         this.StatusMessage = "UsageDelta < 0";
                         this.BadColumn = "UsageDelta";
-                        this.BadColumnValue = this.UsageDelta.ToString();
+                        this.BadColumnValue = this.UsageDelta;
                     }
                 }
             }
@@ -2289,31 +2414,31 @@ namespace PortalWebApp.Models
             {
                 bool tl9xDevice = false;
                 int wakeinterval = 0;
-                if (this.WakeInterval != 0)
+                if (this.WakeInterval != "*** Empty ***")
                 {
-                    //wakeinterval = int.Parse(this.WakeInterval);
+                    wakeinterval = int.Parse(this.WakeInterval);
                     if (this.CurrentModelNumber.Substring(2, 1) == "H" || this.CurrentModelNumber.Substring(2, 1) == "L")
                         tl9xDevice = true;
-                    if (!tl9xDevice && WakeInterval > 255)
+                    if (!tl9xDevice && wakeinterval > 255)
                     {
                         this.HaveError = true;
                         this.StatusMessage = "WakeInterval > 255";
                         this.BadColumn = "WakeInterval";
-                        this.BadColumnValue = this.WakeInterval.ToString();
+                        this.BadColumnValue = this.WakeInterval;
                     }
                     if (!tl9xDevice && wakeinterval > 1092)
                     {
                         this.HaveError = true;
                         this.StatusMessage = "WakeInterval > 1092";
                         this.BadColumn = "WakeInterval";
-                        this.BadColumnValue = this.WakeInterval.ToString();
+                        this.BadColumnValue = this.WakeInterval;
                     }
-                    if (WakeInterval < 1)
+                    if (wakeinterval < 1)
                     {
                         this.HaveError = true;
                         this.StatusMessage = "WakeInterval < 1";
                         this.BadColumn = "WakeInterval";
-                        this.BadColumnValue = this.WakeInterval.ToString();
+                        this.BadColumnValue = this.WakeInterval;
                     }
                 }
             }
@@ -2334,37 +2459,37 @@ namespace PortalWebApp.Models
 
         #endregion
 
-        //internal bool Add()
-        //{
-        //    bool successfulupdate = false;
-        //    try
-        //    {
-        //        successfulupdate = Utilities.Utilities.UpdateTankConfig(this.ConnectionString, this.TankID, this.CurrentTankConfigID, this.UserID,
-        //                                    this.TankName, this.TankHgt, this.TankCap, this.CapacityLimit,
-        //                                    this.LimitCapacityFlag, this.TankMinimum, this.ReorderUsage,
-        //                                    this.SafetyStockUsage, this.StartTime, this.CallsPerDay, this.CallDay,
-        //                                    this.Interval, this.DiagCallDayMask, this.HighSetPoint, this.LowSetPoint,
-        //                                    this.SensorOffset, this.CoeffExp, this.SpecGrav, this.LowLowLevel,
-        //                                    this.LowLevel, this.HighLevel, this.HighHighLevel, this.FillDetectDelta,
-        //                                    this.ShortFillDelta, this.VolumeDelta, this.RateChangeDelta,
-        //                                    this.DeviceCriticalLowLevel, this.DeviceLowLevel, this.DeviceHighLevel,
-        //                                    this.DeviceCriticalHighLevel, this.DeviceFillDetect, this.DeviceFillDetectDelta,
-        //                                    this.DeviceFillHysteresis, this.DataLogDelta, this.UsageDelta, this.WakeInterval, this.DeviceUsageAlarm,
-        //                                    this.HasExpectedCallAlarm, this.TankNormallyFills, EnableGPS, EnableLocation);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        string errorMsg = ex.Message;
-        //        fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
-        //        FileWriter errorWriter = new FileWriter(fileName);
-        //        errorWriter.Write("****************************");
-        //        errorWriter.Write(DateTime.Now.ToString());
-        //        errorWriter.Write("Error at TankConfig.Add - ");
-        //        errorWriter.Write(ex.Message);
-        //        errorWriter.Close();
-        //    }
-        //    return successfulupdate;
-        //}
+        internal bool Add()
+        {
+            bool successfulupdate = false;
+            try
+            {
+                successfulupdate = Util.UpdateTankConfig(this.ConnectionString, int.Parse(this.TankID), this.CurrentTankConfigID, this.UserID,
+                                            this.TankName, this.TankHgt, this.TankCap, this.CapacityLimit,
+                                            this.LimitCapacityFlag, this.TankMinimum, this.ReorderUsage,
+                                            this.SafetyStockUsage, this.StartTime, this.CallsPerDay, this.CallDay,
+                                            this.Interval, this.DiagCallDayMask, this.HighSetPoint, this.LowSetPoint,
+                                            this.SensorOffset, this.CoeffExp, this.SpecGrav, this.LowLowLevel,
+                                            this.LowLevel, this.HighLevel, this.HighHighLevel, this.FillDetectDelta,
+                                            this.ShortFillDelta, this.VolumeDelta, this.RateChangeDelta,
+                                            this.DeviceCriticalLowLevel, this.DeviceLowLevel, this.DeviceHighLevel,
+                                            this.DeviceCriticalHighLevel, this.DeviceFillDetect, this.DeviceFillDetectDelta,
+                                            this.DeviceFillHysteresis, this.DataLogDelta, this.UsageDelta, this.WakeInterval, this.DeviceUsageAlarm,
+                                            this.HasExpectedCallAlarm, this.TankNormallyFills, EnableGPS, EnableLocation);
+            }
+            catch (Exception ex)
+            {
+                string errorMsg = ex.Message;
+                fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
+                FileWriter errorWriter = new FileWriter(fileName);
+                errorWriter.Write("****************************");
+                errorWriter.Write(DateTime.Now.ToString());
+                errorWriter.Write("Error at TankConfig.Add - ");
+                errorWriter.Write(ex.Message);
+                errorWriter.Close();
+            }
+            return successfulupdate;
+        }
     }
 
 }

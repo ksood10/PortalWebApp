@@ -489,194 +489,194 @@ namespace PortalWebApp.Utilities {
 
         //modified to include EnableGPS and EnableLocation
 
-        //public static bool UpdateTankConfig(string conn, int tankid, int tankconfigid, int userid, string tankname, string tankhgt, string tankcap,
-        //                                    string capacitylimit, string limitcapacityflag, string tankminimum, string reorderusage,
-        //                                    string safetystockusage, string starttime, string callsperday, string callday, string interval,
-        //                                    string diagcalldaymask, string highsetpoint, string lowsetpoint, string sensoroffset,
-        //                                    string coeffexp, string specgrav, string lowlowlevel, string lowlevel, string highlevel,
-        //                                    string highhighlevel, string filldetectdelta, string shortfilldelta, string volumedelta,
-        //                                    string ratechangedelta, string devicecriticallowlevel, string devicelowlevel,
-        //                                    string devicehighlevel, string devicecriticalhighlevel, string devicefilldetect,
-        //                                    string devicefilldetectdelta, string devicefillhysteresis, string datalogdelta,
-        //                                    string usagedelta, string wakeinterval, string deviceusagealarm, string hasexpectedcallalarm,
-        //                                    string tanknormallyfills, string enablegps, string enablelocation)
+        public static bool UpdateTankConfig(string conn, int tankid, int tankconfigid, int userid, string tankname, string tankhgt, string tankcap,
+                                            string capacitylimit, string limitcapacityflag, string tankminimum, string reorderusage,
+                                            string safetystockusage, string starttime, string callsperday, string callday, string interval,
+                                            string diagcalldaymask, string highsetpoint, string lowsetpoint, string sensoroffset,
+                                            string coeffexp, string specgrav, string lowlowlevel, string lowlevel, string highlevel,
+                                            string highhighlevel, string filldetectdelta, string shortfilldelta, string volumedelta,
+                                            string ratechangedelta, string devicecriticallowlevel, string devicelowlevel,
+                                            string devicehighlevel, string devicecriticalhighlevel, string devicefilldetect,
+                                            string devicefilldetectdelta, string devicefillhysteresis, string datalogdelta,
+                                            string usagedelta, string wakeinterval, string deviceusagealarm, string hasexpectedcallalarm,
+                                            string tanknormallyfills, string enablegps, string enablelocation)
 
-        //{
-        //  //  bool noerrors = false;
-        //    bool tankupdateerror = false;
-        //    string fileName = string.Empty;
-        //    string errorfilepath = AppDomain.CurrentDomain.BaseDirectory + "ErrorFile";
-        //    TankData.DBTableAdapters.TankConfigTableAdapter tankConfigTA = null;
-        //    TankData.DB.TankConfigDataTable tankConfigDT = null;
-        //    TankData.DB.TankConfigRow newTankConfigDR = null;
-        //    // int newTankConfigID = 0;
-        //    try
-        //    {
-                //TankData.DB.TankConfigRow currentTankConfigDR = GetCurrentTankConfig(conn, tankconfigid);
-                //using (tankConfigTA = new TankData.DBTableAdapters.TankConfigTableAdapter())
-                //{
-                //    tankConfigTA.Connection.ConnectionString = conn;
-                //    using (tankConfigDT = new TankData.DB.TankConfigDataTable())
-                //    {
-                //        tankConfigDT.Clear();
-                //        newTankConfigDR = tankConfigDT.NewTankConfigRow();
-                //        newTankConfigDR.Copy(currentTankConfigDR, userid);
-                //        newTankConfigDR.BeginEdit();
-                //        if (tankname != "*** Empty ***")
-                //            newTankConfigDR.TankName = tankname;
-                //        if (tankhgt != "*** Empty ***")
-                //            newTankConfigDR.TankHgt = decimal.Parse(tankhgt, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
-                //        if (tankcap != "*** Empty ***")
-                //            newTankConfigDR.TankCap = decimal.Parse(tankcap, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
-                //        if (capacitylimit != "*** Empty ***")
-                //            newTankConfigDR.CapacityLimit = decimal.Parse(capacitylimit);
-                //        if (!string.IsNullOrEmpty(limitcapacityflag))
-                //            newTankConfigDR.LimitCapacityFlag = bool.Parse(limitcapacityflag);
-                //        if (tankminimum != "*** Empty ***")
-                //            newTankConfigDR.TankMinimum = decimal.Parse(tankminimum, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
-                //        if (reorderusage != "*** Empty ***")
-                //            newTankConfigDR.ReorderUsage = int.Parse(reorderusage);
-                //        if (safetystockusage != "*** Empty ***")
-                //            newTankConfigDR.SafetyStockUsage = int.Parse(safetystockusage);
-                //        if (starttime != "*** Empty ***")
-                //            newTankConfigDR.StartTime = DateTime.Parse(starttime);
-                //        if (callsperday != "*** Empty ***")
-                //            newTankConfigDR.Callsperday = int.Parse(callsperday);
-                //        if (callday != "*** Empty ***")
-                //            newTankConfigDR.CallDay = int.Parse(callday);
-                //        if (interval != "*** Empty ***")
-                //            newTankConfigDR.Interval = int.Parse(interval);
-                //        if (diagcalldaymask != "*** Empty ***")
-                //            newTankConfigDR.DiagCallDayMask = int.Parse(diagcalldaymask);
-                //        if (highsetpoint != "*** Empty ***")
-                //            newTankConfigDR.HighSetPoint = decimal.Parse(highsetpoint, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
-                //        if (lowsetpoint != "*** Empty ***")
-                //            newTankConfigDR.LowSetPoint = decimal.Parse(lowsetpoint, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
-                //        if (sensoroffset != "*** Empty ***")
-                //            newTankConfigDR.SensorOffset = decimal.Parse(sensoroffset, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
-                //        if (coeffexp != "*** Empty ***")
-                //            newTankConfigDR.CoeffExp = decimal.Parse(coeffexp, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
-                //        if (specgrav != "*** Empty ***")
-                //            newTankConfigDR.SpecGrav = decimal.Parse(specgrav, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
-                //        if (lowlowlevel != "*** Empty ***")
-                //            newTankConfigDR.LowLowLevel = int.Parse(lowlowlevel);
-                //        if (lowlevel != "*** Empty ***")
-                //            newTankConfigDR.LowLevel = int.Parse(lowlevel);
-                //        if (highlevel != "*** Empty ***")
-                //            newTankConfigDR.HighLevel = int.Parse(highlevel);
-                //        if (highhighlevel != "*** Empty ***")
-                //            newTankConfigDR.HighHighLevel = int.Parse(highhighlevel);
-                //        if (filldetectdelta != "*** Empty ***")
-                //            newTankConfigDR.FillDetectDelta = decimal.Parse(filldetectdelta, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
-                //        if (shortfilldelta != "*** Empty ***")
-                //            newTankConfigDR.ShortFillDelta = decimal.Parse(shortfilldelta, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
-                //        if (volumedelta != "*** Empty ***")
-                //            newTankConfigDR.VolumeDelta = int.Parse(volumedelta);
-                //        if (ratechangedelta != "*** Empty ***")
-                //            newTankConfigDR.RateChangeDelta = int.Parse(ratechangedelta);
-                //        if (devicecriticallowlevel != "*** Empty ***")
-                //            newTankConfigDR.DeviceCriticalLowLevel = bool.Parse(devicecriticallowlevel);
-                //        if (devicelowlevel != "*** Empty ***")
-                //            newTankConfigDR.DeviceLowLevel = bool.Parse(devicelowlevel);
-                //        if (devicehighlevel != "*** Empty ***")
-                //            newTankConfigDR.DeviceHighLevel = bool.Parse(devicehighlevel);
-                //        if (devicecriticalhighlevel != "*** Empty ***")
-                //            newTankConfigDR.DeviceCriticalHighLevel = bool.Parse(devicecriticalhighlevel);
-                //        if (devicefilldetect != "*** Empty ***")
-                //            newTankConfigDR.DeviceFillDetect = bool.Parse(devicefilldetect);
-                //        if (devicefilldetectdelta != "*** Empty ***")
-                //            newTankConfigDR.DeviceFillDetectDelta = decimal.Parse(devicefilldetectdelta, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
-                //        if (devicefillhysteresis != "*** Empty ***")
-                //            newTankConfigDR.DeviceFillHysteresis = decimal.Parse(devicefillhysteresis, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
-                //        if (datalogdelta != "*** Empty ***")
-                //            newTankConfigDR.DataLogDelta = int.Parse(datalogdelta);
-                //        if (usagedelta != "*** Empty ***")
-                //            newTankConfigDR.UsageDelta = int.Parse(usagedelta);
-                //        if (wakeinterval != "*** Empty ***")
-                //            newTankConfigDR.WakeInterval = int.Parse(wakeinterval);
-                //        if (deviceusagealarm != "*** Empty ***")
-                //            newTankConfigDR.DeviceUsageAlarm = bool.Parse(deviceusagealarm);
-                //        if (hasexpectedcallalarm != "*** Empty ***")
-                //            newTankConfigDR.HasExpectedCallAlarm = bool.Parse(hasexpectedcallalarm);
-                //        if (tanknormallyfills != "*** Empty ***")
-                //            newTankConfigDR.TankNormallyFills = bool.Parse(tanknormallyfills);
-                //        if (enablegps != "*** Empty ***")
-                //            newTankConfigDR.EnableGPS = bool.Parse(enablegps);
-                //        if (enablelocation != "*** Empty ***")
-                //            newTankConfigDR.EnableLocation = bool.Parse(enablelocation);
-                //        newTankConfigDR.EndEdit();
-                //        tankConfigDT.Rows.Add(newTankConfigDR);
-                //        tankConfigTA.Update(tankConfigDT);
-                //        newTankConfigID = newTankConfigDR.TankConfigId;
-                //        noerrors = false;
-                //        tankupdateerror = UpdateTank(noerrors, conn, tankid, userid, newTankConfigID);
-                //    }
-                //}
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        string errorMsg = ex.Message;
-        //        fileName = errorfilepath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
-        //        //FileWriter errorWriter = new FileWriter(fileName);
-        //        //errorWriter.Write("****************************");
-        //        //errorWriter.Write(DateTime.Now.ToString());
-        //        //errorWriter.Write("Error at TankConfig.Add - ");
-        //        //errorWriter.Write(ex.Message);
-        //        //errorWriter.Close();
-        //    }
-        //    return tankupdateerror;
-        //}
-
-        public static /*TankData.DB.TankConfigRow*/ void  GetCurrentTankConfig(string conn, int tankconfigid)
         {
-            //TankData.DB.TankConfigRow currentTankConfigDR = null;
-            //TankData.DB.TankConfigDataTable tankConfigDT = null;
-            //TankData.DBTableAdapters.TankConfigTableAdapter tankConfigTA = null;
+            bool noerrors = false;
+            bool tankupdateerror = false;
+            string fileName = string.Empty;
+            string errorfilepath = AppDomain.CurrentDomain.BaseDirectory + "ErrorFile";
+            TankData.DBTableAdapters.TankConfigTableAdapter tankConfigTA = null;
+            TankData.DB.TankConfigDataTable tankConfigDT = null;
+            TankData.DB.TankConfigRow newTankConfigDR = null;
+            int newTankConfigID = 0;
             try
             {
-                //using (tankConfigTA = new TankData.DBTableAdapters.TankConfigTableAdapter())
-                //{
-                //    tankConfigTA.Connection.ConnectionString = conn; ;
-                //    using (tankConfigDT = new TankData.DB.TankConfigDataTable())
-                //    {
-                //        tankConfigDT.Clear();
-                //        tankConfigTA.FillByID(tankConfigDT, tankconfigid);
-                //        foreach (TankData.DB.TankConfigRow dr in tankConfigDT.Rows)
-                //        {
-                //            currentTankConfigDR = dr;
-                //        }
-                //    }
-                //}
+                TankData.DB.TankConfigRow currentTankConfigDR = GetCurrentTankConfig(conn, tankconfigid);
+                using (tankConfigTA = new TankData.DBTableAdapters.TankConfigTableAdapter())
+                {
+                    tankConfigTA.Connection.ConnectionString = conn;
+                    using (tankConfigDT = new TankData.DB.TankConfigDataTable())
+                    {
+                        tankConfigDT.Clear();
+                        newTankConfigDR = tankConfigDT.NewTankConfigRow();
+                        newTankConfigDR.Copy(currentTankConfigDR, userid);
+                        newTankConfigDR.BeginEdit();
+                        if (tankname != "*** Empty ***")
+                            newTankConfigDR.TankName = tankname;
+                        if (tankhgt != "*** Empty ***")
+                            newTankConfigDR.TankHgt = decimal.Parse(tankhgt, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
+                        if (tankcap != "*** Empty ***")
+                            newTankConfigDR.TankCap = decimal.Parse(tankcap, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
+                        if (capacitylimit != "*** Empty ***")
+                            newTankConfigDR.CapacityLimit = decimal.Parse(capacitylimit);
+                        if (!string.IsNullOrEmpty(limitcapacityflag))
+                            newTankConfigDR.LimitCapacityFlag = bool.Parse(limitcapacityflag);
+                        if (tankminimum != "*** Empty ***")
+                            newTankConfigDR.TankMinimum = decimal.Parse(tankminimum, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
+                        if (reorderusage != "*** Empty ***")
+                            newTankConfigDR.ReorderUsage = int.Parse(reorderusage);
+                        if (safetystockusage != "*** Empty ***")
+                            newTankConfigDR.SafetyStockUsage = int.Parse(safetystockusage);
+                        if (starttime != "*** Empty ***")
+                            newTankConfigDR.StartTime = DateTime.Parse(starttime);
+                        if (callsperday != "*** Empty ***")
+                            newTankConfigDR.Callsperday = int.Parse(callsperday);
+                        if (callday != "*** Empty ***")
+                            newTankConfigDR.CallDay = int.Parse(callday);
+                        if (interval != "*** Empty ***")
+                            newTankConfigDR.Interval = int.Parse(interval);
+                        if (diagcalldaymask != "*** Empty ***")
+                            newTankConfigDR.DiagCallDayMask = int.Parse(diagcalldaymask);
+                        if (highsetpoint != "*** Empty ***")
+                            newTankConfigDR.HighSetPoint = decimal.Parse(highsetpoint, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
+                        if (lowsetpoint != "*** Empty ***")
+                            newTankConfigDR.LowSetPoint = decimal.Parse(lowsetpoint, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
+                        if (sensoroffset != "*** Empty ***")
+                            newTankConfigDR.SensorOffset = decimal.Parse(sensoroffset, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
+                        if (coeffexp != "*** Empty ***")
+                            newTankConfigDR.CoeffExp = decimal.Parse(coeffexp, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
+                        if (specgrav != "*** Empty ***")
+                            newTankConfigDR.SpecGrav = decimal.Parse(specgrav, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
+                        if (lowlowlevel != "*** Empty ***")
+                            newTankConfigDR.LowLowLevel = int.Parse(lowlowlevel);
+                        if (lowlevel != "*** Empty ***")
+                            newTankConfigDR.LowLevel = int.Parse(lowlevel);
+                        if (highlevel != "*** Empty ***")
+                            newTankConfigDR.HighLevel = int.Parse(highlevel);
+                        if (highhighlevel != "*** Empty ***")
+                            newTankConfigDR.HighHighLevel = int.Parse(highhighlevel);
+                        if (filldetectdelta != "*** Empty ***")
+                            newTankConfigDR.FillDetectDelta = decimal.Parse(filldetectdelta, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
+                        if (shortfilldelta != "*** Empty ***")
+                            newTankConfigDR.ShortFillDelta = decimal.Parse(shortfilldelta, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
+                        if (volumedelta != "*** Empty ***")
+                            newTankConfigDR.VolumeDelta = int.Parse(volumedelta);
+                        if (ratechangedelta != "*** Empty ***")
+                            newTankConfigDR.RateChangeDelta = int.Parse(ratechangedelta);
+                        if (devicecriticallowlevel != "*** Empty ***")
+                            newTankConfigDR.DeviceCriticalLowLevel = bool.Parse(devicecriticallowlevel);
+                        if (devicelowlevel != "*** Empty ***")
+                            newTankConfigDR.DeviceLowLevel = bool.Parse(devicelowlevel);
+                        if (devicehighlevel != "*** Empty ***")
+                            newTankConfigDR.DeviceHighLevel = bool.Parse(devicehighlevel);
+                        if (devicecriticalhighlevel != "*** Empty ***")
+                            newTankConfigDR.DeviceCriticalHighLevel = bool.Parse(devicecriticalhighlevel);
+                        if (devicefilldetect != "*** Empty ***")
+                            newTankConfigDR.DeviceFillDetect = bool.Parse(devicefilldetect);
+                        if (devicefilldetectdelta != "*** Empty ***")
+                            newTankConfigDR.DeviceFillDetectDelta = decimal.Parse(devicefilldetectdelta, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
+                        if (devicefillhysteresis != "*** Empty ***")
+                            newTankConfigDR.DeviceFillHysteresis = decimal.Parse(devicefillhysteresis, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
+                        if (datalogdelta != "*** Empty ***")
+                            newTankConfigDR.DataLogDelta = int.Parse(datalogdelta);
+                        if (usagedelta != "*** Empty ***")
+                            newTankConfigDR.UsageDelta = int.Parse(usagedelta);
+                        if (wakeinterval != "*** Empty ***")
+                            newTankConfigDR.WakeInterval = int.Parse(wakeinterval);
+                        if (deviceusagealarm != "*** Empty ***")
+                            newTankConfigDR.DeviceUsageAlarm = bool.Parse(deviceusagealarm);
+                        if (hasexpectedcallalarm != "*** Empty ***")
+                            newTankConfigDR.HasExpectedCallAlarm = bool.Parse(hasexpectedcallalarm);
+                        if (tanknormallyfills != "*** Empty ***")
+                            newTankConfigDR.TankNormallyFills = bool.Parse(tanknormallyfills);
+                        if (enablegps != "*** Empty ***")
+                            newTankConfigDR.EnableGPS = bool.Parse(enablegps);
+                        if (enablelocation != "*** Empty ***")
+                            newTankConfigDR.EnableLocation = bool.Parse(enablelocation);
+                        newTankConfigDR.EndEdit();
+                        tankConfigDT.Rows.Add(newTankConfigDR);
+                        tankConfigTA.Update(tankConfigDT);
+                        newTankConfigID = newTankConfigDR.TankConfigId;
+                        noerrors = false;
+                        tankupdateerror = UpdateTank(noerrors, conn, tankid, userid, newTankConfigID);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string errorMsg = ex.Message;
+                fileName = errorfilepath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
+                //FileWriter errorWriter = new FileWriter(fileName);
+                //errorWriter.Write("****************************");
+                //errorWriter.Write(DateTime.Now.ToString());
+                //errorWriter.Write("Error at TankConfig.Add - ");
+                //errorWriter.Write(ex.Message);
+                //errorWriter.Close();
+            }
+            return tankupdateerror;
+        }
+
+        public static TankData.DB.TankConfigRow  GetCurrentTankConfig(string conn, int tankconfigid)
+        {
+            TankData.DB.TankConfigRow currentTankConfigDR = null;
+            TankData.DB.TankConfigDataTable tankConfigDT = null;
+            TankData.DBTableAdapters.TankConfigTableAdapter tankConfigTA = null;
+            try
+            {
+                using (tankConfigTA = new TankData.DBTableAdapters.TankConfigTableAdapter())
+                {
+                    tankConfigTA.Connection.ConnectionString = conn; ;
+                    using (tankConfigDT = new TankData.DB.TankConfigDataTable())
+                    {
+                        tankConfigDT.Clear();
+                        tankConfigTA.FillByID(tankConfigDT, tankconfigid);
+                        foreach (TankData.DB.TankConfigRow dr in tankConfigDT.Rows)
+                        {
+                            currentTankConfigDR = dr;
+                        }
+                    }
+                }
             }
             catch (Exception ex)
             {
                 string errorMsg = ex.Message;
             }
-          //  return currentTankConfigDR;
+            return currentTankConfigDR;
         }
 
         public static bool UpdateTank(bool goterror, string conn, int tankid, int userid, int newtankconfigid)
         {
-          //  TankData.DBTableAdapters.TankTableAdapter tankTA = null;
-          //  TankData.DB.TankDataTable tankDT = null;
+            TankData.DBTableAdapters.TankTableAdapter tankTA = null;
+            TankData.DB.TankDataTable tankDT = null;
             bool successfulupdate = false;
             try
             {
                 if (!goterror)
                 {
-                    //using (tankTA = new TankData.DBTableAdapters.TankTableAdapter())
-                    //{
-                    //    tankTA.Connection.ConnectionString = conn;
-                    //    using (tankDT = new TankData.DB.TankDataTable())
-                    //    {
-                    //        tankDT.Clear();
-                    //        tankTA.FillByID(tankDT, tankid);
-                    //        tankDT[0].TankConfigID = newtankconfigid;
-                    //        tankDT[0].ModifiedBy = userid;
-                    //        tankDT[0].ModifiedOn = DateTime.Now.ToUniversalTime();
-                    //        tankTA.Update(tankDT);
-                    //    }
-                    //}
+                    using (tankTA = new TankData.DBTableAdapters.TankTableAdapter())
+                    {
+                        tankTA.Connection.ConnectionString = conn;
+                        using (tankDT = new TankData.DB.TankDataTable())
+                        {
+                            tankDT.Clear();
+                            tankTA.FillByID(tankDT, tankid);
+                            tankDT[0].TankConfigID = newtankconfigid;
+                            tankDT[0].ModifiedBy = userid;
+                            tankDT[0].ModifiedOn = DateTime.Now.ToUniversalTime();
+                            tankTA.Update(tankDT);
+                        }
+                    }
                     successfulupdate = true;
                 }
                 else
@@ -697,7 +697,7 @@ namespace PortalWebApp.Utilities {
             {
                 using (var con = new SqlConnection(connectionstring))
                 {
-                    using (var cmd = new SqlCommand("select userid from [user] where username = @username", con))
+                    using (var cmd = new SqlCommand("select userid from [user] where superuser=1 and username = @username", con))
                     {
                         con.Open();
                         cmd.Parameters.Add(new SqlParameter("username", username));

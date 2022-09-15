@@ -89,11 +89,11 @@ namespace PortalWebApp.Utilities
             this.checkRTUCondition = checkrtu;
             //this.ErrorFilePath = "C:\\BulkConfig\\ErrorFile\\";
             this.ErrorFilePath = AppDomain.CurrentDomain.BaseDirectory + "ErrorFile";
-            //this.ErrorFileName = this.ErrorFilePath + "Errors_" + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + DateTime.Now.Second.ToString() + ".xlsx";
+            //this.Error ErrorFileName = this.ErrorFilePath + "Errors_" + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + DateTime.Now.Second.ToString() + ".xlsx";
             this.ErrorFileName = this.ErrorFilePath + "\\" + "Errors_" + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + DateTime.Now.Second.ToString() + ".xlsx";
             //this.StatusFilePath = "C:\\BulkConfig\\SummaryFile\\";
             this.StatusFilePath = AppDomain.CurrentDomain.BaseDirectory + "SummaryFile";
-            //this.StatusFileName = this.StatusFilePath + "Summary_" + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".txt";
+            //this.Status ErrorFileName = this.StatusFilePath + "Summary_" + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".txt";
             this.StatusFileName = this.StatusFilePath + "\\" + "Summary_" + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".txt";
             DeleteOldReportFiles();
             GetUserOrganization();
@@ -101,14 +101,14 @@ namespace PortalWebApp.Utilities
             {
                 if (!this.SuperUser)
                     BuildListOfUserOrganizations();
-                //ReadEXCELFile();
-                //if (!this.HaveEXCELReadError)
-                //{
-                //   // MessageBox.Show("# of EXCEL Records To Process: " + myTankConfigs.Count.ToString());
-                //    this.TotalEXCELCount = myTankConfigs.Count;
-                //    myThread = new Thread(new ThreadStart(ValidateTheEXCELFile));
-                //    ValidateTheEXCELFile();
-                //}
+                ReadEXCELFile();
+                if (!this.HaveEXCELReadError)
+                {
+                    // MessageBox.Show("# of EXCEL Records To Process: " + myTankConfigs.Count.ToString());
+                    this.TotalEXCELCount = myTankConfigs.Count;
+                    //myThread = new Thread(new ThreadStart(ValidateTheEXCELFile));
+                    ValidateTheEXCELFile();
+                }
             }
         }
 
@@ -179,7 +179,7 @@ namespace PortalWebApp.Utilities
             catch (Exception ex)
             {
                 string errorMsg = ex.Message;
-                FileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
+                 ErrorFileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
                 FileWriter errorWriter = new FileWriter(FileName);
                 errorWriter.Write("****************************");
                 errorWriter.Write(DateTime.Now.ToString());
@@ -202,7 +202,7 @@ namespace PortalWebApp.Utilities
             catch (Exception ex)
             {
                 string errorMsg = ex.Message;
-                FileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
+                 ErrorFileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
                 FileWriter errorWriter = new FileWriter(FileName);
                 errorWriter.Write("****************************");
                 errorWriter.Write(DateTime.Now.ToString());
@@ -351,9 +351,9 @@ namespace PortalWebApp.Utilities
                         myTankConfig.ErrorFilePath = this.ErrorFilePath;
                         myTankConfig.CheckRTUCondition = checkRTUCondition;
                         if (dr[tankIDOrdinal] == DBNull.Value)
-                            myTankConfig.TankID = 0;
+                            myTankConfig.TankID = "*** Empty ***";
                         else
-                            myTankConfig.TankID = Convert.ToInt32(dr[tankIDOrdinal]);
+                            myTankConfig.TankID = dr[tankIDOrdinal].ToString();
                         if (dr[rtuNumberOrdinal] == DBNull.Value)
                             myTankConfig.RTUNumber = "*** Empty ***";
                         else
@@ -363,164 +363,164 @@ namespace PortalWebApp.Utilities
                         else
                             myTankConfig.TankName = dr[tankNameOrdinal].ToString();
                         if (dr[tankHgtOrdinal] == DBNull.Value)
-                            myTankConfig.TankHgt =0;
+                            myTankConfig.TankHgt = "*** Empty ***";
                         else
-                            myTankConfig.TankHgt = Convert.ToDecimal(dr[tankHgtOrdinal]);
+                            myTankConfig.TankHgt = dr[tankHgtOrdinal].ToString();
                         if (dr[tankCapOrdinal] == DBNull.Value)
-                            myTankConfig.TankCap = 0;
+                            myTankConfig.TankCap = "*** Empty ***";
                         else
-                            myTankConfig.TankCap = Convert.ToDecimal( dr[tankCapOrdinal]);
+                            myTankConfig.TankCap = dr[tankCapOrdinal].ToString();
                         if (dr[capacityLimitOrdinal] == DBNull.Value)
-                            myTankConfig.CapacityLimit = 0;
+                            myTankConfig.CapacityLimit = "*** Empty ***";
                         else
-                            myTankConfig.CapacityLimit = Convert.ToDecimal(dr[capacityLimitOrdinal]);
+                            myTankConfig.CapacityLimit = dr[capacityLimitOrdinal].ToString();
                         if (dr[tankMinimumOrdinal] == DBNull.Value)
-                            myTankConfig.TankMinimum = 0;
+                            myTankConfig.TankMinimum = "*** Empty ***";
                         else
-                            myTankConfig.TankMinimum = Convert.ToDecimal(dr[tankMinimumOrdinal]);
+                            myTankConfig.TankMinimum = dr[tankMinimumOrdinal].ToString();
                         if (dr[reorderUsageOrdinal] == DBNull.Value)
-                            myTankConfig.ReorderUsage = 0;
+                            myTankConfig.ReorderUsage = "*** Empty ***";
                         else
-                            myTankConfig.ReorderUsage = Convert.ToInt32(dr[reorderUsageOrdinal]);
+                            myTankConfig.ReorderUsage = dr[reorderUsageOrdinal].ToString();
                         if (dr[safetyStockUsageOrdinal] == DBNull.Value)
-                            myTankConfig.SafetyStockUsage = 0;
+                            myTankConfig.SafetyStockUsage = "*** Empty ***";
                         else
-                            myTankConfig.SafetyStockUsage = Convert.ToInt32(dr[safetyStockUsageOrdinal]);
+                            myTankConfig.SafetyStockUsage = dr[safetyStockUsageOrdinal].ToString();
                         if (dr[lowLowLevelOrdinal] == DBNull.Value)
-                            myTankConfig.LowLowLevel = 0;
+                            myTankConfig.LowLowLevel = "*** Empty ***";
                         else
-                            myTankConfig.LowLowLevel = Convert.ToInt32(dr[lowLowLevelOrdinal]);
+                            myTankConfig.LowLowLevel =  dr[lowLowLevelOrdinal].ToString();
                         if (dr[lowLevelOrdinal] == DBNull.Value)
-                            myTankConfig.LowLevel = 0;
+                            myTankConfig.LowLevel = "*** Empty ***";
                         else
-                            myTankConfig.LowLevel = Convert.ToInt32(dr[lowLevelOrdinal]);
+                            myTankConfig.LowLevel =  dr[lowLevelOrdinal].ToString();
                         if (dr[highLevelOrdinal] == DBNull.Value)
-                            myTankConfig.HighLevel = 0;
+                            myTankConfig.HighLevel = "*** Empty ***";
                         else
-                            myTankConfig.HighLevel = Convert.ToInt32(dr[highLevelOrdinal]);
+                            myTankConfig.HighLevel =  dr[highLevelOrdinal].ToString();
                         if (dr[highHighLevelOrdinal] == DBNull.Value)
-                            myTankConfig.HighHighLevel = 0;
+                            myTankConfig.HighHighLevel = "*** Empty ***";
                         else
-                            myTankConfig.HighHighLevel = Convert.ToInt32(dr[highHighLevelOrdinal]);
+                            myTankConfig.HighHighLevel =  dr[highHighLevelOrdinal].ToString();
                         if (dr[fillDetectDeltaOrdinal] == DBNull.Value)
-                            myTankConfig.FillDetectDelta =0;
+                            myTankConfig.FillDetectDelta ="*** Empty ***";
                         else
-                            myTankConfig.FillDetectDelta = Convert.ToDecimal(dr[fillDetectDeltaOrdinal]);
+                            myTankConfig.FillDetectDelta =  dr[fillDetectDeltaOrdinal].ToString();
                         if (dr[shortFillDeltaOrdinal] == DBNull.Value)
-                            myTankConfig.ShortFillDelta =0;
+                            myTankConfig.ShortFillDelta ="*** Empty ***";
                         else
-                            myTankConfig.ShortFillDelta = Convert.ToDecimal(dr[shortFillDeltaOrdinal]);
+                            myTankConfig.ShortFillDelta =  dr[shortFillDeltaOrdinal].ToString();
                         if (dr[volumeDeltaOrdinal] == DBNull.Value)
-                            myTankConfig.VolumeDelta = 0;
+                            myTankConfig.VolumeDelta = "*** Empty ***";
                         else
-                            myTankConfig.VolumeDelta = Convert.ToInt32(dr[volumeDeltaOrdinal]);
+                            myTankConfig.VolumeDelta =  dr[volumeDeltaOrdinal].ToString();
                         if (dr[rateChangeDeltaOrdinal] == DBNull.Value)
-                            myTankConfig.RateChangeDelta = 0;
+                            myTankConfig.RateChangeDelta = "*** Empty ***";
                         else
-                            myTankConfig.RateChangeDelta = Convert.ToInt32(dr[rateChangeDeltaOrdinal]);
+                            myTankConfig.RateChangeDelta =  dr[rateChangeDeltaOrdinal].ToString();
                         if (dr[callsPerDayOrdinal] == DBNull.Value)
-                            myTankConfig.CallDay =0;
+                            myTankConfig.CallDay ="*** Empty ***";
                         else
-                            myTankConfig.CallDay = Convert.ToInt32(dr[callsPerDayOrdinal]);
+                            myTankConfig.CallDay =  dr[callsPerDayOrdinal].ToString();
                         if (dr[callDayOrdinal] == DBNull.Value)
-                            myTankConfig.CallDay =0;
+                            myTankConfig.CallDay ="*** Empty ***";
                         else
-                            myTankConfig.CallDay = Convert.ToInt32(dr[callDayOrdinal]);
+                            myTankConfig.CallDay =  dr[callDayOrdinal].ToString();
                         if (dr[intervalOrdinal] == DBNull.Value)
                             myTankConfig.Interval = "*** Empty ***";
                         else
                             myTankConfig.Interval = dr[intervalOrdinal].ToString();
                         if (dr[diagCallDayMaskOrdinal] == DBNull.Value)
-                            myTankConfig.DiagCallDayMask =0;
+                            myTankConfig.DiagCallDayMask ="*** Empty ***";
                         else
-                            myTankConfig.DiagCallDayMask = Convert.ToInt32(dr[diagCallDayMaskOrdinal]);
+                            myTankConfig.DiagCallDayMask =  dr[diagCallDayMaskOrdinal].ToString();
                         if (dr[dataLogDeltaOrdinal] == DBNull.Value)
-                            myTankConfig.DataLogDelta =0;
+                            myTankConfig.DataLogDelta ="*** Empty ***";
                         else
-                            myTankConfig.DataLogDelta = Convert.ToInt32(dr[dataLogDeltaOrdinal]);
+                            myTankConfig.DataLogDelta =  dr[dataLogDeltaOrdinal].ToString();
                         if (dr[usageDeltaOrdinal] == DBNull.Value)
-                            myTankConfig.UsageDelta =0;
+                            myTankConfig.UsageDelta ="*** Empty ***";
                         else
-                            myTankConfig.UsageDelta = Convert.ToInt32(dr[usageDeltaOrdinal]);
+                            myTankConfig.UsageDelta =  dr[usageDeltaOrdinal].ToString();
                         if (dr[wakeIntervalOrdinal] == DBNull.Value)
-                            myTankConfig.WakeInterval =0;
+                            myTankConfig.WakeInterval ="*** Empty ***";
                         else
-                            myTankConfig.WakeInterval = Convert.ToInt32(dr[wakeIntervalOrdinal]);
+                            myTankConfig.WakeInterval =  dr[wakeIntervalOrdinal].ToString();
                         if (dr[startTimeOrdinal] == DBNull.Value)
-                            myTankConfig.StartTime =DateTime.Now;
+                            myTankConfig.StartTime = "*** Empty ***";
                         else
-                            myTankConfig.StartTime = Convert.ToDateTime(dr[startTimeOrdinal]);
+                            myTankConfig.StartTime =  dr[startTimeOrdinal].ToString();
                         if (dr[highSetPointOrdinal] == DBNull.Value)
-                            myTankConfig.HighSetPoint =0;
+                            myTankConfig.HighSetPoint ="*** Empty ***";
                         else
-                            myTankConfig.HighSetPoint = Convert.ToDecimal(dr[highSetPointOrdinal]);
+                            myTankConfig.HighSetPoint =  dr[highSetPointOrdinal].ToString();
                         if (dr[lowSetPointOrdinal] == DBNull.Value)
-                            myTankConfig.LowSetPoint =0;
+                            myTankConfig.LowSetPoint ="*** Empty ***";
                         else
-                            myTankConfig.LowSetPoint = Convert.ToDecimal(dr[lowSetPointOrdinal]);
+                            myTankConfig.LowSetPoint = dr[lowSetPointOrdinal].ToString();
                         if (dr[sensorOffsetOrdinal] == DBNull.Value)
-                            myTankConfig.SensorOffset =0;
+                            myTankConfig.SensorOffset ="*** Empty ***";
                         else
-                            myTankConfig.SensorOffset = Convert.ToDecimal(dr[sensorOffsetOrdinal]);
+                            myTankConfig.SensorOffset =  dr[sensorOffsetOrdinal].ToString();
                         if (dr[coeffExpOrdinal] == DBNull.Value)
-                            myTankConfig.CoeffExp =0;
+                            myTankConfig.CoeffExp ="*** Empty ***";
                         else
-                            myTankConfig.CoeffExp = Convert.ToDecimal(dr[coeffExpOrdinal]);
+                            myTankConfig.CoeffExp =  dr[coeffExpOrdinal].ToString();
                         if (dr[specGravOrdinal] == DBNull.Value)
-                            myTankConfig.SpecGrav =0;
+                            myTankConfig.SpecGrav ="*** Empty ***";
                         else
-                            myTankConfig.SpecGrav = Convert.ToDecimal(dr[specGravOrdinal]);
+                            myTankConfig.SpecGrav =  dr[specGravOrdinal].ToString();
                         if (dr[deviceFillDetectDeltaOrdinal] == DBNull.Value)
-                            myTankConfig.DeviceFillDetectDelta =0;
+                            myTankConfig.DeviceFillDetectDelta ="*** Empty ***";
                         else
-                            myTankConfig.DeviceFillDetectDelta = Convert.ToDecimal(dr[deviceFillDetectDeltaOrdinal]);
+                            myTankConfig.DeviceFillDetectDelta =  dr[deviceFillDetectDeltaOrdinal].ToString();
                         if (dr[deviceFillHysteresisOrdinal] == DBNull.Value)
-                            myTankConfig.DeviceFillHysteresis =0;
+                            myTankConfig.DeviceFillHysteresis ="*** Empty ***";
                         else
-                            myTankConfig.DeviceFillHysteresis = Convert.ToDecimal(dr[deviceFillHysteresisOrdinal]);
+                            myTankConfig.DeviceFillHysteresis =  dr[deviceFillHysteresisOrdinal].ToString();
                         if (dr[deviceCriticalLowLevelOrdinal] == DBNull.Value)
-                            myTankConfig.DeviceCriticalLowLevel =false;
+                            myTankConfig.DeviceCriticalLowLevel = "*** Empty ***";
                         else
-                            myTankConfig.DeviceCriticalLowLevel = Convert.ToBoolean(dr[deviceCriticalLowLevelOrdinal]);
+                            myTankConfig.DeviceCriticalLowLevel =  dr[deviceCriticalLowLevelOrdinal].ToString();
                         if (dr[deviceLowLevelOrdinal] == DBNull.Value)
-                            myTankConfig.DeviceLowLevel =false;
+                            myTankConfig.DeviceLowLevel = "*** Empty ***";
                         else
-                            myTankConfig.DeviceLowLevel = Convert.ToBoolean(dr[deviceLowLevelOrdinal]);
+                            myTankConfig.DeviceLowLevel =  dr[deviceLowLevelOrdinal].ToString();
                         if (dr[deviceHighLevelOrdinal] == DBNull.Value)
-                            myTankConfig.DeviceHighLevel =false;
+                            myTankConfig.DeviceHighLevel = "*** Empty ***";
                         else
-                            myTankConfig.DeviceHighLevel = Convert.ToBoolean(dr[deviceHighLevelOrdinal]);
+                            myTankConfig.DeviceHighLevel =  dr[deviceHighLevelOrdinal].ToString();
                         if (dr[deviceCriticalHighLevelOrdinal] == DBNull.Value)
-                            myTankConfig.DeviceCriticalHighLevel =false;
+                            myTankConfig.DeviceCriticalHighLevel = "*** Empty ***";
                         else
-                            myTankConfig.DeviceCriticalHighLevel = Convert.ToBoolean(dr[deviceCriticalHighLevelOrdinal]);
+                            myTankConfig.DeviceCriticalHighLevel =  dr[deviceCriticalHighLevelOrdinal].ToString();
                         if (dr[deviceFillDetectOrdinal] == DBNull.Value)
-                            myTankConfig.DeviceFillDetect =false;
+                            myTankConfig.DeviceFillDetect = "*** Empty ***";
                         else
-                            myTankConfig.DeviceFillDetect = Convert.ToBoolean(dr[deviceFillDetectOrdinal]);
+                            myTankConfig.DeviceFillDetect =  dr[deviceFillDetectOrdinal].ToString();
                         if (dr[deviceUsageAlarmOrdinal] == DBNull.Value)
-                            myTankConfig.DeviceUsageAlarm =false;
+                            myTankConfig.DeviceUsageAlarm = "*** Empty ***";
                         else
-                            myTankConfig.DeviceUsageAlarm = Convert.ToBoolean(dr[deviceUsageAlarmOrdinal]);
+                            myTankConfig.DeviceUsageAlarm =  dr[deviceUsageAlarmOrdinal].ToString();
                         if (dr[hasExpectedCallAlarmOrdinal] == DBNull.Value)
-                            myTankConfig.HasExpectedCallAlarm =false;
+                            myTankConfig.HasExpectedCallAlarm = "*** Empty ***";
                         else
-                            myTankConfig.HasExpectedCallAlarm = Convert.ToBoolean(dr[hasExpectedCallAlarmOrdinal]);
+                            myTankConfig.HasExpectedCallAlarm =  dr[hasExpectedCallAlarmOrdinal].ToString();
                         if (dr[tankNormallyFillsOrdinal] == DBNull.Value)
-                            myTankConfig.TankNormallyFills =false;
+                            myTankConfig.TankNormallyFills = "*** Empty ***";
                         else
-                            myTankConfig.TankNormallyFills = Convert.ToBoolean(dr[tankNormallyFillsOrdinal]);
+                            myTankConfig.TankNormallyFills =  dr[tankNormallyFillsOrdinal].ToString();
                         //new code added to accomodate EnableLocation and EnableGPS
                        // D Arcilla
                      //   Oct 2020
                         if (dr[enableLocationOrdinal] == DBNull.Value)
-                            myTankConfig.EnableLocation =0;
+                            myTankConfig.EnableLocation = "*** Empty ***";
                         else
-                            myTankConfig.EnableLocation = Convert.ToInt32(dr[enableLocationOrdinal]);
+                            myTankConfig.EnableLocation =  dr[enableLocationOrdinal].ToString();
                         if (dr[enableGPSOrdinal] == DBNull.Value)
-                            myTankConfig.EnableGPS =0;
+                            myTankConfig.EnableGPS = "*** Empty ***";
                         else
-                            myTankConfig.EnableGPS = Convert.ToInt32(dr[enableGPSOrdinal]);
+                            myTankConfig.EnableGPS =  dr[enableGPSOrdinal].ToString();
                                    
                         myTankConfigs.Add(myTankConfig);
                     }
@@ -532,7 +532,7 @@ namespace PortalWebApp.Utilities
             catch (Exception ex)
             {
                 string errorMsg = ex.Message;
-                FileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
+                 ErrorFileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
                 FileWriter errorWriter = new FileWriter(FileName);
                 errorWriter.Write("****************************");
                 errorWriter.Write(DateTime.Now.ToString());
@@ -574,13 +574,13 @@ namespace PortalWebApp.Utilities
                 {
                     BulkConfigValueChecks();
                 }
-                if (this.HaveError && !wroteErrorFile)
-                    WriteErrorReport();
+                //if (this.HaveError && !wroteErrorFile)
+                //    WriteErrorReport();
             }
             catch (Exception ex)
             {
                 string errorMsg = ex.Message;
-                FileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
+                ErrorFileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
                 FileWriter errorWriter = new FileWriter(FileName);
                 errorWriter.Write("****************************");
                 errorWriter.Write(DateTime.Now.ToString());
@@ -604,7 +604,7 @@ namespace PortalWebApp.Utilities
             catch (Exception ex)
             {
                 string errorMsg = ex.Message;
-                FileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
+                ErrorFileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
                 FileWriter errorWriter = new FileWriter(FileName);
                 errorWriter.Write("****************************");
                 errorWriter.Write(DateTime.Now.ToString());
@@ -660,7 +660,7 @@ namespace PortalWebApp.Utilities
             catch (Exception ex)
             {
                 string errorMsg = ex.Message;
-                FileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
+                 ErrorFileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
                 FileWriter errorWriter = new FileWriter(FileName);
                 errorWriter.Write("****************************");
                 errorWriter.Write(DateTime.Now.ToString());
@@ -674,57 +674,59 @@ namespace PortalWebApp.Utilities
         {
             try
             {
+                int i = 0;
                 foreach (TankConfig aTankConfig in myTankConfigs)
                 {
-                    //aTankConfig.IntegerClassCheck("TankID");
-                    //aTankConfig.IntegerClassCheck("RTUNumber");
-                    //aTankConfig.DecimalClassCheck("TankHgt");
-                    //aTankConfig.DecimalClassCheck("TankCap");
-                    //aTankConfig.DecimalClassCheck("CapacityLimit");
-                    //aTankConfig.DecimalClassCheck("TankMinimum");
-                    //aTankConfig.IntegerClassCheck("ReorderUsage");
-                    //aTankConfig.IntegerClassCheck("SafetyStockUsage");
-                    //aTankConfig.DateTimeClassCheck("StartTime");
-                    //aTankConfig.IntegerClassCheck("CallDay");
-                    //aTankConfig.IntegerClassCheck("Interval");
-                    //aTankConfig.IntegerClassCheck("DiagCallDayMask");
-                    //aTankConfig.IntegerClassCheck("Callsperday");
-                    //aTankConfig.DecimalClassCheck("HighSetPoint");
-                    //aTankConfig.DecimalClassCheck("LowSetPoint");
-                    //aTankConfig.DecimalClassCheck("SensorOffset");
-                    //aTankConfig.DecimalClassCheck("CoeffExp");
-                    //aTankConfig.DecimalClassCheck("SpecGrav");
-                    //aTankConfig.IntegerClassCheck("LowLowLevel");
-                    //aTankConfig.IntegerClassCheck("LowLevel");
-                    //aTankConfig.IntegerClassCheck("HighLevel");
-                    //aTankConfig.IntegerClassCheck("HighHighLevel");
-                    //aTankConfig.DecimalClassCheck("FillDetectDelta");
-                    //aTankConfig.DecimalClassCheck("ShortFillDelta");
-                    //aTankConfig.IntegerClassCheck("VolumeDelta");
-                    //aTankConfig.IntegerClassCheck("RateChangeDelta");
-                    //aTankConfig.BoolClassCheck("DeviceCriticalLowLevel");
-                    //aTankConfig.BoolClassCheck("DeviceLowLevel");
-                    //aTankConfig.BoolClassCheck("DeviceHighLevel");
-                    //aTankConfig.BoolClassCheck("DeviceCriticalHighLevel");
-                    //aTankConfig.BoolClassCheck("DeviceFillDetect");
-                    //aTankConfig.DecimalClassCheck("DeviceFillDetectDelta");
-                    //aTankConfig.DecimalClassCheck("DeviceFillHysteresis");
-                    //aTankConfig.IntegerClassCheck("DataLogDelta");
-                    //aTankConfig.IntegerClassCheck("UsageDelta");
-                    //aTankConfig.IntegerClassCheck("WakeInterval");
-                    //aTankConfig.BoolClassCheck("DeviceUsageAlarm");
-                    //aTankConfig.BoolClassCheck("HasExpectedCallAlarm");
-                    //aTankConfig.BoolClassCheck("TankNormallyFills");
-                    //aTankConfig.BoolClassCheck("EnableGPS");
-                    //aTankConfig.BoolClassCheck("EnableLocation");
-                    //if (aTankConfig.HaveError)
-                    //    this.HaveError = true;
+                    i ++;
+                    aTankConfig.IntegerClassCheck("TankID");
+                    aTankConfig.IntegerClassCheck("RTUNumber");
+                    aTankConfig.DecimalClassCheck("TankHgt");
+                    aTankConfig.DecimalClassCheck("TankCap");
+                    aTankConfig.DecimalClassCheck("CapacityLimit");
+                    aTankConfig.DecimalClassCheck("TankMinimum");
+                    aTankConfig.IntegerClassCheck("ReorderUsage");
+                    aTankConfig.IntegerClassCheck("SafetyStockUsage");
+                    aTankConfig.DateTimeClassCheck("StartTime");
+                    aTankConfig.IntegerClassCheck("CallDay");
+                    aTankConfig.IntegerClassCheck("Interval");
+                    aTankConfig.IntegerClassCheck("DiagCallDayMask");
+                    aTankConfig.IntegerClassCheck("Callsperday");
+                    aTankConfig.DecimalClassCheck("HighSetPoint");
+                    aTankConfig.DecimalClassCheck("LowSetPoint");
+                    aTankConfig.DecimalClassCheck("SensorOffset");
+                    aTankConfig.DecimalClassCheck("CoeffExp");
+                    aTankConfig.DecimalClassCheck("SpecGrav");
+                    aTankConfig.IntegerClassCheck("LowLowLevel");
+                    aTankConfig.IntegerClassCheck("LowLevel");
+                    aTankConfig.IntegerClassCheck("HighLevel");
+                    aTankConfig.IntegerClassCheck("HighHighLevel");
+                    aTankConfig.DecimalClassCheck("FillDetectDelta");
+                    aTankConfig.DecimalClassCheck("ShortFillDelta");
+                    aTankConfig.IntegerClassCheck("VolumeDelta");
+                    aTankConfig.IntegerClassCheck("RateChangeDelta");
+                    aTankConfig.BoolClassCheck("DeviceCriticalLowLevel");
+                    aTankConfig.BoolClassCheck("DeviceLowLevel");
+                    aTankConfig.BoolClassCheck("DeviceHighLevel");
+                    aTankConfig.BoolClassCheck("DeviceCriticalHighLevel");
+                    aTankConfig.BoolClassCheck("DeviceFillDetect");
+                    aTankConfig.DecimalClassCheck("DeviceFillDetectDelta");
+                    aTankConfig.DecimalClassCheck("DeviceFillHysteresis");
+                    aTankConfig.IntegerClassCheck("DataLogDelta");
+                    aTankConfig.IntegerClassCheck("UsageDelta");
+                    aTankConfig.IntegerClassCheck("WakeInterval");
+                    aTankConfig.BoolClassCheck("DeviceUsageAlarm");
+                    aTankConfig.BoolClassCheck("HasExpectedCallAlarm");
+                    aTankConfig.BoolClassCheck("TankNormallyFills");
+                    aTankConfig.BoolClassCheck("EnableGPS");
+                    aTankConfig.BoolClassCheck("EnableLocation");
+                    if (aTankConfig.HaveError)
+                        this.HaveError = true;
                 }
             }
             catch (Exception ex)
             {
                 string errorMsg = ex.Message;
-                FileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
+                 ErrorFileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
                 FileWriter errorWriter = new FileWriter(FileName);
                 errorWriter.Write("****************************");
                 errorWriter.Write(DateTime.Now.ToString());
@@ -740,21 +742,21 @@ namespace PortalWebApp.Utilities
             {
                 foreach (TankConfig aTankConfig in myTankConfigs)
                 {
-                    //aTankConfig.GetCurrentDeviceID();
-                    //if (!aTankConfig.ValidateRTUNumber())
-                    //{
-                    //    aTankConfig.HaveError = true;
-                    //    this.HaveError = true;
-                    //    aTankConfig.StatusMessage = "TankID/RTU Number mismatch";
-                    //    aTankConfig.BadColumn = "RTUNumber";
-                    //    aTankConfig.BadColumnValue = aTankConfig.RTUNumber;
-                    //}
+                    aTankConfig.GetCurrentDeviceID();
+                    if (!aTankConfig.ValidateRTUNumber())
+                    {
+                        aTankConfig.HaveError = true;
+                        this.HaveError = true;
+                        aTankConfig.StatusMessage = "TankID/RTU Number mismatch";
+                        aTankConfig.BadColumn = "RTUNumber";
+                        aTankConfig.BadColumnValue = aTankConfig.RTUNumber;
+                    }
                 }
             }
             catch (Exception ex)
             {
                 string errorMsg = ex.Message;
-                FileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
+                 ErrorFileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
                 FileWriter errorWriter = new FileWriter(FileName);
                 errorWriter.Write("****************************");
                 errorWriter.Write(DateTime.Now.ToString());
@@ -768,36 +770,36 @@ namespace PortalWebApp.Utilities
         {
             try
             {
-              //  bool matchfound = false;
+                bool matchfound = false;
                 foreach (TankConfig aTankConfig in myTankConfigs)
                 {
-                  //  matchfound = false;
-                  //  aTankConfig.GetCurrentTankConfigInfo();
-                    //if (!this.SuperUser)
-                    //{
-                    //    foreach (int userOrganization in myUserOrganizations)
-                    //    {
-                    //        if (aTankConfig.OrganizationID == userOrganization)
-                    //        {
-                    //            matchfound = true;
-                    //            break;
-                    //        }
-                    //    }
-                    //    if (!matchfound)
-                    //    {
-                    //        this.HaveError = true;
-                    //        aTankConfig.HaveError = true;
-                    //        aTankConfig.StatusMessage = "TankID not within User scope";
-                    //        aTankConfig.BadColumn = "OrganizationID";
-                    //        aTankConfig.BadColumnValue = aTankConfig.OrganizationID.ToString();
-                    //    }
-                    //}
+                    matchfound = false;
+                    aTankConfig.GetCurrentTankConfigInfo();
+                    if (!this.SuperUser)
+                    {
+                        foreach (var userOrganization in myUserOrganizations)
+                        {
+                            if (aTankConfig.OrganizationID == userOrganization.OrganizationID)
+                            {
+                                matchfound = true;
+                                break;
+                            }
+                        }
+                        if (!matchfound)
+                        {
+                            this.HaveError = true;
+                            aTankConfig.HaveError = true;
+                            aTankConfig.StatusMessage = "TankID not within User scope";
+                            aTankConfig.BadColumn = "OrganizationID";
+                            aTankConfig.BadColumnValue = aTankConfig.OrganizationID.ToString();
+                        }
+                    }
                 }
             }
             catch (Exception ex)
             {
                 string errorMsg = ex.Message;
-                FileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
+                 ErrorFileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
                 FileWriter errorWriter = new FileWriter(FileName);
                 errorWriter.Write("****************************");
                 errorWriter.Write(DateTime.Now.ToString());
@@ -856,7 +858,7 @@ namespace PortalWebApp.Utilities
             catch (Exception ex)
             {
                 string errorMsg = ex.Message;
-                FileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
+                 ErrorFileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
                  FileWriter errorWriter = new FileWriter(FileName);
                 errorWriter.Write("****************************");
                 errorWriter.Write(DateTime.Now.ToString());
@@ -923,7 +925,7 @@ namespace PortalWebApp.Utilities
             catch (Exception ex)
             {
                 string errorMsg = ex.Message;
-                FileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
+                 ErrorFileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
                 FileWriter errorWriter = new FileWriter(FileName);
                 errorWriter.Write("****************************");
                 errorWriter.Write(DateTime.Now.ToString());

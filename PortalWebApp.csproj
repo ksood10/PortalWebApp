@@ -26,6 +26,9 @@
     <Reference Include="Adage_CSLA">
       <HintPath>bin\Debug\Adage_CSLA.dll</HintPath>
     </Reference>
+    <Reference Include="TankData">
+      <HintPath>bin\Debug\TankData.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
