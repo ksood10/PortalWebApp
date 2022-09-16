@@ -180,7 +180,7 @@ namespace PortalWebApp.Utilities
             {
                 string errorMsg = ex.Message;
                  ErrorFileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
-                FileWriter errorWriter = new FileWriter(FileName);
+                FileWriter errorWriter = new FileWriter(ErrorFileName);
                 errorWriter.Write("****************************");
                 errorWriter.Write(DateTime.Now.ToString());
                 errorWriter.Write("Error at GetUserOrganization - ");
@@ -203,7 +203,7 @@ namespace PortalWebApp.Utilities
             {
                 string errorMsg = ex.Message;
                  ErrorFileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
-                FileWriter errorWriter = new FileWriter(FileName);
+                FileWriter errorWriter = new FileWriter(ErrorFileName);
                 errorWriter.Write("****************************");
                 errorWriter.Write(DateTime.Now.ToString());
                 errorWriter.Write("Error at BuildListOfUserOrganizations - ");
@@ -313,7 +313,7 @@ namespace PortalWebApp.Utilities
                 int shortFillDeltaOrdinal = dt.Columns["ShortFillDelta"].Ordinal;
                 int volumeDeltaOrdinal = dt.Columns["VolumeDelta"].Ordinal;
                 int rateChangeDeltaOrdinal = dt.Columns["RateChangeDelta"].Ordinal;
-                int callsPerDayOrdinal = dt.Columns["CallsPerDay"].Ordinal;
+                int callsperdayOrdinal = dt.Columns["Callsperday"].Ordinal;
                 int callDayOrdinal = dt.Columns["CallDay"].Ordinal;
                 int intervalOrdinal = dt.Columns["Interval"].Ordinal;
                 int diagCallDayMaskOrdinal = dt.Columns["DiagCallDayMask"].Ordinal;
@@ -418,10 +418,10 @@ namespace PortalWebApp.Utilities
                             myTankConfig.RateChangeDelta = "*** Empty ***";
                         else
                             myTankConfig.RateChangeDelta =  dr[rateChangeDeltaOrdinal].ToString();
-                        if (dr[callsPerDayOrdinal] == DBNull.Value)
-                            myTankConfig.CallDay ="*** Empty ***";
+                        if (dr[callsperdayOrdinal] == DBNull.Value)
+                            myTankConfig.Callsperday ="*** Empty ***";
                         else
-                            myTankConfig.CallDay =  dr[callsPerDayOrdinal].ToString();
+                            myTankConfig.Callsperday =  dr[callsperdayOrdinal].ToString();
                         if (dr[callDayOrdinal] == DBNull.Value)
                             myTankConfig.CallDay ="*** Empty ***";
                         else
@@ -574,8 +574,8 @@ namespace PortalWebApp.Utilities
                 {
                     BulkConfigValueChecks();
                 }
-                //if (this.HaveError && !wroteErrorFile)
-                //    WriteErrorReport();
+                if (this.HaveError && !wroteErrorFile)
+                    WriteErrorReport();
             }
             catch (Exception ex)
             {
@@ -775,6 +775,7 @@ namespace PortalWebApp.Utilities
                 {
                     matchfound = false;
                     aTankConfig.GetCurrentTankConfigInfo();
+                    this.SuperUser = true;
                     if (!this.SuperUser)
                     {
                         foreach (var userOrganization in myUserOrganizations)
@@ -828,7 +829,7 @@ namespace PortalWebApp.Utilities
                         aTankConfig.CallDayCheck();
                         aTankConfig.DiagCallDayMaskCheck();
                         aTankConfig.IntervalCheck();
-                        aTankConfig.CallsPerDayCheck();
+                        aTankConfig.CallsperdayCheck();
                         aTankConfig.SensorOffsetCheck();
                         aTankConfig.CoeffExpCheck();
                         aTankConfig.SpecGravCheck();
@@ -884,10 +885,10 @@ namespace PortalWebApp.Utilities
                     {
                         if (aTankConfig.PerformUpdate)
                         {
-                            //if (aTankConfig.Add())
-                            //    aTankConfig.StatusMessage = "Successful Update";
-                            //else
-                            //    aTankConfig.StatusMessage = "Update Failed";
+                            if (aTankConfig.Add())
+                                aTankConfig.StatusMessage = "Successful Update";
+                            else
+                                aTankConfig.StatusMessage = "Update Failed";
                             sb.Append(DateTime.Now.ToString().PadRight(25));
                             sb.Append(aTankConfig.TankID.ToString().PadRight(20));
                             sb.Append(aTankConfig.StatusMessage);
@@ -906,10 +907,10 @@ namespace PortalWebApp.Utilities
                                 throttleamount = this.ThrottleAmount * 1000;
                                 Util.Throttle(throttleamount);
                             }
-                            //if (aTankConfig.Add())
-                            //    aTankConfig.StatusMessage = "Successful Update";
-                            //else
-                            //    aTankConfig.StatusMessage = "Update Failed";
+                            if (aTankConfig.Add())
+                                aTankConfig.StatusMessage = "Successful Update";
+                            else
+                                aTankConfig.StatusMessage = "Update Failed";
                             processedRecordCount = processedRecordCount + 1;
                             sb.Append(DateTime.Now.ToString().PadRight(25));
                             sb.Append(aTankConfig.TankID.ToString().PadRight(20));

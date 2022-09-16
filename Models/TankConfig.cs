@@ -62,7 +62,7 @@ namespace PortalWebApp.Models
         public string TankSensorLength                 { get; set; }
         public string TankSensorDesc                   { get; set; }
         public string TankSensorNumber                 { get; set; }
-        public string CallsPerDay                      { get; set; }
+        public string Callsperday                      { get; set; }
         public string CallDay                          { get; set; }
         public string DiagCallDayMask                  { get; set; }
         public string UsageDelta                       { get; set; }
@@ -140,7 +140,7 @@ namespace PortalWebApp.Models
         public decimal CurrentSensorOffset { get; private set; }
         public decimal CurrentDeviceFillHysteresis { get;  set; }
         public int CurrentHighLevel { get;  set; }
-        public int CurrentCallsPerDay { get;  set; }
+        public int CurrentCallsperday { get;  set; }
 
         public TankConfig()
         {
@@ -190,7 +190,7 @@ namespace PortalWebApp.Models
                 sb.Append("select t.organizationid, t.tankconfigid, CapacityLimit, TankCap, ");
                 sb.Append("LowLowLevel, LowLevel, HighLevel, FillDetectDelta, ShortFillDelta, ");
                 sb.Append("HighHighLevel, VolumeDelta, RateChangeDelta, SensorOffset, DeviceFillHysteresis, ");
-                sb.Append("CallsPerDay, Interval, ModelNumber, HasGPS, HasModem  ");
+                sb.Append("Callsperday, Interval, ModelNumber, HasGPS, HasModem  ");
                 sb.Append("from tank t ");
                 sb.Append("inner join tankconfig tc on t.tankconfigid = tc.tankconfigid ");
                 sb.Append("inner join device d on t.deviceid = d.deviceid ");
@@ -226,7 +226,7 @@ namespace PortalWebApp.Models
                                 this.CurrentRateChangeDelta = dr.GetInt32(11);
                                 this.CurrentSensorOffset = dr.GetDecimal(12);
                                 this.CurrentDeviceFillHysteresis = dr.GetDecimal(13);
-                                this.CurrentCallsPerDay = dr.GetInt32(14);
+                                this.CurrentCallsperday = dr.GetInt32(14);
                                 this.CurrentInterval = dr.GetInt32(15);
                                 //this.CurrentDeviceFillDetect = dr.GetDecimal(16);
                                 this.CurrentModelNumber = dr.GetString(16);
@@ -410,25 +410,25 @@ namespace PortalWebApp.Models
                         }
                         else
                             break;
-                    //case "Callsperday":
-                    //    if (this.CallsPerDay != "*** Empty ***")
-                    //    {
-                    //        if (Utilities.ConvertStringToInt(this.CallDay))
-                    //        {
-                    //            this.PerformUpdate = true;
-                    //            break;
-                    //        }
-                    //        else
-                    //        {
-                    //            this.HaveError = true;
-                    //            this.StatusMessage = "CallsPerDay Is Not An Integer";
-                    //            this.BadColumn = "CallsPerDay";
-                    //            this.BadColumnValue = this.CallrDay;
-                    //            break;
-                    //        }
-                    //    }
-                    //    else
-                    //        break;
+                    case "Callsperday":
+                        if (this.Callsperday != "*** Empty ***")
+                        {
+                            if (Util.ConvertStringToInt(this.Callsperday))
+                            {
+                                this.PerformUpdate = true;
+                                break;
+                            }
+                            else
+                            {
+                                this.HaveError = true;
+                                this.StatusMessage = "Callsperday Is Not An Integer";
+                                this.BadColumn = "Callsperday";
+                                this.BadColumnValue = this.Callsperday;
+                                break;
+                            }
+                        }
+                        else
+                            break;
                     case "CallDay":
                         if (this.CallDay != "*** Empty ***")
                         {
@@ -1599,10 +1599,10 @@ namespace PortalWebApp.Models
             int interval = 0;
             try
             {
-                if (this.CallsPerDay != "*** Empty ***")
-                    callsperday = int.Parse(this.CallsPerDay);
+                if (this.Callsperday != "*** Empty ***")
+                    callsperday = int.Parse(this.Callsperday);
                 else
-                    callsperday = this.CurrentCallsPerDay;
+                    callsperday = this.CurrentCallsperday;
                 if (this.Interval != "*** Empty ***")
                     interval = int.Parse(this.Interval);
                 else
@@ -1656,20 +1656,20 @@ namespace PortalWebApp.Models
             }
         }
 
-        internal void CallsPerDayCheck()
+        internal void CallsperdayCheck()
         {
             try
             {
                 int callsperday = 0;
-                if (this.CallsPerDay != "*** Empty ***")
+                if (this.Callsperday != "*** Empty ***")
                 {
-                    callsperday = int.Parse(this.CallsPerDay);
+                    callsperday = int.Parse(this.Callsperday);
                     if (callsperday < 1 || callsperday > 23)
                     {
                         this.HaveError = true;
-                        this.StatusMessage = "Invalid CallsPerDay";
-                        this.BadColumn = "CallsPerDay";
-                        this.BadColumnValue = this.CallsPerDay;
+                        this.StatusMessage = "Invalid Callsperday";
+                        this.BadColumn = "Callsperday";
+                        this.BadColumnValue = this.Callsperday;
                     }
                 }
             }
@@ -1680,7 +1680,7 @@ namespace PortalWebApp.Models
                 FileWriter errorWriter = new FileWriter(fileName);
                 errorWriter.Write("****************************");
                 errorWriter.Write(DateTime.Now.ToString());
-                errorWriter.Write("Error at CallsPerDayCheck - ");
+                errorWriter.Write("Error at CallsperdayCheck - ");
                 errorWriter.Write(ex.Message);
                 errorWriter.Close();
             }
@@ -2467,7 +2467,7 @@ namespace PortalWebApp.Models
                 successfulupdate = Util.UpdateTankConfig(this.ConnectionString, int.Parse(this.TankID), this.CurrentTankConfigID, this.UserID,
                                             this.TankName, this.TankHgt, this.TankCap, this.CapacityLimit,
                                             this.LimitCapacityFlag, this.TankMinimum, this.ReorderUsage,
-                                            this.SafetyStockUsage, this.StartTime, this.CallsPerDay, this.CallDay,
+                                            this.SafetyStockUsage, this.StartTime, this.Callsperday, this.CallDay,
                                             this.Interval, this.DiagCallDayMask, this.HighSetPoint, this.LowSetPoint,
                                             this.SensorOffset, this.CoeffExp, this.SpecGrav, this.LowLowLevel,
                                             this.LowLevel, this.HighLevel, this.HighHighLevel, this.FillDetectDelta,

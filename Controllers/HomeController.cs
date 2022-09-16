@@ -169,32 +169,32 @@ namespace PortalWebApp.Controllers
             if (conn == "ProdString")               realConn = Env.Prod.Value;
 
             myBulkConfigurator = new BulkConfiguratorQueue(realConn, filename, userid, throttlenum, throttleduration, rtu);
-            //if (myBulkConfigurator.HaveEXCELReadError)
-            //{
-            //   // statusLBL.ForeColor = Color.Red;
-            //   // statusLBL.Text = "Problem reading the EXCEL sheet. Make sure all columns are present";
-            //    validationError = true;
-            //}
-            //else
-            //{
-            //    totalEXCELCount = myBulkConfigurator.TotalEXCELCount;
-            //   // progressBar1.Maximum = totalEXCELCount;
-            //    if (!myBulkConfigurator.HaveError) 
-            //    {
-            //        bulkUpdate.StatusString= "Data Validation Checks Finished.  Now processing updates";
-            //        ProcessAllEXCELRecords();
-            //       // th1 = new Thread(new ThreadStart(ProcessAllEXCELRecords));
-            //        //Timer.Enabled = true;
-            //        //Timer.Start();
-            //       // th1.Start();
-            //    }
-            //    else
-            //    {
-            //       // statusLBL.ForeColor = Color.Red;
-            //      //  statusLBL.Text = "Errors found in EXCEL file. Review error report";
-            //        validationError = true;
-            //    }
-            //}
+            if (myBulkConfigurator.HaveEXCELReadError)
+            {
+                // statusLBL.ForeColor = Color.Red;
+                // statusLBL.Text = "Problem reading the EXCEL sheet. Make sure all columns are present";
+                validationError = true;
+            }
+            else
+            {
+                totalEXCELCount = myBulkConfigurator.TotalEXCELCount;
+                // progressBar1.Maximum = totalEXCELCount;
+                if (!myBulkConfigurator.HaveError)
+                {
+                    bulkUpdate.StatusString = "Data Validation Checks Finished.  Now processing updates";
+                    ProcessAllEXCELRecords();
+                    // th1 = new Thread(new ThreadStart(ProcessAllEXCELRecords));
+                    //Timer.Enabled = true;
+                    //Timer.Start();
+                    // th1.Start();
+                }
+                else
+                {
+                    // statusLBL.ForeColor = Color.Red;
+                    //  statusLBL.Text = "Errors found in EXCEL file. Review error report";
+                    validationError = true;
+                }
+            }
             TempData["Status"] = "Excel File Imported !";
             return RedirectToAction("BulkConfig");
             ///////////////////////////////////////////////////////////////////////////////////////////////

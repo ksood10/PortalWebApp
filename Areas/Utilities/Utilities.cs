@@ -33,7 +33,7 @@ namespace PortalWebApp.Utilities {
         public static int shortFillDeltaOrdinal { get; set; }
         public static int volumeDeltaOrdinal { get; set; }
         public static int rateChangeDeltaOrdinal { get; set; }
-        public static int callsPerDayOrdinal { get; set; }
+        public static int callsperdayOrdinal { get; set; }
         public static int callDayOrdinal { get; set; }
         public static int intervalOrdinal { get; set; }
         public static int diagCallDayMaskOrdinal { get; set; }
@@ -165,7 +165,7 @@ namespace PortalWebApp.Utilities {
 
                 new SqlParameter("@ReorderUsage", SqlDbType.Int)                { Value = (dr[reorderUsageOrdinal] == DBNull.Value) ? 0 : dr[reorderUsageOrdinal] },
                 new SqlParameter("@SafetyStockUsage", SqlDbType.Int)            { Value = (dr[safetyStockUsageOrdinal] == DBNull.Value) ? 0 : dr[safetyStockUsageOrdinal] },
-                new SqlParameter("@Callsperday", SqlDbType.Int)                 { Value = (dr[callsPerDayOrdinal] == DBNull.Value) ? 0 : dr[callsPerDayOrdinal] },
+                new SqlParameter("@Callsperday", SqlDbType.Int)                 { Value = (dr[callsperdayOrdinal] == DBNull.Value) ? 0 : dr[callsperdayOrdinal] },
                 new SqlParameter("@CallDay", SqlDbType.Int)                     { Value = (dr[callDayOrdinal] == DBNull.Value) ? 0 : dr[callDayOrdinal] },
 
                 new SqlParameter("@StartTime", SqlDbType.DateTime)              { Value = (dr[startTimeOrdinal] == DBNull.Value) ? 0 : dr[startTimeOrdinal] },
@@ -227,7 +227,7 @@ namespace PortalWebApp.Utilities {
              shortFillDeltaOrdinal = dt.Columns["ShortFillDelta"].Ordinal;
              volumeDeltaOrdinal = dt.Columns["VolumeDelta"].Ordinal;
              rateChangeDeltaOrdinal = dt.Columns["RateChangeDelta"].Ordinal;
-             callsPerDayOrdinal = dt.Columns["CallsPerDay"].Ordinal;
+             callsperdayOrdinal = dt.Columns["Callsperday"].Ordinal;
              callDayOrdinal = dt.Columns["CallDay"].Ordinal;
              intervalOrdinal = dt.Columns["Interval"].Ordinal;
              diagCallDayMaskOrdinal = dt.Columns["DiagCallDayMask"].Ordinal;
@@ -710,6 +710,7 @@ namespace PortalWebApp.Utilities {
                 string errorMessage = ex.Message;
                 userID = -1;
             }
+           
             return userID;
         }
 
