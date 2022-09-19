@@ -1,5 +1,7 @@
-﻿using PortalWebApp.Areas.Utilities;
+﻿using Microsoft.AspNetCore.SignalR;
+using PortalWebApp.Areas.Utilities;
 using PortalWebApp.Data;
+using PortalWebApp.Hubs;
 using PortalWebApp.Models;
 using System;
 using System.Collections.Generic;
@@ -73,13 +75,8 @@ namespace PortalWebApp.Utilities
         }
 
         private PortalWebAppContext _databaseContext;
-        public BulkConfiguratorQueue(string conn, string excelfilename, int userid, int recordthrottle, int throttleamount, bool checkrtu)
+        public BulkConfiguratorQueue(string conn, string excelfilename, int userid, int recordthrottle, int throttleamount, bool checkrtu , IHubContext<ProgressHub> _notificationHubContext)
         {
-
-            BulkUpdate bulkUpdate = new BulkUpdate();
-           // if (conn == "DEVELOPMENT") conn = "Server=TankdataLSN1\\TankData;Database=TankData_TDG;User ID=EmailManager;pwd=tanklink5410";
-          //  if (conn == "PRODUCTION") conn = "Server=Prod";
-           // _databaseContext = databaseContext;
             this.ConnectionString = conn;
             this.FileName = excelfilename;
             this.UserID = userid;
@@ -87,13 +84,9 @@ namespace PortalWebApp.Utilities
             this.ThrottleAmount = throttleamount;
             wroteErrorFileHeadings = false;
             this.checkRTUCondition = checkrtu;
-            //this.ErrorFilePath = "C:\\BulkConfig\\ErrorFile\\";
             this.ErrorFilePath = AppDomain.CurrentDomain.BaseDirectory + "ErrorFile";
-            //this.Error ErrorFileName = this.ErrorFilePath + "Errors_" + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + DateTime.Now.Second.ToString() + ".xlsx";
             this.ErrorFileName = this.ErrorFilePath + "\\" + "Errors_" + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + DateTime.Now.Second.ToString() + ".xlsx";
-            //this.StatusFilePath = "C:\\BulkConfig\\SummaryFile\\";
             this.StatusFilePath = AppDomain.CurrentDomain.BaseDirectory + "SummaryFile";
-            //this.Status ErrorFileName = this.StatusFilePath + "Summary_" + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".txt";
             this.StatusFileName = this.StatusFilePath + "\\" + "Summary_" + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".txt";
             DeleteOldReportFiles();
             GetUserOrganization();
@@ -105,23 +98,13 @@ namespace PortalWebApp.Utilities
                 if (!this.HaveEXCELReadError)
                 {
                     // MessageBox.Show("# of EXCEL Records To Process: " + myTankConfigs.Count.ToString());
+                    BulkUpdate.TotalRows = myTankConfigs.Count;
                     this.TotalEXCELCount = myTankConfigs.Count;
+                    
                     //myThread = new Thread(new ThreadStart(ValidateTheEXCELFile));
-                    ValidateTheEXCELFile();
+                    ValidateTheEXCELFile(_notificationHubContext);
                 }
             }
-        }
-
-        private string BuildOleDbConnectionString()
-        {
-            sb.Length = 0;
-            sb.Append(oleDB);
-            sb.Append(this.FileName);
-            sb.Append(";Extended Properties=");
-            sb.Append(Convert.ToChar(34).ToString());
-            sb.Append("Excel 12.0 Xml;HDR=YES;IMEX=1;TypeGuessRows=0");
-            sb.Append(Convert.ToChar(34).ToString());
-            return sb.ToString();
         }
 
         private void DeleteOldReportFiles()
@@ -542,40 +525,34 @@ namespace PortalWebApp.Utilities
             }
         }
 
-        internal void ValidateTheEXCELFile()
+        internal async void ValidateTheEXCELFile(IHubContext<ProgressHub> _notificationHubContext)
         {
             try
             {
                 RequiredColumnsCheck();
-                if (this.HaveError && !wroteErrorFile)
-                    WriteErrorReport();
-                if (!this.HaveError)
-                    DataTypeCheck();
-                if (this.HaveError && !wroteErrorFile)
-                    WriteErrorReport();
-                if (!this.HaveError)
-                {
-                    if (checkRTUCondition)
-                    {
-                        ValidateTankIDRTUNumber();
-                    }
-                }
-                if (this.HaveError && !wroteErrorFile)
-                    WriteErrorReport();
+                await _notificationHubContext.Clients.All.SendAsync("sendToUser", 1, 5);
+
+                if (this.HaveError && !wroteErrorFile)  WriteErrorReport();
+                if (!this.HaveError)                    DataTypeCheck();
+                await _notificationHubContext.Clients.All.SendAsync("sendToUser", 2, 5);
+
+                if (this.HaveError && !wroteErrorFile)  WriteErrorReport();
+                if (!this.HaveError && checkRTUCondition)  ValidateTankIDRTUNumber();
+                await _notificationHubContext.Clients.All.SendAsync("sendToUser", 3, 5);
+                if (this.HaveError && !wroteErrorFile)  WriteErrorReport();
+               
                 if (!this.HaveError)
                 {
                     ValidateTankScope();
                     if (this.HaveError)
                         WriteErrorReport();
                 }
-                if (this.HaveError && !wroteErrorFile)
-                    WriteErrorReport();
-                if (!this.HaveError)
-                {
-                    BulkConfigValueChecks();
-                }
-                if (this.HaveError && !wroteErrorFile)
-                    WriteErrorReport();
+                await _notificationHubContext.Clients.All.SendAsync("sendToUser", 4, 5);
+                if (this.HaveError && !wroteErrorFile)  WriteErrorReport();
+                if (!this.HaveError)                    BulkConfigValueChecks();
+                if (this.HaveError && !wroteErrorFile)  WriteErrorReport();
+                await _notificationHubContext.Clients.All.SendAsync("sendToUser", 5, 5);
+
             }
             catch (Exception ex)
             {
@@ -721,6 +698,7 @@ namespace PortalWebApp.Utilities
                     aTankConfig.BoolClassCheck("EnableLocation");
                     if (aTankConfig.HaveError)
                         this.HaveError = true;
+                   
                 }
             }
             catch (Exception ex)
@@ -869,7 +847,7 @@ namespace PortalWebApp.Utilities
             }
         }
 
-        public void ApplyTankConfigChanges()
+        public async void ApplyTankConfigChanges(IHubContext<ProgressHub> _notificationHubContext)
         {
             int recordsToProcessPerSecond = this.RecordThrottle;
             int processedRecordCount = 0;
@@ -921,6 +899,7 @@ namespace PortalWebApp.Utilities
                         }
                     }
                     this.CurrentEXCELCount = i;
+                    await _notificationHubContext.Clients.All.SendAsync("sendToProcessing", this.CurrentEXCELCount, myTankConfigs.Count);
                 }
             }
             catch (Exception ex)
@@ -936,17 +915,6 @@ namespace PortalWebApp.Utilities
             }
         }
 
-        public int GetCurrentEXCELCount()
-        {
-            return this.CurrentEXCELCount;
-        }
-
-        public string TestDLL()
-        {
-            return "hello";
-        }
-
-       
     }
 
 }

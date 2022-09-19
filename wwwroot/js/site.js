@@ -11,5 +11,20 @@
             $('#UploadBtn').prop("disabled", true);
     });
 
+    $('#UploadBtn').click(function () {
+        var totalTasks = document.getElementById("totalTasks").value;
+        $.ajax({
+            url: '/Home/ImportExcelFile/' + totalTasks,
+            type: "POST",
+            contentType: false,
+            processData: false, // Not to process data
+            async: true,
+            success: function (result) {
+                console.log(result);
+            },
+            error: function (err) { alert(err.statusText); }
+        });
+    });
+
   
 });

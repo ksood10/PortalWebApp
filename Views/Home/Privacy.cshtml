@@ -1,60 +1,27 @@
-﻿@{    ViewData["Title"] = "Privacy Policy";}
-<link href="https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css"
-      rel="stylesheet">   @*I got this link from Tutorials point*@
-     <div class="container">
-                <div class="col-sm-2">        <input type="button" id="UploadBtn" class="btn btn-danger" value="Upload" />      </div>
-        <div class="progress">
-            <div id="prog" class="progress-bar progress-bar-striped" role="progressbar" style="min-width: 100%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" ></div>
-        </div>
+﻿@using PortalWebApp.Models
+@model Article
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<h1 class="display-4">Welcome</h1>
+@using (Html.BeginForm("Index", "Home", FormMethod.Post, new { id = "Article" }))
+{
+    <div class="row">
+        <div > @Html.TextBoxFor(model => model.totalTasks)        </div>
     </div>
-    @section scripts{
-        <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
-        <script src="https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
-        <script>
 
-            $('#UploadBtn').click(function () {
-                var fileData = new FormData();
-                $.ajax({
-                    url: '/Home/UploadFiles',
-                    type: "POST",
-                    contentType: false, // Not to set any content header
-                    processData: false, // Not to process data
-                    data: fileData,
-                    async: false,
-                    success: function (result) {
-                        console.log(result);
-                        if (result != "") {
-                            LoadProgressBar(result); //calling LoadProgressBar function to load the progress bar.
-                        }
-                    },
-                    error: function (err) {                        alert(err.statusText);                    }
-                });
+    <div class="progress">
+        <div id="progBar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 1%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
 
-            });
+    <div id="results">
+        <input type="button" id="UploadBtn" class="btn btn-danger" value="Run CONFIG IMPORT   " />
+    </div>
 
-            function LoadProgressBar(result) {
-                var progressbar = $("#prog");
-                progressbar.show();
-                $("#prog").progressbar({
-                    value: false,
-                    change: function () {
-                        var progval = progressbar.progressbar("value") + "%";
-                        console.log(progval);
-                      //  progressLabel.text(progval);  // Showing the progress increment value in progress bar
-                    },
-                    complete: function () {
-                        progressbar.hide(); 
-                    }
-                });
-                function progress() {
-                    var val = progressbar.progressbar("value") || 0;
-                    progressbar.progressbar("value", val + 1);
-                    console.log("inside the fuction");
-                    if (val < 99) {
-                        setTimeout(progress, 600);
-                    }
-                }
-                setTimeout(progress, 1500);
-            }
-        </script>
-    } 
+}
+<p id="user"></p>
+<div id="articleList"></div>
+
+<script src="~/lib/signalr/signalr.js"></script>
+<script src="~/js/notification.js"></script>

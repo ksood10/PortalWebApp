@@ -5,8 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="Areas\Utilities\BulkConfiguratorQueue.cs" />
-    <Content Include="Areas\Utilities\Utilities.cs" />
+    <Compile Remove="Hubs\NotificationHub.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Utilities\BulkConfiguratorQueue.cs" />
+    <Content Include="Utilities\Utilities.cs" />
   </ItemGroup>
 
   <ItemGroup>
