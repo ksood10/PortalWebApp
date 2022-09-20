@@ -19,14 +19,14 @@
 {
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-    <div style="width:70%">
+    <div style="width:80%">
         <table class="table table-striped">
 
 
 
             <tr>
-                <td>@Html.LabelFor(model => model.ThrottleNum)</td>
-                <td>
+                <td style="width:200px">@Html.LabelFor(model => model.ThrottleNum)</td>
+                <td style="width:150px">
 
                     @Html.EditorFor(model => model.ThrottleNum, new
                    {
@@ -146,8 +146,6 @@
             var rtu = document.getElementById("RTU").checked;
               var fullPath = document.getElementById("FileName").value;
             var filename = fullPath.replace(/^.*[\\\/]/, '');
-
-           // var filename = document.getElementById("FileName").value.fullPath.replace(/^.*[\\\/]/, '');
             console.log(conn + '---' + userid + "---" + throttlenum + "--" + throttleduration + "--" + rtu + "--" + filename);
 
             $.ajax({
