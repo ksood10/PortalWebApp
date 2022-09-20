@@ -10,13 +10,9 @@ using PortalWebApp.Interface;
 using PortalWebApp.Models;
 using PortalWebApp.Utilities;
 using System;
-using System.Data;
-using System.Data.SqlClient;
 using System.Diagnostics;
-using System.Threading;
-using System.Timers;
+
 using static PortalWebApp.Utilities.Util;
-using Timer = System.Threading.Timer;
 
 namespace PortalWebApp.Controllers
 {
@@ -36,7 +32,7 @@ namespace PortalWebApp.Controllers
         private BulkConfiguratorQueue myBulkConfigurator;
         private int totalEXCELCount;
         private bool validationError;
-        private Thread th1;
+
         private readonly IHubContext<ProgressHub> _notificationHubContext;
         private readonly IHubContext<ProgressUserHub> _notificationUserHubContext;
         private readonly IUserConnectionManager _userConnectionManager;
@@ -126,16 +122,6 @@ namespace PortalWebApp.Controllers
             return View();
         }
 
-        public IActionResult check(BulkUpdate model)
-        {
-            //CALCULATING PERCENTAGE BASED ON THE PARAMETERS SENT
-           // var percentage = (progressCount * 100) / totalItems;
-            //PUSHING DATA TO ALL CLIENTS
-          //  _hubContext.Clients.All.SendAsync(progressMessage, percentage + "%");
-            TempData["Status"] = string.Format("Env--{0} :::  User -- {1}::: ThrottleNum -- {2}:::Duration-- {3}:::RTU--{4}:::File--{5}", model.Environment, model.UserID, model.ThrottleNum, model.ThrottleDuration, model.RTU, model.FileName);
-            return RedirectToAction("BulkConfig");
-        }
-       
         public IActionResult Privacy()
         {
             return View();
@@ -156,17 +142,6 @@ namespace PortalWebApp.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        [Route("/Home/UploadFiles/{userid}/{throttlenum}/{throttleduration}/{rtu}/{filename}")]
-        public string UploadFiles(int userid, int throttlenum, int throttleduration , bool rtu, string filename)
-        {
-            int x = userid;
-            int y = throttlenum;
-            int z = throttleduration;
-            bool r = rtu;
-            string f = filename;
-            return "test result :::" +x.ToString() + y.ToString() + z.ToString()+ r.ToString() + f;
-        }
-
         private void ProcessAllEXCELRecords()
         {
             try
@@ -179,100 +154,28 @@ namespace PortalWebApp.Controllers
             }
         }
 
-        [Route("/Home/ImportExcelFile/{totaltasks}")]
-        [HttpPost]
-        public async void ImportExcelFile(Article model, string totaltasks)
-        {
-            // work on a fictitious task
-            int intTotalTasks = Convert.ToInt32(totaltasks);
-            for (int c = 1; c <= intTotalTasks; c++)
-            {
-                //do cth task
-                Thread.Sleep(50);
-                //end task
-                await _notificationHubContext.Clients.All.SendAsync("sendToUser", c, Convert.ToInt32(totaltasks));
-            }
-        }
-
         [Route("/Home/ImportExcelFile/{conn}/{userid}/{throttlenum}/{throttleduration}/{rtu}/{filename}")]
         [HttpPost]
         public IActionResult ImportExcelFile(string conn, int userid, int throttlenum, int throttleduration, bool rtu, string filename)
         {
-
-            BulkUpdate bulkUpdate = new BulkUpdate();
-            ///////////////////////////////////////////////////////////////////////////////////////////////
-            ///
             var realConn = "";
             if (conn == "DevString")                realConn = Env.Dev.Value;
             if (conn == "ProdString")               realConn = Env.Prod.Value;
 
             myBulkConfigurator = new BulkConfiguratorQueue(realConn, filename, userid, throttlenum, throttleduration, rtu, _notificationHubContext);
             if (myBulkConfigurator.HaveEXCELReadError)
-            {
-                // statusLBL.ForeColor = Color.Red;
-                // statusLBL.Text = "Problem reading the EXCEL sheet. Make sure all columns are present";
                 validationError = true;
-            }
             else
             {
                 totalEXCELCount = myBulkConfigurator.TotalEXCELCount;
                 TempData["Status"] = "Excel file read!";
-                // progressBar1.Maximum = totalEXCELCount;
                 if (!myBulkConfigurator.HaveError)
-                {
-                    bulkUpdate.StatusString = "Data Validation Checks Finished.  Now processing updates";
                     ProcessAllEXCELRecords();
-                    // th1 = new Thread(new ThreadStart(ProcessAllEXCELRecords));
-                    //Timer.Enabled = true;
-                    //Timer.Start();
-                    // th1.Start();
-                }
                 else
-                {
-                    // statusLBL.ForeColor = Color.Red;
-                    //  statusLBL.Text = "Errors found in EXCEL file. Review error report";
                     validationError = true;
-                }
             }
             TempData["Status"] = "Excel File Imported !";
             return RedirectToAction("BulkConfig");
-            ///////////////////////////////////////////////////////////////////////////////////////////////
-
-            //var dt= GetDataTableFromExcelFile(filename); 
-            //if (dt.Columns.Contains("Error")) HaveEXCELReadError = true;
-            //if(!HaveEXCELReadError) {
-            //    GetColumnOrdinals(dt);
-            //    try
-            //    {
-            //        using (var con = new SqlConnection(Env.Dev.Value))
-            //        {
-            //            using (var cmd = new SqlCommand(SPBulkInsert, con))
-            //            {
-            //                con.Open();
-            //                cmd.CommandType = CommandType.StoredProcedure;
-            //                foreach (DataRow dr in dt.Rows)
-            //                {
-            //                    cmd.Parameters.Clear();
-            //                    cmd.Parameters.AddRange(GetSqlParams(dr));
-            //                    cmd.ExecuteNonQuery();
-            //                }
-            //            }
-            //        }
-            //        TempData["Status"] = "Excel File Imported !";
-            //    }
-            //    catch(Exception e)
-            //    {
-            //        TempData["Status"] = e.Message;
-            //    }
-
-            //    TempData["RowsToProcess"] = dt.Rows.Count.ToString();
-            //}
-            //else     
-            //    TempData["Status"] = "Excel File Read error !";
-
-            //ViewBag.Message = "File Imported and excel data saved into database"; //if the code reach here means everthing goes fine and excel data is imported into database
-
-           
         }
     }
 }

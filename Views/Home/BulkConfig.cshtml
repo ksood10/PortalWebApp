@@ -12,16 +12,6 @@
             else return e.which;
         }
     }
-    function updateui() {
-        document.getElementById('Submit').value = 'Running CONFIG IMPORT..';
-        document.getElementById('spin').style.visibility = "visible";
-        document.getElementById('divAlert').style.visibility = "visible";
-        document.getElementById("divAlert").children[0].innerHTML = "Running ...";
-
-        document.getElementById('UploadBtn').value = 'Running CONFIG IMPORT..';
-
-    }
-
 </script>
 
 
@@ -92,47 +82,46 @@
                 </td>
 
             </tr>
-
+            <tr>
+                <td colspan="3">&nbsp;
+                    </td>
             <tr>
                 <td colspan="3">
                     <span style="color:green">@Html.Raw(ViewBag.Message)</span>
-                    <button name="button" runat="server" class="btn btn-success" id="btnRun" value="cph" asp-action="check">Run</button>
-                    <input id="Submit" class="btn btn-success" type="submit" value="Run BULK CONFIG IMPORT" disabled onclick="updateui() " />
-                    &nbsp;&nbsp;&nbsp;
-                    <input type="button" id="UploadBtn" class="btn btn-danger" value="Run CONFIG IMPORT   " disabled onclick="updateui()" />
+                    <input type="button" id="UploadBtn" class="btn btn-danger" value="Run CONFIG IMPORT   " disabled  />
                     <div id="spin" class="spinner-border" role="status" style="visibility:hidden">
                         <span class="sr-only">Loading...</span>
                     </div>
                     <br /><br />
 
-
-                    <div id="divAlert" runat="server" class="alert alert-success alert-dismissible  fade show" style="visibility:hidden" role="alert">
+                    <div id="divAlert" class="alert alert-success alert-dismissible  fade show" style="visibility:hidden" role="alert">
                         <strong>&nbsp;@TempData["Status"]</strong>
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
+
+                        <p id="user"></p>
+                        <div style="width: 100px; display: inline-block;"> &nbsp;Validating ...</div>
+                        <div id="vd" style="display: inline-block; visibility:hidden;font-weight:bold">DONE</div>
+
+                        <div class="progress">
+                            <div id="progBarValidation" class="progress-bar progress-bar-striped " role="progressbar" style="width: 1%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <div id="articleList"></div>
+                        <br />
+
+                        <div style="display: inline-block;"> &nbsp;Processing ...</div>
+                        <div id="pd" style=" display: inline-block; visibility:hidden;font-weight:bold">DONE</div>
+
+                        <div class="progress">
+                            <div id="progBarProcessing" class="progress-bar progress-bar-striped " role="progressbar" style="width: 1%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <div id="processingList"></div>
                     </div>
-
-
-                    <p id="user"></p>
-                    <div>Validating ...</div>
-                    <div id="articleList"></div>
-                    <div class="progress">
-                        <div id="progBarValidation" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 1%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-
-                    <div>Processing ...</div>
-                    <div id="processingList"></div>
-                    <div class="progress">
-                        <div id="progBarProcessing" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 1%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-
                 </td>
             </tr>
         </table>
     </div>
-
-
 
 }
 
@@ -146,30 +135,31 @@
     <script>
 
         $('#UploadBtn').click(function () {
+            document.getElementById('spin').style.visibility = "visible";
+            document.getElementById('divAlert').style.visibility = "visible";
+            document.getElementById("divAlert").children[0].innerHTML = "Running ...";
+            document.getElementById('UploadBtn').value = 'Running CONFIG IMPORT..';
             var userid = document.getElementById("txtUserID").value;
             var conn = document.getElementById("txtEnvironment").value;
             var throttlenum = document.getElementById("ThrottleNum").value;
             var throttleduration = document.getElementById("ThrottleDuration").value;
             var rtu = document.getElementById("RTU").checked;
-            var fullPath = document.getElementById("FileName").value;
+              var fullPath = document.getElementById("FileName").value;
             var filename = fullPath.replace(/^.*[\\\/]/, '');
 
+           // var filename = document.getElementById("FileName").value.fullPath.replace(/^.*[\\\/]/, '');
             console.log(conn + '---' + userid + "---" + throttlenum + "--" + throttleduration + "--" + rtu + "--" + filename);
-            // var fileData = new FormData();
+
             $.ajax({
                 url: '/Home/ImportExcelFile/' + conn + '/' + userid + '/' + throttlenum + '/' + throttleduration + '/' + rtu + '/' + filename,
-
-                //dataType: 'JSON',
                 type: "POST",
                 contentType: false, // Not to set any content header
                 processData: false, // Not to process data
-
                 async: true,
                 beforeSend: function () {
                     $("#UploadBtn").attr('disabled', 'disabled');
                     $("#progress").css("display", "block");
                 },
-
                 success: function (result) {
                     console.log(result);
                     document.getElementById('spin').style.visibility = "hidden";
@@ -181,9 +171,7 @@
                 },
                 error: function (err) { alert(err.statusText); }
             });
-
         });
-
 
     </script>
 }
