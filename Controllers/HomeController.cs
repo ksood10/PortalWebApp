@@ -11,90 +11,32 @@ using PortalWebApp.Models;
 using PortalWebApp.Utilities;
 using System;
 using System.Diagnostics;
-
 using static PortalWebApp.Utilities.Util;
 
 namespace PortalWebApp.Controllers
 {
     public class HomeController : Controller
     {
-        private PortalWebAppContext _databaseContext;
+        private readonly PortalWebAppContext _databaseContext;
         private readonly ILogger<HomeController> _logger;
-        private IWebHostEnvironment Environment;
+        private readonly IWebHostEnvironment Environment;
         public bool HaveEXCELReadError = false;
-        private bool wroteErrorFileHeadings;
-        private object checkRTUCondition;
-        private string errorFilePath;
-        private string errorFileName;
-        private string filePath;
-        private string fileName;
-        private string connectionString;
         private BulkConfiguratorQueue myBulkConfigurator;
-        private int totalEXCELCount;
-        private bool validationError;
+     
 
+        // private int totalEXCELCount;
         private readonly IHubContext<ProgressHub> _notificationHubContext;
         private readonly IHubContext<ProgressUserHub> _notificationUserHubContext;
         private readonly IUserConnectionManager _userConnectionManager;
 
-        internal string ConnectionString
-        {
-            get
-            {
-                return connectionString;
-            }
-            set
-            {
-                connectionString = value;
-            }
-        }
-        internal string ErrorFilePath
-        {
-            get
-            {
-                return errorFilePath;
-            }
-            set
-            {
-                errorFilePath = value;
-            }
-        }
+        internal string ConnectionString { get; set; }
+        internal string ErrorFilePath { get; set; }
 
-        internal string ErrorFileName
-        {
-            get
-            {
-                return errorFileName;
-            }
-            set
-            {
-                errorFileName = value;
-            }
-        }
+        internal string ErrorFileName { get; set; }
 
-        internal string StatusFilePath
-        {
-            get
-            {
-                return filePath;
-            }
-            set
-            {
-                filePath = value;
-            }
-        }
+        internal string StatusFilePath { get; set; }
 
-        internal string FileName
-        {
-            get
-            {
-                return fileName;
-            }
-            set
-            {
-                fileName = value;
-            }
-        }
+        internal string FileName { get; set; }
 
         public HomeController(IHubContext<ProgressHub> notificationHubContext, 
                                 IHubContext<ProgressUserHub> notificationUserHubContext, 
@@ -109,6 +51,7 @@ namespace PortalWebApp.Controllers
             _notificationHubContext = notificationHubContext;
             _notificationUserHubContext = notificationUserHubContext;
             _userConnectionManager = userConnectionManager;
+           
         }
 
        [Authorize]
@@ -117,10 +60,7 @@ namespace PortalWebApp.Controllers
            return View();
         }
 
-        public IActionResult User()
-        {
-            return View();
-        }
+       
 
         public IActionResult Privacy()
         {
@@ -150,32 +90,36 @@ namespace PortalWebApp.Controllers
             }
             catch (Exception ex)
             {
-                string errorMsg = ex.Message;
+                _ = ex.Message;
             }
         }
 
         [Route("/Home/ImportExcelFile/{conn}/{userid}/{throttlenum}/{throttleduration}/{rtu}/{filename}")]
         [HttpPost]
-        public IActionResult ImportExcelFile(string conn, int userid, int throttlenum, int throttleduration, bool rtu, string filename)
+        public string ImportExcelFile(string conn, int userid, int throttlenum, int throttleduration, bool rtu, string filename)
         {
-            var realConn = "";
+
+            var realConn = ""; string ret = "";
             if (conn == "DevString")                realConn = Env.Dev.Value;
             if (conn == "ProdString")               realConn = Env.Prod.Value;
 
             myBulkConfigurator = new BulkConfiguratorQueue(realConn, filename, userid, throttlenum, throttleduration, rtu, _notificationHubContext);
             if (myBulkConfigurator.HaveEXCELReadError)
-                validationError = true;
+                ret = "Excel File read error";
             else
             {
-                totalEXCELCount = myBulkConfigurator.TotalEXCELCount;
-                TempData["Status"] = "Excel file read!";
+                // totalEXCELCount = myBulkConfigurator.TotalEXCELCount;
+                BulkUpdate.StatusString =  "Excel file read!";
                 if (!myBulkConfigurator.HaveError)
+                {
                     ProcessAllEXCELRecords();
+                    ret =  "Excel File Imported !";
+                }
                 else
-                    validationError = true;
+                    ret =  "Excel File read error";
             }
-            TempData["Status"] = "Excel File Imported !";
-            return RedirectToAction("BulkConfig");
+
+            return ret;
         }
     }
 }

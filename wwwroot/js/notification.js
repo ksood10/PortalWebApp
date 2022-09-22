@@ -9,7 +9,7 @@ connection.on("sendToUser", (tasknumber, totalTasks) => {
     div.appendChild(heading);
 
     document.getElementById("articleList").innerHTML = tasknumber + " out of " + totalTasks + " ( " + pct + "% )";
-    if (pct == 100) document.getElementById("vd").style.visibility = "visible";
+    if (pct === 100) document.getElementById("vd").style.visibility = "visible";
     $('#progBarValidation').css('width', pct + '%').attr('aria-valuenow', pct);
 });
 

@@ -12,7 +12,7 @@ namespace PortalWebApp.Models
     public class TankConfig
     {
 
-        private StringBuilder sb = new StringBuilder();
+        private readonly StringBuilder sb = new StringBuilder();
         [Key]
         public string TankID                           { get; set; }
         public string RTUNumber                     { get; set; }
@@ -170,7 +170,7 @@ namespace PortalWebApp.Models
                           }
             catch (Exception ex)
             {
-                string errorMsg = ex.Message;
+                _ = ex.Message;
                 fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
                 FileWriter errorWriter = new FileWriter(fileName);
                 errorWriter.Write("****************************");
@@ -246,7 +246,7 @@ namespace PortalWebApp.Models
             }
             catch (Exception ex)
             {
-                string errorMsg = ex.Message;
+                _ = ex.Message;
                 fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
                 FileWriter errorWriter = new FileWriter(fileName);
                 errorWriter.Write("****************************");
@@ -282,7 +282,7 @@ namespace PortalWebApp.Models
             }
             catch (Exception ex)
             {
-                string errorMsg = ex.Message;
+                _ = ex.Message;
                 fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
                 FileWriter errorWriter = new FileWriter(fileName);
                 errorWriter.Write("****************************");
@@ -310,16 +310,10 @@ namespace PortalWebApp.Models
                 }
                 }
 
-                //sb.Length = 0;
-                //sb.Append("if exists(select 1 from device where deviceid = @deviceid and rtunumber = @rtunumber)select 'true' else select 'false'");
-                //SqlParameter[] paramArray = new SqlParameter[2];
-                //paramArray[0] = DAL.Parameter("@deviceid", this.CurrentTankDeviceID);
-                //paramArray[1] = DAL.Parameter("@rtunumber", this.RTUNumber);
-                //valid = bool.Parse(DAL.ReturnScalar(sb.ToString(), this.ConnectionString, paramArray, true, 20).ToString());
             }
             catch (Exception ex)
             {
-                string errorMsg = ex.Message;
+                _ = ex.Message;
                 fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
                 FileWriter errorWriter = new FileWriter(fileName);
                 errorWriter.Write("****************************");
@@ -663,7 +657,7 @@ namespace PortalWebApp.Models
             }
             catch (Exception ex)
             {
-                string errorMsg = ex.Message;
+                _ = ex.Message;
                 fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
                 FileWriter errorWriter = new FileWriter(fileName);
                 errorWriter.Write("****************************");
@@ -998,7 +992,7 @@ namespace PortalWebApp.Models
             }
             catch (Exception ex)
             {
-                string errorMsg = ex.Message;
+                _ = ex.Message;
                 fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
                 FileWriter errorWriter = new FileWriter(fileName);
                 errorWriter.Write("****************************");
@@ -1211,7 +1205,7 @@ namespace PortalWebApp.Models
             }
             catch (Exception ex)
             {
-                string errorMsg = ex.Message;
+                _ = ex.Message;
                 fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
                 FileWriter errorWriter = new FileWriter(fileName);
                 errorWriter.Write("****************************");
@@ -1253,7 +1247,7 @@ namespace PortalWebApp.Models
             }
             catch (Exception ex)
             {
-                string errorMsg = ex.Message;
+                _ = ex.Message;
                 fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
                 FileWriter errorWriter = new FileWriter(fileName);
                 errorWriter.Write("****************************");
@@ -1288,7 +1282,7 @@ namespace PortalWebApp.Models
             }
             catch (Exception ex)
             {
-                string errorMsg = ex.Message;
+                _ = ex.Message;
                 fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
                 FileWriter errorWriter = new FileWriter(fileName);
                 errorWriter.Write("****************************");
@@ -1319,7 +1313,7 @@ namespace PortalWebApp.Models
             }
             catch (Exception ex)
             {
-                string errorMsg = ex.Message;
+                _ = ex.Message;
                 fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
                 FileWriter errorWriter = new FileWriter(fileName);
                 errorWriter.Write("****************************");
@@ -1347,7 +1341,7 @@ namespace PortalWebApp.Models
             }
             catch (Exception ex)
             {
-                string errorMsg = ex.Message;
+                _ = ex.Message;
                 fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
                 FileWriter errorWriter = new FileWriter(fileName);
                 errorWriter.Write("****************************");
@@ -1375,7 +1369,7 @@ namespace PortalWebApp.Models
             }
             catch (Exception ex)
             {
-                string errorMsg = ex.Message;
+               
                 fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
                 FileWriter errorWriter = new FileWriter(fileName);
                 errorWriter.Write("****************************");
@@ -1388,7 +1382,7 @@ namespace PortalWebApp.Models
 
         internal void TankCapCheck()
         {
-            decimal tankcap = 0;
+            decimal tankcap;
             try
             {
                 if (this.TankCap != "*** Empty ***")
@@ -1405,7 +1399,7 @@ namespace PortalWebApp.Models
             }
             catch (Exception ex)
             {
-                string errorMsg = ex.Message;
+                _ = ex.Message;
                 fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
                 FileWriter errorWriter = new FileWriter(fileName);
                 errorWriter.Write("****************************");
@@ -1444,7 +1438,7 @@ namespace PortalWebApp.Models
             }
             catch (Exception ex)
             {
-                string errorMsg = ex.Message;
+                _ = ex.Message;
                 fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
                 FileWriter errorWriter = new FileWriter(fileName);
                 errorWriter.Write("****************************");
@@ -1479,7 +1473,7 @@ namespace PortalWebApp.Models
             }
             catch (Exception ex)
             {
-                string errorMsg = ex.Message;
+                _ = ex.Message;
                 fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
                 FileWriter errorWriter = new FileWriter(fileName);
                 errorWriter.Write("****************************");
@@ -1507,7 +1501,7 @@ namespace PortalWebApp.Models
             }
             catch (Exception ex)
             {
-                string errorMsg = ex.Message;
+                _ = ex.Message;
                 fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
                 FileWriter errorWriter = new FileWriter(fileName);
                 errorWriter.Write("****************************");
@@ -1535,7 +1529,7 @@ namespace PortalWebApp.Models
             }
             catch (Exception ex)
             {
-                string errorMsg = ex.Message;
+                _ = ex.Message;
                 fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
                 FileWriter errorWriter = new FileWriter(fileName);
                 errorWriter.Write("****************************");
@@ -1581,7 +1575,7 @@ namespace PortalWebApp.Models
             }
             catch (Exception ex)
             {
-                string errorMsg = ex.Message;
+                _ = ex.Message;
                 fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
                 FileWriter errorWriter = new FileWriter(fileName);
                 errorWriter.Write("****************************");
@@ -1594,27 +1588,28 @@ namespace PortalWebApp.Models
 
         private int ValidateStartHour(int hour)
         {
-            int maxHour = hour;
-            int callsperday = 0;
-            int interval = 0;
+            int maxHour = hour; 
+            int interval, callsperday;
             try
             {
+                
                 if (this.Callsperday != "*** Empty ***")
                     callsperday = int.Parse(this.Callsperday);
                 else
                     callsperday = this.CurrentCallsperday;
+
                 if (this.Interval != "*** Empty ***")
                     interval = int.Parse(this.Interval);
                 else
                     interval = this.CurrentInterval;
                 for (int counter = 1; counter <= callsperday - 1; counter++)
                 {
-                    maxHour = maxHour + interval;
+                    maxHour += interval;
                 }
             }
             catch (Exception ex)
             {
-                string errorMsg = ex.Message;
+                _ = ex.Message;
                 fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
                 FileWriter errorWriter = new FileWriter(fileName);
                 errorWriter.Write("****************************");
@@ -1645,7 +1640,7 @@ namespace PortalWebApp.Models
             }
             catch (Exception ex)
             {
-                string errorMsg = ex.Message;
+                _ = ex.Message;
                 fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
                 FileWriter errorWriter = new FileWriter(fileName);
                 errorWriter.Write("****************************");
@@ -1675,7 +1670,7 @@ namespace PortalWebApp.Models
             }
             catch (Exception ex)
             {
-                string errorMsg = ex.Message;
+                _ = ex.Message;
                 fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
                 FileWriter errorWriter = new FileWriter(fileName);
                 errorWriter.Write("****************************");
@@ -1708,7 +1703,7 @@ namespace PortalWebApp.Models
             }
             catch (Exception ex)
             {
-                string errorMsg = ex.Message;
+                _ = ex.Message;
                 fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
                 FileWriter errorWriter = new FileWriter(fileName);
                 errorWriter.Write("****************************");
@@ -1741,7 +1736,7 @@ namespace PortalWebApp.Models
             }
             catch (Exception ex)
             {
-                string errorMsg = ex.Message;
+                _ = ex.Message;
                 fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
                 FileWriter errorWriter = new FileWriter(fileName);
                 errorWriter.Write("****************************");
@@ -1786,7 +1781,7 @@ namespace PortalWebApp.Models
             }
             catch (Exception ex)
             {
-                string errorMsg = ex.Message;
+                _ = ex.Message;
                 fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
                 FileWriter errorWriter = new FileWriter(fileName);
                 errorWriter.Write("****************************");
@@ -1823,7 +1818,7 @@ namespace PortalWebApp.Models
             }
             catch (Exception ex)
             {
-                string errorMsg = ex.Message;
+                _ = ex.Message;
                 fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
                 FileWriter errorWriter = new FileWriter(fileName);
                 errorWriter.Write("****************************");
@@ -1853,7 +1848,7 @@ namespace PortalWebApp.Models
             }
             catch (Exception ex)
             {
-                string errorMsg = ex.Message;
+                _ = ex.Message;
                 fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
                 FileWriter errorWriter = new FileWriter(fileName);
                 errorWriter.Write("****************************");
@@ -1883,7 +1878,7 @@ namespace PortalWebApp.Models
             }
             catch (Exception ex)
             {
-                string errorMsg = ex.Message;
+                _ = ex.Message;
                 fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
                 FileWriter errorWriter = new FileWriter(fileName);
                 errorWriter.Write("****************************");
@@ -1932,7 +1927,7 @@ namespace PortalWebApp.Models
             }
             catch (Exception ex)
             {
-                string errorMsg = ex.Message;
+                _ = ex.Message;
                 fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
                 FileWriter errorWriter = new FileWriter(fileName);
                 errorWriter.Write("****************************");
@@ -1981,7 +1976,7 @@ namespace PortalWebApp.Models
             }
             catch (Exception ex)
             {
-                string errorMsg = ex.Message;
+                _ = ex.Message;
                 fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
                 FileWriter errorWriter = new FileWriter(fileName);
                 errorWriter.Write("****************************");
@@ -2030,7 +2025,7 @@ namespace PortalWebApp.Models
             }
             catch (Exception ex)
             {
-                string errorMsg = ex.Message;
+                _ = ex.Message;
                 fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
                 FileWriter errorWriter = new FileWriter(fileName);
                 errorWriter.Write("****************************");
@@ -2079,7 +2074,7 @@ namespace PortalWebApp.Models
             }
             catch (Exception ex)
             {
-                string errorMsg = ex.Message;
+                _ = ex.Message;
                 fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
                 FileWriter errorWriter = new FileWriter(fileName);
                 errorWriter.Write("****************************");
@@ -2133,7 +2128,7 @@ namespace PortalWebApp.Models
             }
             catch (Exception ex)
             {
-                string errorMsg = ex.Message;
+                _ = ex.Message;
                 fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
                 FileWriter errorWriter = new FileWriter(fileName);
                 errorWriter.Write("****************************");
@@ -2187,7 +2182,7 @@ namespace PortalWebApp.Models
             }
             catch (Exception ex)
             {
-                string errorMsg = ex.Message;
+                _ = ex.Message;
                 fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
                 FileWriter errorWriter = new FileWriter(fileName);
                 errorWriter.Write("****************************");
@@ -2224,7 +2219,7 @@ namespace PortalWebApp.Models
             }
             catch (Exception ex)
             {
-                string errorMsg = ex.Message;
+                _ = ex.Message;
                 fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
                 FileWriter errorWriter = new FileWriter(fileName);
                 errorWriter.Write("****************************");
@@ -2237,18 +2232,19 @@ namespace PortalWebApp.Models
 
         internal void DeviceFillDetectDeltaCheck()
         {
-            decimal devicefillhysteresis = 0; ;
-            decimal devicefilldetectdelta = 0;
-            decimal capacitylimit = 0;
             try
             {
                 if (this.DeviceFillDetectDelta != "*** Empty ***")
                 {
+                    decimal capacitylimit, devicefillhysteresis, devicefilldetectdelta;
+                    
                     devicefilldetectdelta = decimal.Parse(this.DeviceFillDetectDelta);
+                    
                     if (this.DeviceFillHysteresis != "*** Empty ***")
                         devicefillhysteresis = decimal.Parse(this.DeviceFillHysteresis);
                     else
                         devicefillhysteresis = this.CurrentDeviceFillHysteresis;
+                    
                     if (this.CapacityLimit != "*** Empty ***")
                         capacitylimit = decimal.Parse(this.CapacityLimit);
                     else
@@ -2271,7 +2267,7 @@ namespace PortalWebApp.Models
             }
             catch (Exception ex)
             {
-                string errorMsg = ex.Message;
+                _ = ex.Message;
                 fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
                 FileWriter errorWriter = new FileWriter(fileName);
                 errorWriter.Write("****************************");
@@ -2284,9 +2280,7 @@ namespace PortalWebApp.Models
 
         internal void DeviceFillHysteresisCheck()
         {
-            decimal devicefillhysteresis = 0; ;
-            decimal devicefilldetect = 0;
-            decimal tankcap = 0;
+            decimal devicefillhysteresis ,  devicefilldetect , tankcap ;
             try
             {
                 if (this.DeviceFillHysteresis != "*** Empty ***")
@@ -2318,7 +2312,7 @@ namespace PortalWebApp.Models
             }
             catch (Exception ex)
             {
-                string errorMsg = ex.Message;
+                _ = ex.Message;
                 fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
                 FileWriter errorWriter = new FileWriter(fileName);
                 errorWriter.Write("****************************");
@@ -2331,7 +2325,7 @@ namespace PortalWebApp.Models
 
         internal void DataLogDeltaCheck()
         {
-            decimal datalogdelta = 0; ;
+            decimal datalogdelta;
             try
             {
                 if (this.DataLogDelta != "*** Empty ***")
@@ -2355,7 +2349,7 @@ namespace PortalWebApp.Models
             }
             catch (Exception ex)
             {
-                string errorMsg = ex.Message;
+                _ = ex.Message;
                 fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
                 FileWriter errorWriter = new FileWriter(fileName);
                 errorWriter.Write("****************************");
@@ -2368,13 +2362,13 @@ namespace PortalWebApp.Models
 
         internal void UsageDeltaCheck()
         {
-            decimal usagedelta = 0; ;
-            decimal tankcap = 0;
+            decimal tankcap, usagedelta;
             try
             {
                 if (this.UsageDelta != "*** Empty ***")
                 {
-                    usagedelta = decimal.Parse(this.UsageDelta, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
+                     usagedelta = decimal.Parse(this.UsageDelta, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
+
                     if (this.TankCap != "*** Empty ***")
                         tankcap = decimal.Parse(this.TankCap, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
                     else
@@ -2397,7 +2391,7 @@ namespace PortalWebApp.Models
             }
             catch (Exception ex)
             {
-                string errorMsg = ex.Message;
+                _ = ex.Message;
                 fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
                 FileWriter errorWriter = new FileWriter(fileName);
                 errorWriter.Write("****************************");
@@ -2444,7 +2438,7 @@ namespace PortalWebApp.Models
             }
             catch (Exception ex)
             {
-                string errorMsg = ex.Message;
+                _ = ex.Message;
                 fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
                 FileWriter errorWriter = new FileWriter(fileName);
                 errorWriter.Write("****************************");
@@ -2479,7 +2473,7 @@ namespace PortalWebApp.Models
             }
             catch (Exception ex)
             {
-                string errorMsg = ex.Message;
+                _ = ex.Message;
                 fileName = this.ErrorFilePath + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".TXT";
                 FileWriter errorWriter = new FileWriter(fileName);
                 errorWriter.Write("****************************");

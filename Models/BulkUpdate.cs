@@ -31,15 +31,9 @@ namespace PortalWebApp.Models
 
         [Display(Name ="Enable RTU Validation")]
         public bool RTU { get; set; }
-
         public string FileName { get; set; }
         public IFormFile file1 { get; set; }
-
         public static int TotalRows { get; set; }
-        public int RowsProcessed { get; set; }
-        public string StatusString { get; set; }
-
-        public string JavascriptToRun { get; set; }
-
+        public static string StatusString { get; set; }
     }
 }

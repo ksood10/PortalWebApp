@@ -95,7 +95,7 @@
                     <br /><br />
 
                     <div id="divAlert" class="alert alert-success alert-dismissible  fade show" style="visibility:hidden" role="alert">
-                        <strong>&nbsp;@TempData["Status"]</strong>
+                        <strong>&nbsp;@BulkUpdate.StatusString</strong>
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -162,10 +162,11 @@
                     console.log(result);
                     document.getElementById('spin').style.visibility = "hidden";
                     document.getElementById('UploadBtn').value = 'Run CONFIG IMPORT   ';
-                    document.getElementById("divAlert").children[0].innerHTML = "File Import DONE";
+                    document.getElementById("divAlert").children[0].innerHTML = result;
                     $('#UploadBtn').prop("disabled", "disabled");
                     document.getElementById("file1").value = null;
-                    
+                    document.getElementById('vd').visibility = "visible";
+                    document.getElementById('pd').visibility = "visible";
                 },
                 error: function (err) { alert(err.statusText); }
             });

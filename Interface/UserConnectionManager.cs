@@ -4,8 +4,8 @@ namespace PortalWebApp.Interface
 {
     public class UserConnectionManager : IUserConnectionManager
     {
-        private static Dictionary<string, List<string>> userConnectionMap = new Dictionary<string, List<string>>();
-        private static string userConnectionMapLocker = string.Empty;
+        private static readonly Dictionary<string, List<string>> userConnectionMap = new Dictionary<string, List<string>>();
+        private static readonly string userConnectionMapLocker = string.Empty;
 
         public void KeepUserConnection(string userId, string connectionId)
         {

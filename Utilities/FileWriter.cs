@@ -1,15 +1,14 @@
-﻿using System.IO;
-namespace PortalWebApp.Areas.Utilities
+﻿namespace PortalWebApp.Areas.Utilities
 {
     public class FileWriter
     {
-        private readonly StreamWriter fileWriter;
+        private readonly System.IO.StreamWriter fileWriter;
         internal string FileName { get; set; }
 
         public FileWriter(string fileName)
         {
-            this.FileName = fileName;
-            fileWriter = new StreamWriter(fileName, true);
+            FileName = fileName;
+            fileWriter = new System.IO.StreamWriter(fileName, true);
         }
 
         public void Write(string line)
@@ -21,12 +20,6 @@ namespace PortalWebApp.Areas.Utilities
         {
             fileWriter.Close();
             fileWriter.Dispose();
-        }
-
-        public void Delete(string fileName)
-        {
-            FileInfo myFile = new FileInfo(fileName);
-            myFile.Delete();
         }
     }
 }
