@@ -1,27 +1,15 @@
 ﻿"use strict";
 var connection = new signalR.HubConnectionBuilder().withUrl("/ProgressHub").build();
-connection.on("sendToUser", (tasknumber, totalTasks) => {
-    var heading = document.createElement("h3");
+connection.on("sendToUser", (validation,tasknumber, totalTasks) => {
     var pct = Math.round(tasknumber / totalTasks * 100);
-
-    heading.textContent = tasknumber + "##############" + totalTasks;
-    var div = document.createElement("div");
-    div.appendChild(heading);
-
-    document.getElementById("articleList").innerHTML = tasknumber + " out of " + totalTasks + " ( " + pct + "% )";
+    document.getElementById("articleList").innerHTML = validation + "  ~  "+tasknumber + " out of " + totalTasks + " ( " + pct + "% )";
     if (pct === 100) document.getElementById("vd").style.visibility = "visible";
     $('#progBarValidation').css('width', pct + '%').attr('aria-valuenow', pct);
 });
 
-connection.on("sendToProcessing", (tasknumber, totalTasks) => {
-    var heading = document.createElement("h3");
+connection.on("sendToProcessing", (tankid,tasknumber, totalTasks) => {
     var pct = Math.round(tasknumber / totalTasks * 100);
-
-    heading.textContent = tasknumber + "##############" + totalTasks;
-    var div = document.createElement("div");
-    div.appendChild(heading);
-
-    document.getElementById("processingList").innerHTML = tasknumber + " out of " + totalTasks + " ( " + pct + "% )";
+    document.getElementById("processingList").innerHTML = "TankID: "+tankid+ "  ~  "+ tasknumber + " out of " + totalTasks + " ( " + pct + "% )";
     if (pct === 100) document.getElementById("pd").style.visibility = "visible";
     $('#progBarProcessing').css('width', pct + '%').attr('aria-valuenow', pct);
 });

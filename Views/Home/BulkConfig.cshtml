@@ -95,28 +95,30 @@
                     <br /><br />
 
                     <div id="divAlert" class="alert alert-success alert-dismissible  fade show" style="visibility:hidden" role="alert">
-                        <strong>&nbsp;@BulkUpdate.StatusString</strong>
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                        <strong>&nbsp;</strong>
+                        <div id="divAlertDetails">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
 
-                        <p id="user"></p>
-                        <div style="width: 100px; display: inline-block;"> &nbsp;Validating ...</div>
-                        <div id="vd" style="display: inline-block; visibility:hidden;font-weight:bold">DONE</div>
+                            <p id="user"></p>
+                            <div style="width: 100px; display: inline-block;"> &nbsp;Validating ...</div>
+                            <div id="vd" style="display: inline-block; visibility:hidden;font-weight:bold">DONE</div>
 
-                        <div class="progress">
-                            <div id="progBarValidation" class="progress-bar progress-bar-striped " role="progressbar" style="width: 1%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
+                            <div class="progress">
+                                <div id="progBarValidation" class="progress-bar progress-bar-striped " role="progressbar" style="width: 1%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <div id="articleList"></div>
+                            <br />
+
+                            <div style="display: inline-block;"> &nbsp;Processing ...</div>
+                            <div id="pd" style=" display: inline-block; visibility:hidden;font-weight:bold">DONE</div>
+
+                            <div class="progress">
+                                <div id="progBarProcessing" class="progress-bar progress-bar-striped " role="progressbar" style="width: 1%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <div id="processingList"></div>
                         </div>
-                        <div id="articleList"></div>
-                        <br />
-
-                        <div style="display: inline-block;"> &nbsp;Processing ...</div>
-                        <div id="pd" style=" display: inline-block; visibility:hidden;font-weight:bold">DONE</div>
-
-                        <div class="progress">
-                            <div id="progBarProcessing" class="progress-bar progress-bar-striped " role="progressbar" style="width: 1%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                        <div id="processingList"></div>
                     </div>
                 </td>
             </tr>
@@ -163,10 +165,16 @@
                     document.getElementById('spin').style.visibility = "hidden";
                     document.getElementById('UploadBtn').value = 'Run CONFIG IMPORT   ';
                     document.getElementById("divAlert").children[0].innerHTML = result;
+                    
                     $('#UploadBtn').prop("disabled", "disabled");
                     document.getElementById("file1").value = null;
-                    document.getElementById('vd').visibility = "visible";
-                    document.getElementById('pd').visibility = "visible";
+                    if (result === "Excel File read error") {
+                        document.getElementById("divAlertDetails").style.visibility = "hidden";
+                        document.getElementById("vd").style.visibility = "hidden";
+                        document.getElementById("pd").style.visibility = "hidden";
+                    }
+                   
+
                 },
                 error: function (err) { alert(err.statusText); }
             });

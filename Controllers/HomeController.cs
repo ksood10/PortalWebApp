@@ -98,25 +98,24 @@ namespace PortalWebApp.Controllers
         [HttpPost]
         public string ImportExcelFile(string conn, int userid, int throttlenum, int throttleduration, bool rtu, string filename)
         {
-
-            var realConn = ""; string ret = "";
-            if (conn == "DevString")                realConn = Env.Dev.Value;
-            if (conn == "ProdString")               realConn = Env.Prod.Value;
-
+            string ret, realConn;
+            if (conn == "ProdString") 
+                realConn = Env.Prod.Value;
+            else 
+                realConn = Env.Dev.Value;
+           
             myBulkConfigurator = new BulkConfiguratorQueue(realConn, filename, userid, throttlenum, throttleduration, rtu, _notificationHubContext);
             if (myBulkConfigurator.HaveEXCELReadError)
                 ret = "Excel File read error";
             else
             {
-                // totalEXCELCount = myBulkConfigurator.TotalEXCELCount;
-                BulkUpdate.StatusString =  "Excel file read!";
                 if (!myBulkConfigurator.HaveError)
                 {
                     ProcessAllEXCELRecords();
-                    ret =  "Excel File Imported !";
+                    ret = "Excel File Imported !";
                 }
                 else
-                    ret =  "Excel File read error";
+                    ret = "Excel File read error";
             }
 
             return ret;

@@ -494,15 +494,15 @@ namespace PortalWebApp.Utilities
             try
             {
                 RequiredColumnsCheck();
-                await _notificationHubContext.Clients.All.SendAsync("sendToUser", 1, 5);
+                await _notificationHubContext.Clients.All.SendAsync("sendToUser","Required Columns", 1, 5);
 
                 if (this.HaveError && !wroteErrorFile)  WriteErrorReport();
                 if (!this.HaveError)                    DataTypeCheck();
-                await _notificationHubContext.Clients.All.SendAsync("sendToUser", 2, 5);
+                await _notificationHubContext.Clients.All.SendAsync("sendToUser","Data Type", 2, 5);
 
                 if (this.HaveError && !wroteErrorFile)  WriteErrorReport();
                 if (!this.HaveError && checkRTUCondition)  ValidateTankIDRTUNumber();
-                await _notificationHubContext.Clients.All.SendAsync("sendToUser", 3, 5);
+                await _notificationHubContext.Clients.All.SendAsync("sendToUser","TankID RTU Number",3, 5);
                 if (this.HaveError && !wroteErrorFile)  WriteErrorReport();
                
                 if (!this.HaveError)
@@ -511,11 +511,12 @@ namespace PortalWebApp.Utilities
                     if (this.HaveError)
                         WriteErrorReport();
                 }
-                await _notificationHubContext.Clients.All.SendAsync("sendToUser", 4, 5);
+                await _notificationHubContext.Clients.All.SendAsync("sendToUser","Valid Tank Scope", 4, 5);
+
                 if (this.HaveError && !wroteErrorFile)  WriteErrorReport();
                 if (!this.HaveError)                    BulkConfigValueChecks();
                 if (this.HaveError && !wroteErrorFile)  WriteErrorReport();
-                await _notificationHubContext.Clients.All.SendAsync("sendToUser", 5, 5);
+                await _notificationHubContext.Clients.All.SendAsync("sendToUser", "Bulk Config Value Check", 5, 5);
 
             }
             catch (Exception ex)
@@ -863,7 +864,7 @@ namespace PortalWebApp.Utilities
                         }
                     }
                     this.CurrentEXCELCount = i;
-                    await _notificationHubContext.Clients.All.SendAsync("sendToProcessing", this.CurrentEXCELCount, myTankConfigs.Count);
+                    await _notificationHubContext.Clients.All.SendAsync("sendToProcessing", aTankConfig.TankID,this.CurrentEXCELCount, myTankConfigs.Count);
                 }
             }
             catch (Exception ex)
