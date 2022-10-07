@@ -10,7 +10,11 @@ using PortalWebApp.Interface;
 using PortalWebApp.Models;
 using PortalWebApp.Utilities;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 using static PortalWebApp.Utilities.Util;
 
 namespace PortalWebApp.Controllers
@@ -22,7 +26,7 @@ namespace PortalWebApp.Controllers
         private readonly IWebHostEnvironment Environment;
         public bool HaveEXCELReadError = false;
         private BulkConfiguratorQueue myBulkConfigurator;
-     
+        BulkUpdate model;
 
         // private int totalEXCELCount;
         private readonly IHubContext<ProgressHub> _notificationHubContext;
@@ -67,8 +71,11 @@ namespace PortalWebApp.Controllers
             return View();
         }
 
+
+
         public IActionResult BulkConfig()
         {
+
             if (TempData.Peek("LoginCheck") != null)
                 return View();
             else
@@ -94,31 +101,59 @@ namespace PortalWebApp.Controllers
             }
         }
 
-        [Route("/Home/ImportExcelFile/{conn}/{userid}/{throttlenum}/{throttleduration}/{rtu}/{filename}")]
-        [HttpPost]
-        public string ImportExcelFile(string conn, int userid, int throttlenum, int throttleduration, bool rtu, string filename)
+
+        [HttpPost("ImportExcelFile")]
+        public IActionResult ImportExcelFile(List<IFormFile> files)
         {
+            foreach (var formFile in files)
+            {
+                if (formFile.Length > 0)
+                {
+                    var x = formFile.OpenReadStream();
+                    var s = x.Length;
+                }
+            }
+            return View();
+        }
+
+        [HttpPost]
+        public  IActionResult Index(IFormFile file1, int ThrottleNum, int ThrottleDuration, bool RTU)
+        {
+            var MainPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Uploads");
+            if (!Directory.Exists(MainPath))
+                Directory.CreateDirectory(MainPath);
+            var pathString = MainPath +"\\"+ file1.FileName;
+             model = new BulkUpdate();
+            if (!System.IO.File.Exists(pathString))
+            {
+                using FileStream fs = System.IO.File.Create(pathString);
+                Stream origFileStream = file1.OpenReadStream();
+                origFileStream.CopyToAsync(fs);
+            }
+
             string ret, realConn;
-            if (conn == "ProdString") 
+            var userid = Convert.ToInt32(TempData.Peek("Userid"));
+            if (TempData.Peek("Environment").ToString() == "ProdString")
                 realConn = Env.Prod.Value;
-            else 
+            else
                 realConn = Env.Dev.Value;
-           
-            myBulkConfigurator = new BulkConfiguratorQueue(realConn, filename, userid, throttlenum, throttleduration, rtu, _notificationHubContext);
+
+            myBulkConfigurator = new BulkConfiguratorQueue(realConn, file1.FileName, userid, ThrottleNum, ThrottleDuration, RTU, _notificationHubContext);
             if (myBulkConfigurator.HaveEXCELReadError)
-                ret = "Excel File read error";
+                model.StatusString = "Excel File read error";
             else
             {
                 if (!myBulkConfigurator.HaveError)
                 {
                     ProcessAllEXCELRecords();
-                    ret = "Excel File Imported !";
+                    model.StatusString = "Bulk Import .. DONE";
                 }
                 else
-                    ret = "Excel File read error";
+                    model.StatusString = "Excel File read error";
             }
 
-            return ret;
+            return View("BulkConfig",model);
         }
     }
 }
+

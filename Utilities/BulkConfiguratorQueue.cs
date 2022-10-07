@@ -193,6 +193,10 @@ namespace PortalWebApp.Utilities
                     Directory.CreateDirectory(MainPath);
                 //get file path 
                 var filePath = Path.Combine(MainPath, filename);
+
+
+               
+
                 string conString = string.Empty;
                 switch (Path.GetExtension(filename))
                 {

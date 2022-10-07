@@ -5,21 +5,21 @@
 
     $("#ThrottleNum").change(function () {
         if ($('#file1').val().length > 0 && $("#ThrottleNum").val() >= 0 && $("#ThrottleNum").val() <= 100 && $("#ThrottleDuration").val() >= 0 && $("#ThrottleDuration").val() <= 100)
-            $('#UploadBtn').prop("disabled", false);
+            $('#ImportExcel').prop("disabled", false);
         else
-            $('#UploadBtn').prop("disabled", true);
+            $('#ImportExcel').prop("disabled", true);
     });
     $("#ThrottleDuration").change(function () {
         if ($('#file1').val().length > 0 && $("#ThrottleNum").val() >= 0 && $("#ThrottleNum").val() <= 100 && $("#ThrottleDuration").val() >= 0 && $("#ThrottleDuration").val() <= 100)
-            $('#UploadBtn').prop("disabled", false);
+            $('#ImportExcel').prop("disabled", false);
         else
-            $('#UploadBtn').prop("disabled", true);
+            $('#ImportExcel').prop("disabled", true);
     });
     $('#file1').change(function () {
         if ($(this).val().length > 0 && $("#ThrottleNum").val() >= 0 && $("#ThrottleNum").val() <= 100 && $("#ThrottleDuration").val() >= 0 && $("#ThrottleDuration").val() <=100  ) 
-            $('#UploadBtn').prop("disabled", false);
+            $('#ImportExcel').prop("disabled", false);
         else 
-            $('#UploadBtn').prop("disabled", true);
+            $('#ImportExcel').prop("disabled", true);
     });
 
 });

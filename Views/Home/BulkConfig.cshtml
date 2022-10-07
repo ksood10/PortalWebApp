@@ -14,21 +14,15 @@
     }
 </script>
 
-
-@using (Html.BeginForm("ImportExcelFile", "Home", FormMethod.Post))
-{
+<form method="post" enctype="multipart/form-data" asp-controller="Home" asp-action="Index">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <div style="width:80%">
         <table class="table table-striped">
-
-
-
             <tr>
                 <td style="width:200px">@Html.LabelFor(model => model.ThrottleNum)</td>
                 <td style="width:150px">
-
-                    @Html.EditorFor(model => model.ThrottleNum, new
+                   @Html.EditorFor(model => model.ThrottleNum, new
                    {
                        htmlAttributes = new
                        {
@@ -37,7 +31,7 @@
                             @max = "100",
                             @step = "1",
                            @onkeypress = "OnlyNumeric(this);",
-                            Class = "form-control"
+                           
                        }
                    })
                     <input type="hidden" id="txtEnvironment" value="@TempData.Peek("Environment")" />
@@ -58,7 +52,7 @@
                             @max = "100",
                             @step = "1",
                             @onkeypress = "OnlyNumeric(this);",
-                            Class = "form-control"
+                           
                         }
                     })
                 </td>
@@ -79,45 +73,49 @@
                 </td>
                 <td colspan="2">
                     <input type="file" model onchange="document.getElementById('FileName').value = this.value;" name="file1" id="file1" value="s" />
+
+
                 </td>
 
             </tr>
             <tr>
-                <td colspan="3">&nbsp;
-                    </td>
+                <td colspan="3">
+                    &nbsp;
+                </td>
             <tr>
                 <td colspan="3">
                     <span style="color:green">@Html.Raw(ViewBag.Message)</span>
-                    <input type="button" id="UploadBtn" class="btn btn-danger" value="Run CONFIG IMPORT   " disabled  />
+                    
+                    <input type="submit" id="ImportExcel" value="Run BULK CONFIG IMPORT   " disabled />
                     <div id="spin" class="spinner-border" role="status" style="visibility:hidden">
                         <span class="sr-only">Loading...</span>
                     </div>
                     <br /><br />
 
-                    <div id="divAlert" class="alert alert-success alert-dismissible  fade show" style="visibility:hidden" role="alert">
-                        <strong>&nbsp;</strong>
+                    <div id="divAlert">
+                        <strong>&nbsp; @Html.ValueFor(model => model.StatusString)</strong>
                         <div id="divAlertDetails">
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-
+                           
+                           
                             <p id="user"></p>
-                            <div style="width: 100px; display: inline-block;"> &nbsp;Validating ...</div>
-                            <div id="vd" style="display: inline-block; visibility:hidden;font-weight:bold">DONE</div>
+                            <div id="statusProgress" style="visibility:hidden">
+                                <div style="width: 100px; display: inline-block;"> &nbsp;Validating ... </div>
+                                <div id="vd" style="display: inline-block; visibility:hidden;font-weight:bold">DONE</div>
 
-                            <div class="progress">
-                                <div id="progBarValidation" class="progress-bar progress-bar-striped " role="progressbar" style="width: 1%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
+                                <div class="progress" >
+                                    <div id="progBarValidation" class="progress-bar progress-bar-striped " role="progressbar" style="width: 1%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <div id="articleList"></div>
+                                <br />
+
+                                <div style="display: inline-block;"> &nbsp;Processing ... </div>
+                                <div id="pd" style=" display: inline-block; visibility:hidden;font-weight:bold">DONE</div>
+
+                                <div class="progress"  >
+                                    <div id="progBarProcessing" class="progress-bar progress-bar-striped " role="progressbar" style="width: 1%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <div id="processingList"></div>
                             </div>
-                            <div id="articleList"></div>
-                            <br />
-
-                            <div style="display: inline-block;"> &nbsp;Processing ...</div>
-                            <div id="pd" style=" display: inline-block; visibility:hidden;font-weight:bold">DONE</div>
-
-                            <div class="progress">
-                                <div id="progBarProcessing" class="progress-bar progress-bar-striped " role="progressbar" style="width: 1%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                            <div id="processingList"></div>
                         </div>
                     </div>
                 </td>
@@ -125,60 +123,29 @@
         </table>
     </div>
 
-}
+    </form>
 
-@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
-@section scripts{
-    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
-    <script src="https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
-    <script src="~/lib/signalr/signalr.js"></script>
-    <script src="~/js/notification.js"></script>
-    <script>
+    @section scripts{
+        <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+        <script src="https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+        <script src="~/lib/signalr/signalr.js"></script>
+        <script src="~/js/notification.js"></script>
+     
+        <script>
 
-        $('#UploadBtn').click(function () {
-            document.getElementById('spin').style.visibility = "visible";
-            document.getElementById('divAlert').style.visibility = "visible";
-            document.getElementById("divAlert").children[0].innerHTML = "Running ...";
-            document.getElementById('UploadBtn').value = 'Running CONFIG IMPORT..';
-            var userid = document.getElementById("txtUserID").value;
-            var conn = document.getElementById("txtEnvironment").value;
-            var throttlenum = document.getElementById("ThrottleNum").value;
-            var throttleduration = document.getElementById("ThrottleDuration").value;
-            var rtu = document.getElementById("RTU").checked;
-              var fullPath = document.getElementById("FileName").value;
-            var filename = fullPath.replace(/^.*[\\\/]/, '');
-            console.log(conn + '---' + userid + "---" + throttlenum + "--" + throttleduration + "--" + rtu + "--" + filename);
 
-            $.ajax({
-                url: '/Home/ImportExcelFile/' + conn + '/' + userid + '/' + throttlenum + '/' + throttleduration + '/' + rtu + '/' + filename,
-                type: "POST",
-                contentType: false, // Not to set any content header
-                processData: false, // Not to process data
-                async: true,
-                beforeSend: function () {
-                    $("#UploadBtn").attr('disabled', 'disabled');
-                    $("#progress").css("display", "block");
-                },
-                success: function (result) {
-                    console.log(result);
-                    document.getElementById('spin').style.visibility = "hidden";
-                    document.getElementById('UploadBtn').value = 'Run CONFIG IMPORT   ';
-                    document.getElementById("divAlert").children[0].innerHTML = result;
-                    
-                    $('#UploadBtn').prop("disabled", "disabled");
-                    document.getElementById("file1").value = null;
-                    if (result === "Excel File read error") {
-                        document.getElementById("divAlertDetails").style.visibility = "hidden";
-                        document.getElementById("vd").style.visibility = "hidden";
-                        document.getElementById("pd").style.visibility = "hidden";
-                    }
-                   
+            $('#ImportExcel').click(function () {
+                document.getElementById('spin').style.visibility = "visible";
+                document.getElementById('divAlert').style.visibility = "visible";
+                document.getElementById('statusProgress').style.visibility = "visible";
+                document.getElementById("divAlert").children[0].innerHTML = "Running ...";
+                document.getElementById('UploadBtn').value = 'Running CONFIG IMPORT..';
 
-                },
-                error: function (err) { alert(err.statusText); }
             });
-        });
 
-    </script>
-}
+           
+
+        </script>
+    }

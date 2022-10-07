@@ -10,20 +10,11 @@ namespace PortalWebApp.Models
 {
     public class BulkUpdate
     {
-
-
-        [Display(Name = "Environment")]
-        public string Environment { get; set; }
-
-        [Display(Name = "User ID")]
-        [Required(ErrorMessage = "Required")]
-        public int UserID { get; set; }
-
         [Display(Name = "Records To Throttle")]
         [Required(ErrorMessage = "Required")]
         [RegularExpression("^[0-9]*$", ErrorMessage = "Must be numeric")]
         public int ThrottleNum { get; set; }
-
+        
         [Display(Name = "Throttle Duration")]
         [Required(ErrorMessage = "Required")]
         [RegularExpression("^[0-9]*$", ErrorMessage = "Must be numeric")]
@@ -34,6 +25,7 @@ namespace PortalWebApp.Models
         public string FileName { get; set; }
         public IFormFile file1 { get; set; }
         public static int TotalRows { get; set; }
-        public static string StatusString { get; set; }
+        public string StatusString { get; set; }
+
     }
 }
