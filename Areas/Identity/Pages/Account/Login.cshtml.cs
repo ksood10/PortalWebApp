@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using PortalWebApp.Areas.Identity.Data;
+using PortalWebApp.Models;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
@@ -109,6 +111,9 @@ namespace PortalWebApp.Areas.Identity.Pages.Account
                     TempData["Environment"] = Input.Environment;
                     TempData.Keep("Environment");
 
+                    TempData["UserOrgId"] = userDB.OrganizationID;
+                    TempData.Keep("UserOrgId");
+                    StrapChart.UserOrgID = Convert.ToInt32(TempData.Peek("UserOrgId"));
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect("/Home/BulkConfig");
                 }

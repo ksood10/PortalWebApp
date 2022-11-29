@@ -26,6 +26,8 @@ namespace PortalWebApp.Models
         public IFormFile file1 { get; set; }
         public static int TotalRows { get; set; }
         public string StatusString { get; set; }
+        [Display(Name = "User Organization")]
+        public static int UserOrgID { get; set; }
 
     }
 }

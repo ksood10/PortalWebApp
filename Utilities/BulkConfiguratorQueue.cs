@@ -55,7 +55,7 @@ namespace PortalWebApp.Utilities
 
         internal string StatusMessage { get; set; }
 
-        public PortalWebAppContext DatabaseContext { get; }
+        public PortalWebAppContext DatabaseContext { get; set; }
 
         #endregion
 
@@ -63,7 +63,7 @@ namespace PortalWebApp.Utilities
         {
         }
 
-        public BulkConfiguratorQueue(string conn, string excelfilename, int userid, int recordthrottle, int throttleamount, bool checkrtu , IHubContext<ProgressHub> _notificationHubContext)
+        public BulkConfiguratorQueue(PortalWebAppContext DatabaseContext,string conn, string excelfilename, int userid, int recordthrottle, int throttleamount, bool checkrtu , IHubContext<ProgressHub> _notificationHubContext)
         {
             this.ConnectionString = conn;
             this.FileName = excelfilename;
@@ -76,6 +76,7 @@ namespace PortalWebApp.Utilities
             this.StatusFilePath = AppDomain.CurrentDomain.BaseDirectory + "SummaryFile";
             this.StatusFileName = this.StatusFilePath + "\\" + "Summary_" + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Year.ToString() + ".txt";
             DeleteOldReportFiles();
+            var x = DatabaseContext;
             GetUserOrganization();
             if (!this.HaveError)
             {

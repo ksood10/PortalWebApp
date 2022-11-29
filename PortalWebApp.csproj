@@ -27,16 +27,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="Adage_CSLA">
-      <HintPath>bin\Debug\Adage_CSLA.dll</HintPath>
-    </Reference>
-    <Reference Include="TankData">
-      <HintPath>bin\Debug\TankData.dll</HintPath>
-    </Reference>
+    <Folder Include="UploadedFiles\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="UploadedFiles\" />
+    <Reference Include="Adage_CSLA">
+      <HintPath>..\..\path\Adage_CSLA.dll</HintPath>
+    </Reference>
+    <Reference Include="TankData">
+      <HintPath>..\..\path\TankData.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

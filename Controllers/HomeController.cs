@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using PortalWebApp.Data;
 using PortalWebApp.Hubs;
@@ -12,8 +13,10 @@ using PortalWebApp.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using static PortalWebApp.Utilities.Util;
 
@@ -64,10 +67,28 @@ namespace PortalWebApp.Controllers
            return View();
         }
 
-       
 
-        public IActionResult Privacy()
+        
+        public IActionResult StrappingChart()
         {
+            var chartList = (from tank in _databaseContext.Tank
+                     join tankconfig in _databaseContext.TankConfig
+                        on tank.TankConfigId equals tankconfig.TankConfigId
+                     join  strapchart in _databaseContext.StrapChart
+                        on tankconfig.ChartID equals strapchart.ChartID
+                     select new
+                     {
+                         tank.OrganizationID,
+                         strapchart.ChartID,
+                         strapchart.ChartDesc
+                     }).Where(x=>x.OrganizationID ==StrapChart.UserOrgID).Distinct().ToList();
+
+            StrapChart.StrapList = (from item in chartList
+                                    select new Strap { 
+                                                OrganizationID = item.OrganizationID, 
+                                                ChartID = item.ChartID, 
+                                                ChartDesc = item.ChartDesc 
+                                    }).ToList();
             return View();
         }
 
@@ -131,14 +152,14 @@ namespace PortalWebApp.Controllers
                 origFileStream.CopyToAsync(fs);
             }
 
-            string ret, realConn;
+            string realConn;
             var userid = Convert.ToInt32(TempData.Peek("Userid"));
             if (TempData.Peek("Environment").ToString() == "ProdString")
                 realConn = Env.Prod.Value;
             else
                 realConn = Env.Dev.Value;
 
-            myBulkConfigurator = new BulkConfiguratorQueue(realConn, file1.FileName, userid, ThrottleNum, ThrottleDuration, RTU, _notificationHubContext);
+            myBulkConfigurator = new BulkConfiguratorQueue(_databaseContext, realConn, file1.FileName, userid, ThrottleNum, ThrottleDuration, RTU, _notificationHubContext);
             if (myBulkConfigurator.HaveEXCELReadError)
                 model.StatusString = "Excel File read error";
             else

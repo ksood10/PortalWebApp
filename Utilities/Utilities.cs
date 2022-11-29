@@ -6,7 +6,7 @@ using System.Threading;
 
 namespace PortalWebApp.Utilities
 {
-    public class Util
+    public static class Util
     {
         public static float psiPerCubicInch = 27.729623F;
         public static int TankIDOrdinal { get; set; }

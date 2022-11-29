@@ -8,8 +8,8 @@ using System.Text;
 
 namespace PortalWebApp.Models
 {
-    [Table("TankConfig")]
-    public class TankConfig
+    [Table("Tank")]
+    public class Tank
     {
 
         private readonly StringBuilder sb = new StringBuilder();
@@ -142,11 +142,11 @@ namespace PortalWebApp.Models
         public int CurrentHighLevel { get;  set; }
         public int CurrentCallsperday { get;  set; }
 
-        public TankConfig()
+        public Tank()
         {
             //TankID = 0;
         }
-        public TankConfig(string conn, int userid)
+        public Tank(string conn, int userid)
         {
             this.ConnectionString = conn;
             this.UserID = userid;
