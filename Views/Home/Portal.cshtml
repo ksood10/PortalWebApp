@@ -1,0 +1,16 @@
+﻿
+@model BulkUpdate
+<link href="https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css"
+      rel="stylesheet">
+<h4>Portal</h4>
+<hr />
+<h4>Welcome to the Admin Portal</h4>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    @section scripts{
+        <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+        <script src="https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+        <script src="~/lib/signalr/signalr.js"></script>
+        <script src="~/js/notification.js"></script>
+     
+    }

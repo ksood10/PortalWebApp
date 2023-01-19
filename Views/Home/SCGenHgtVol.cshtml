@@ -1,0 +1,66 @@
+﻿@using PortalWebApp.Models
+@model StrapChart
+@{
+    ViewData["Title"] = "Strapping Chart";
+}
+
+<h6>Generate Strapping Chart from height and volume</h6>
+<hr />
+<form method="post" enctype="multipart/form-data" asp-controller="Home" asp-action="Index">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <div style="width:80%">
+        <table class="table table-striped">
+            <tr>
+                <td style="width:200px">Organization</td>
+                <td style="width:150px">
+                    <input type="text" value="Tanklink" disabled />
+                  
+                    <input type="hidden" id="txtEnvironment" value="@TempData.Peek("Environment")" />
+                    <input type="hidden" id="txtUserID" value="@TempData.Peek("Userid")" />
+                </td>
+               
+            </tr>
+
+            <tr>
+                <td>@Html.LabelFor(model => model.ChartDesc)</td>
+                <td>
+                    
+                </td>
+             </tr>
+
+          
+           
+            <tr>
+                <td>RTU</td>
+                <td>
+                    <input type="text" value="" />
+                </td>
+            <tr>
+                <td colspan="3">
+                    <span style="color:green">@Html.Raw(ViewBag.Message)</span>
+                    
+                    <input type="submit" id="ImportExcel" value="Associate Tank(RTU)with selected  Strapping Chart  "  />
+                    <div id="spin" class="spinner-border" role="status" style="visibility:hidden">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                    <br /><br />
+
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    </form>
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    @section scripts{
+        <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+        <script src="https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+        <script src="~/lib/signalr/signalr.js"></script>
+        <script src="~/js/notification.js"></script>
+     
+    }
+
+
